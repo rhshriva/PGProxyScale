@@ -43,6 +43,28 @@ Several of these are **expected to fail under transaction pooling until Phase 1 
 That is the point: they are the Phase 1 acceptance tests, written before the
 implementation so that "done" is defined by behaviour rather than by opinion.
 
+## Proving passthrough
+
+The proxy is designed so that it never needs a password or a SCRAM verifier: it relays the
+authentication exchange, so the client authenticates *to the backend* through it. That is
+the answer to PgBouncer's documented weakness against providers that block `pg_authid`.
+
+Run it against a backend that actually challenges the client:
+
+```sh
+PG_AUTH=scram-sha-256 ./run.sh              # control: direct PostgreSQL, SCRAM
+PG_AUTH=scram-sha-256 PROXY=1 ./run.sh      # the same, through pgproxy
+```
+
+The script enforces two things rather than trusting them:
+
+1. **The proxy's config contains no password.** If `pgproxy.toml` mentioned one, the run
+   would abort — a test that can pass for the wrong reason is worse than no test.
+2. **A wrong password is still rejected.** A green run proves the *client* authenticated;
+   it does not prove the proxy authenticates anyone. A proxy that relayed everything and
+   ignored credentials would also look green, so `drivers/negative_auth_check.py` demands
+   the wrong password fail through the same path.
+
 ## Scope and limits
 
 - One driver so far (**psycopg3**). The M0 milestone calls for a second

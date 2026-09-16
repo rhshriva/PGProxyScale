@@ -95,7 +95,14 @@ The ledger is only safe if we know exactly what can and cannot be virtualised.
       **Not implemented:** cert auth, and channel binding (`SCRAM-SHA-256-PLUS`) — a client
       demanding channel binding is refused rather than silently downgraded, because
       downgrading removes the protection it asked for.
-- [ ] Auth **wiring**: the state machine choosing terminate vs passthrough per database.
+- [x] Auth **wiring (passthrough)**: proven end to end. `PG_AUTH=scram-sha-256 PROXY=1
+      ./tests/conformance/run.sh` passes all 17 scenarios through the proxy against a
+      backend that issues a real SCRAM challenge, with **no credential in the proxy's
+      config** — enforced by the script, not asserted. A negative check rejects a wrong
+      password through the same path, so "all green" cannot mean "auth was bypassed".
+      Still to do: per-database selection of terminate vs passthrough, and certificate auth.
+- [ ] Auth **wiring (terminate)**: the policy engine should be able to reject a client
+      before a backend is touched.
       Both directions of the crypto exist; which one runs is a connection-lifecycle
       decision. Passthrough needs no secret and is the answer to PgBouncer's documented
       managed-cloud weakness; terminate is needed for the policy engine to reject a client

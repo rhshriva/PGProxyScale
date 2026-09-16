@@ -57,6 +57,13 @@ jobs:
       - name: End-to-end through pgproxy
         run: PROXY=1 ./tests/conformance/run.sh
 
+      # The central design claim, demonstrated rather than asserted: the client
+      # authenticates *to the backend* through the proxy, on a real SCRAM challenge, with
+      # no credential in the proxy's config. The run also asserts a wrong password is
+      # still rejected, so "all green" cannot mean "auth was bypassed".
+      - name: SCRAM passthrough (proxy holds no credential)
+        run: PG_AUTH=scram-sha-256 PROXY=1 ./tests/conformance/run.sh
+
       # Proves a real driver (libpq via psycopg) accepts the handshake our server
       # actually emits, including the AuthenticationOk / ParameterStatus /
       # BackendKeyData / ReadyForQuery sequence. The unit tests only prove we agree

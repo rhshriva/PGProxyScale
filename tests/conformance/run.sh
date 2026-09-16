@@ -84,6 +84,19 @@ if [ -n "$PROXY" ]; then
     exit 4
   fi
   echo "  pgproxy is listening"
+
+  # When the backend challenges with SCRAM, this run is a test of passthrough: the
+  # client must authenticate *to the backend* through the proxy, with the proxy holding
+  # no credential at all. Enforce that rather than assert it - a password in the proxy's
+  # config would make the test pass for the wrong reason.
+  if [ "${PG_AUTH:-trust}" = "scram-sha-256" ]; then
+    if grep -qi 'password' "$ROOT/pgproxy.toml"; then
+      echo "FAIL: pgproxy.toml mentions a password, so this would not prove passthrough"
+      exit 5
+    fi
+    echo "  pgproxy config holds no password: passthrough is the only way this can work"
+  fi
+
   TARGET="$PROXY_NAME:6432"
 fi
 
@@ -109,6 +122,25 @@ docker run --rm --network "$NET" \
       --label '$LABEL' ${ONLY:+--only '$ONLY'}
   "
 status=$?
+
+# A green passthrough run proves the *client* authenticated; it does not prove the proxy
+# is authenticating anyone. Demand that a wrong password still fails through the same path.
+if [ -n "$PROXY" ] && [ "${PG_AUTH:-trust}" = "scram-sha-256" ]; then
+  echo
+  echo "== negative check: a wrong password must still be rejected through the proxy =="
+  if docker run --rm --network "$NET" -v "$ROOT:/work" -w /work \
+       -v "$PIP_VOLUME:/root/.cache/pip" "$PY_IMAGE" bash -c "
+         pip install --quiet 'psycopg[binary]' >/dev/null 2>&1
+         python3 drivers/negative_auth_check.py \
+           --host '$HOST' --port '$PORT' --user postgres --dbname '$DB' \
+           --password 'definitely-wrong'
+       "; then
+    echo "  authentication is genuinely happening end to end"
+  else
+    echo "  FAIL: the wrong password was not rejected"
+    status=1
+  fi
+fi
 
 if [ -n "$PROXY" ]; then
   echo
