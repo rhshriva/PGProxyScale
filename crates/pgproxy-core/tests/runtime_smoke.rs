@@ -4,7 +4,7 @@
 //! the pieces the protocol will be built on: per-worker `SO_REUSEPORT` listeners, the
 //! accept path, per-connection dispatch, and a bounded shutdown.
 
-use std::io::Read;
+use std::io::{Read, Write};
 use std::net::TcpStream;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, mpsc};
@@ -97,6 +97,69 @@ fn shutdown_promptly(token: ShutdownToken, handle: thread::JoinHandle<()>) {
         "shutdown took {elapsed:?}: workers never observed the token, so only the drain \
          budget ended them (blocked accept loop?)"
     );
+}
+
+/// A service that performs a blocking read of a fixed number of bytes.
+///
+/// If accepted sockets were left non-blocking, this read would fail with `WouldBlock`
+/// instead of waiting — which is exactly how a working proxy can look alive while closing
+/// every connection on arrival.
+struct BlockingReadService {
+    expected: usize,
+    got: Arc<std::sync::Mutex<Option<Vec<u8>>>>,
+}
+
+impl Service for BlockingReadService {
+    fn handle(&self, conn: Connection) -> std::io::Result<()> {
+        let mut stream = conn.stream;
+        let mut buf = vec![0u8; self.expected];
+        stream.read_exact(&mut buf)?;
+        *self.got.lock().unwrap() = Some(buf);
+        Ok(())
+    }
+}
+
+#[test]
+fn accepted_sockets_support_blocking_reads() {
+    // Regression guard: mio requires a non-blocking listener and an accepted socket
+    // inherits that flag, so the runtime must switch it back.
+    let payload = b"startup-bytes-here";
+
+    let got = Arc::new(std::sync::Mutex::new(None));
+    let service = BlockingReadService {
+        expected: payload.len(),
+        got: Arc::clone(&got),
+    };
+
+    let cfg = test_config(1);
+    let token = ShutdownToken::new();
+    let (tx, rx) = mpsc::channel();
+    let runtime = Runtime::new(cfg, Arc::new(service))
+        .with_ready_signal(tx)
+        .with_shutdown_token(token.clone());
+    let handle = thread::spawn(move || runtime.run().expect("runtime exits cleanly"));
+    let addr = rx.recv_timeout(Duration::from_secs(10)).expect("ready");
+
+    let mut client = TcpStream::connect(addr).expect("connect");
+    client.write_all(payload).expect("write");
+    client.flush().expect("flush");
+
+    // The service must receive all of it; a non-blocking socket would have returned
+    // WouldBlock and left `got` empty.
+    let deadline = std::time::Instant::now() + Duration::from_secs(5);
+    loop {
+        if got.lock().unwrap().is_some() {
+            break;
+        }
+        assert!(
+            std::time::Instant::now() < deadline,
+            "the service never received the payload, so the accepted socket was not readable in blocking mode"
+        );
+        thread::sleep(Duration::from_millis(20));
+    }
+    assert_eq!(got.lock().unwrap().as_deref(), Some(payload.as_slice()));
+
+    shutdown_promptly(token, handle);
 }
 
 #[test]

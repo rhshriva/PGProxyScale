@@ -36,6 +36,8 @@ def scenario(fn: Callable[[argparse.Namespace], None]) -> Callable[[argparse.Nam
 def connect(args: argparse.Namespace, **kwargs):
     """Open a connection to the target under test."""
     kwargs.setdefault("connect_timeout", 10)
+    if args.password:
+        kwargs.setdefault("password", args.password)
     return psycopg.connect(
         host=args.host,
         port=args.port,
@@ -315,6 +317,11 @@ def main() -> int:
     parser.add_argument("--user", default="postgres")
     parser.add_argument("--dbname", default="conformance")
     parser.add_argument("--label", default="target")
+    parser.add_argument(
+        "--password",
+        default=None,
+        help="password to authenticate with, if the endpoint requires one",
+    )
     parser.add_argument("--only", default=None, help="substring filter on scenario name")
     args = parser.parse_args()
 

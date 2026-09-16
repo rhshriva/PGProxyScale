@@ -100,6 +100,15 @@ The ledger is only safe if we know exactly what can and cannot be virtualised.
       decision. Passthrough needs no secret and is the answer to PgBouncer's documented
       managed-cloud weakness; terminate is needed for the policy engine to reject a client
       before touching a backend.
+- [x] **Connection state machine** (`session/`): startup -> route -> connect -> forward startup
+      -> relay. Authentication needs no special case because the relay is message-agnostic,
+      so the exchange *is* passthrough: the proxy never learns the password or the verifier.
+      `Connection` state is observed from `ReadyForQuery`, and per-direction message and byte
+      counters feed the observability the research found missing everywhere.
+- [x] **M0 reached**: all 17 conformance scenarios pass *through* the proxy
+      (`PROXY=1 ./tests/conformance/run.sh`), covering the extended protocol, prepared
+      statements, `WITH HOLD` cursors, advisory locks, `LISTEN`/`NOTIFY`, `COPY FROM STDIN`,
+      a 50k-row result set and 16 concurrent clients.
 - [ ] Extended-protocol state machine: `Parse`/`Bind`/`Describe`/`Execute`/`Sync`/`Flush`/`Close`,
       **including unnamed statements** and their documented death on the next `Parse` *or any simple
       `Query`*

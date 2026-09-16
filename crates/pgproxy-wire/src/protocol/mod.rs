@@ -16,6 +16,10 @@ pub mod codec;
 pub mod messages;
 pub mod startup;
 
+// Convenience re-exports so callers can write `protocol::StartupRequest` rather than
+// reaching into the submodule. The startup phase is common enough to warrant it.
+pub use startup::{CancelRequest, StartupParams, StartupRequest, parse_startup};
+
 /// Protocol 3.0: `major << 16 | minor`.
 pub const PROTOCOL_3_0: i32 = 3 << 16;
 /// Protocol 3.2, introduced in PostgreSQL 18.

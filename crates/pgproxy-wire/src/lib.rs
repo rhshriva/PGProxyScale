@@ -15,8 +15,12 @@
 pub mod auth;
 pub mod protocol;
 pub mod service;
+pub mod session;
 
 pub use auth::{AuthError, AuthMethod};
 pub use protocol::codec::{Frame, FrameReader, FrameWriter};
 pub use protocol::startup::{CancelRequest, StartupParams, StartupRequest, parse_startup};
 pub use service::{Connection, Service, ShutdownToken};
+pub use session::{
+    BackendTarget, DatabaseRouter, RouteError, SessionOptions, SessionService, SessionStats,
+};

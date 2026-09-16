@@ -16,9 +16,11 @@
 pub mod config;
 pub mod error;
 pub mod listener;
+pub mod router;
 pub mod runtime;
 pub mod telemetry;
 
 pub use config::Config;
 pub use error::{Error, Result};
+pub use router::ConfigRouter;
 pub use runtime::Runtime;

@@ -51,6 +51,12 @@ jobs:
       - name: Control run against direct PostgreSQL 18
         run: ./tests/conformance/run.sh
 
+      # M0: the same 17 scenarios, but every one of them through pgproxy. This is the
+      # first job that proves the proxy serves real sessions rather than just speaking
+      # the protocol in unit tests.
+      - name: End-to-end through pgproxy
+        run: PROXY=1 ./tests/conformance/run.sh
+
       # Proves a real driver (libpq via psycopg) accepts the handshake our server
       # actually emits, including the AuthenticationOk / ParameterStatus /
       # BackendKeyData / ReadyForQuery sequence. The unit tests only prove we agree

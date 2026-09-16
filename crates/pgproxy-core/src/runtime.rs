@@ -245,6 +245,15 @@ fn worker_loop(
             match listener.accept() {
                 Ok((stream, peer)) => {
                     let stream: std::net::TcpStream = stream.into();
+                    // The listener is non-blocking (mio requires it) and an accepted
+                    // socket INHERITS that flag. The session layer uses blocking I/O with
+                    // one thread per direction, so without this the first `read_exact`
+                    // returns `WouldBlock` and every connection dies on arrival — with no
+                    // error visible at the default log level.
+                    if let Err(e) = stream.set_nonblocking(false) {
+                        tracing::warn!(error = %e, "cannot switch an accepted socket to blocking");
+                        continue;
+                    }
                     set_nodelay(&stream);
                     let id = next_id.fetch_add(1, Ordering::Relaxed);
                     let service = Arc::clone(&service);

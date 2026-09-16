@@ -2,7 +2,7 @@
 //!
 //! A thin adapter: parse arguments, load and validate configuration, install logging,
 //! hand a [`Service`] to the runtime. All the interesting behaviour lives in
-//! `pgproxy-core` and, from workstream W2, `pgproxy-wire`.
+//! `pgproxy-core` and `pgproxy-wire`.
 //!
 //! Keeping this file thin is deliberate — an embedded or sidecar host must be able to
 //! reuse everything below it without dragging along CLI concerns (ADR-0005).
@@ -13,8 +13,9 @@ use std::sync::Arc;
 
 use clap::Parser;
 use pgproxy_core::config::{Config, Overrides};
+use pgproxy_core::router::ConfigRouter;
 use pgproxy_core::{Runtime, telemetry};
-use pgproxy_wire::{Connection, Service};
+use pgproxy_wire::SessionService;
 
 /// Protocol-aware PostgreSQL gateway.
 #[derive(Debug, Parser)]
@@ -41,33 +42,13 @@ struct Cli {
     check: bool,
 }
 
-/// Placeholder until workstream W2 lands the protocol state machine.
-///
-/// It accepts the connection so that listener, accept-path and shutdown behaviour are
-/// exercisable, then closes it with a log line explaining why.
-struct ProtocolNotImplemented;
-
-impl Service for ProtocolNotImplemented {
-    fn handle(&self, conn: Connection) -> std::io::Result<()> {
-        tracing::warn!(
-            id = conn.id,
-            worker = conn.worker,
-            peer = %conn.peer,
-            "accepted a connection, but the PostgreSQL wire protocol is not implemented yet \
-             (Phase 0 workstream W2) - closing"
-        );
-        let _ = conn.stream.shutdown(std::net::Shutdown::Both);
-        Ok(())
-    }
-}
-
 fn main() -> ExitCode {
     let cli = Cli::parse();
     match run(cli) {
         Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
-            // Errors here are startup errors: config, bind, signals. There is no logging
-            // subscriber yet in the failure path, so write to stderr directly.
+            // Startup errors: config, bind, signals. There may be no logging subscriber
+            // yet on this path, so write to stderr directly.
             eprintln!("pgproxy: {err}");
             ExitCode::FAILURE
         }
@@ -93,6 +74,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    Runtime::new(config, Arc::new(ProtocolNotImplemented)).run()?;
+    let router = ConfigRouter::new(&config);
+    tracing::info!(databases = ?router.database_names(), "routing table");
+
+    Runtime::new(config, Arc::new(SessionService::new(Arc::new(router)))).run()?;
     Ok(())
 }

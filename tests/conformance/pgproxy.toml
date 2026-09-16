@@ -1,0 +1,24 @@
+# pgproxy configuration used by the conformance harness.
+#
+# The addresses are Docker network names, because this file is only ever used by a
+# pgproxy container running on the conformance network alongside the PostgreSQL
+# container it points at.
+
+[general]
+listen_addr = "0.0.0.0"
+listen_port = 6432
+workers = 2
+# The admin console is not implemented yet, so no users are listed.
+admin_users = []
+shutdown_timeout_secs = 10
+
+[logging]
+level = "info"
+format = "text"
+
+[[databases]]
+name = "conformance"
+host = "pg"
+port = 5432
+dbname = "conformance"
+pool_size = 20
