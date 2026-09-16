@@ -373,7 +373,8 @@ dependencies = [
 name = "pgproxy-pool"
 version = "0.0.0"
 dependencies = [
- "pgproxy-session",
+ "thiserror",
+ "tracing",
 ]
 
 [[package]]
