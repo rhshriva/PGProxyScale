@@ -13,11 +13,13 @@
 #![deny(clippy::undocumented_unsafe_blocks)]
 
 pub mod auth;
+pub mod backend;
 pub mod protocol;
 pub mod service;
 pub mod session;
 
 pub use auth::{AuthError, AuthMethod};
+pub use backend::{BackendConnection, BackendCredentials};
 pub use protocol::codec::{Frame, FrameReader, FrameWriter};
 pub use protocol::startup::{CancelRequest, StartupParams, StartupRequest, parse_startup};
 pub use service::{Connection, Service, ShutdownToken};
