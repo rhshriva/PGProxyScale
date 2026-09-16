@@ -1,23 +1,28 @@
 #!/usr/bin/env bash
 # Spike S1 — where is the Rust proxy's data-path overhead?
 #
-# Everything runs inside containers on one Docker network so that no target gets a
-# different network path: Postgres, PgBouncer, each proxy variant, and pgbench itself.
+# Method (corrected after a first run showed classic first-run cache bias):
+#   * everything runs in containers on one Docker bridge network
+#   * pgbench runs in its OWN container, so its CPU does not compete with postgres
+#   * a global warmup brings the whole dataset into shared_buffers before measuring
+#   * targets are interleaved inside the concurrency loop, so any drift affects all
+#     targets equally rather than penalising whichever ran first
+#   * two full passes, best TPS per cell
 #
-# Note: no `docker build` is used. Docker's buildx wants to write outside the
-# workspace, and building via a bind mount is both simpler and more reproducible.
+# Caveat to state in any write-up: pgbench reports *average* latency, not percentiles.
 #
 #   ./run.sh
-#   WORKERS=2 CONNS="1 4 16 64" ./run.sh
 set -uo pipefail
 
 NET=spike-s1
 RUST_IMG=rust:1-slim-bookworm
+PG_IMG=postgres:18-alpine
 WORKERS="${WORKERS:-2}"
 SCALE="${SCALE:-100}"
 CONNS="${CONNS:-1 4 16 64}"
-DUR="${DUR:-10}"
-WARM="${WARM:-5}"
+DUR="${DUR:-8}"
+WARM="${WARM:-4}"
+PASSES="${PASSES:-2}"
 OUT="${OUT:-s1-report.md}"
 ROOT="$PWD"
 
@@ -38,9 +43,9 @@ docker run --rm -v "$ROOT:/app" -w /app "$RUST_IMG" bash -c \
 docker network create "$NET" >/dev/null
 
 echo "== starting postgres =="
-docker run -d --name s1-pg --network "$NET" \
+docker run -d --name s1-pg --network "$NET" --network-alias pg \
   -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_DB=pgbench \
-  postgres:18-alpine \
+  "$PG_IMG" \
   -c max_connections=400 -c shared_buffers=1GB -c fsync=off \
   -c synchronous_commit=off -c full_page_writes=off -c autovacuum=off \
   >/dev/null
@@ -52,12 +57,12 @@ done
 echo "== initialising pgbench (scale $SCALE) =="
 docker exec s1-pg pgbench -i -q -s "$SCALE" -U postgres pgbench >/dev/null 2>&1
 
-echo "== starting pgbouncer (installed in-container; no docker build) =="
+echo "== starting pgbouncer (1.18, Debian; must not run as root) =="
 docker run -d --name s1-pgbouncer --network "$NET" \
   -v "$ROOT/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro" \
   -v "$ROOT/userlist.txt:/etc/pgbouncer/userlist.txt:ro" \
   debian:bookworm-slim bash -c \
-  'apt-get update -qq >/dev/null 2>&1; apt-get install -y -qq --no-install-recommends pgbouncer >/dev/null 2>&1; exec pgbouncer /etc/pgbouncer/pgbouncer.ini' \
+  'apt-get update -qq >/dev/null 2>&1; apt-get install -y -qq --no-install-recommends pgbouncer >/dev/null 2>&1; exec runuser -u postgres -- pgbouncer /etc/pgbouncer/pgbouncer.ini' \
   >/dev/null
 
 echo "== starting proxies (workers=$WORKERS) =="
@@ -77,7 +82,8 @@ for t in s1-pgbouncer s1-proxy-thread s1-proxy-tokio s1-proxy-splice; do
   if docker exec s1-pg pg_isready -h "$t" -p 6432 -U postgres >/dev/null 2>&1; then
     echo "  ok   $t"
   else
-    echo "  FAIL $t"
+    echo "  FAIL $t -- last 15 log lines:"
+    docker logs --tail 15 "$t" 2>&1 | sed 's/^/      /'
   fi
 done
 
@@ -89,38 +95,117 @@ TARGETS=(
   "rust-splice:s1-proxy-splice:6432"
 )
 
-run_pgbench() { # host port conns
-  local host="$1" port="$2" c="$3"
-  docker exec s1-pg pgbench -S -n -U postgres -h "$host" -p "$port" \
-    -c "$c" -j "$c" -T "$WARM" pgbench >/dev/null 2>&1
-  docker exec s1-pg pgbench -S -n -U postgres -h "$host" -p "$port" \
-    -c "$c" -j "$c" -T "$DUR" pgbench 2>&1
+# pgbench runs in its own container on the same network.
+run_pgbench() { # host port conns seconds
+  local host="$1" port="$2" c="$3" secs="$4"
+  local j=$(( c < 8 ? c : 8 ))
+  docker run --rm --network "$NET" "$PG_IMG" \
+    pgbench -S -n -U postgres -h "$host" -p "$port" \
+    -c "$c" -j "$j" -T "$secs" pgbench 2>&1
 }
+
+echo "== global warmup (dataset into shared_buffers) =="
+run_pgbench pg 5432 8 20 >/dev/null 2>&1
+
+declare -A BEST_TPS BEST_LAT
+RAW="$OUT.raw.tsv"
+: > "$RAW"
+
+for pass in $(seq 1 "$PASSES"); do
+  for c in $CONNS; do
+    for entry in "${TARGETS[@]}"; do
+      label="${entry%%:*}"; rest="${entry#*:}"; host="${rest%%:*}"; port="${rest##*:}"
+      run_pgbench "$host" "$port" "$c" "$WARM" >/dev/null 2>&1
+      out="$(run_pgbench "$host" "$port" "$c" "$DUR")"
+      tps="$(printf '%s\n' "$out" | sed -n 's/^tps = \([0-9.]*\).*/\1/p' | head -1)"
+      lat="$(printf '%s\n' "$out" | sed -n 's/^latency average = \([0-9.]*\).*/\1/p' | head -1)"
+      sd="$(printf '%s\n' "$out" | sed -n 's/^latency stddev = \([0-9.]*\).*/\1/p' | head -1)"
+      if [ -z "$tps" ]; then
+        echo "  ! pgbench failed: $label c=$c" >&2
+        printf '%s\n' "$out" | tail -4 | sed 's/^/      /' >&2
+        continue
+      fi
+      printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$pass" "$c" "$label" "$tps" "$lat" "${sd:--}" >> "$RAW"
+      key="$label|$c"
+      if [ -z "${BEST_TPS[$key]:-}" ] || awk "BEGIN{exit !($tps > ${BEST_TPS[$key]})}"; then
+        BEST_TPS[$key]="$tps"; BEST_LAT[$key]="$lat"
+      fi
+      printf '  pass %s  c=%-3s %-18s %10s tps  %s ms\n' "$pass" "$c" "$label" "$tps" "$lat"
+    done
+  done
+done
 
 {
   echo "# Spike S1 — data-path overhead report"
   echo
-  echo "- pgbench scale $SCALE, \`-S -n\`, ${DUR}s measured after ${WARM}s warmup"
-  echo "- all containers on one Docker bridge network (no host-network variance)"
-  echo "- Rust proxies: release build, $WORKERS worker(s), SO_REUSEPORT, TCP_NODELAY"
-  echo "- PgBouncer: single process, session mode, \`default_pool_size=100\`"
-  echo "- PostgreSQL 18, \`fsync=off\`, \`synchronous_commit=off\`, \`shared_buffers=1GB\`"
+  echo "- pgbench scale $SCALE, \`-S -n\`, ${DUR}s measured after ${WARM}s warmup, best of $PASSES passes"
+  echo "- pgbench in its own container; global warmup before measuring; targets interleaved"
+  echo "- all containers on one Docker bridge network"
+  echo "- Rust proxies: release, $WORKERS worker(s), SO_REUSEPORT, TCP_NODELAY, pure pass-through"
+  echo "- PgBouncer 1.18 single process, session mode, \`default_pool_size=100\`"
+  echo "- PostgreSQL 18, \`fsync=off\`, \`synchronous_commit=off\`, \`shared_buffers=1GB\`, 16 CPUs"
   echo
-  echo "| target | conns | TPS | latency avg (ms) |"
-  echo "|---|---|---|---|"
-} > "$OUT"
-
-for entry in "${TARGETS[@]}"; do
-  label="${entry%%:*}"; rest="${entry#*:}"; host="${rest%%:*}"; port="${rest##*:}"
-  for c in $CONNS; do
-    out="$(run_pgbench "$host" "$port" "$c")"
-    tps="$(printf '%s\n' "$out" | sed -n 's/^tps = \([0-9.]*\).*/\1/p' | head -1)"
-    lat="$(printf '%s\n' "$out" | sed -n 's/^latency average = \([0-9.]*\).*/\1/p' | head -1)"
-    [ -z "$tps" ] && tps="FAILED"
-    [ -z "$lat" ] && lat="-"
-    printf '| %s | %s | %s | %s |\n' "$label" "$c" "$tps" "$lat" | tee -a "$OUT"
+  echo "**Raw TPS** (best of $PASSES passes):"
+  echo
+  printf '| target |'
+  for c in $CONNS; do printf ' c=%s |' "$c"; done
+  echo
+  printf '|---|'
+  for c in $CONNS; do printf '---|'; done
+  echo
+  for entry in "${TARGETS[@]}"; do
+    label="${entry%%:*}"
+    printf '| %s |' "$label"
+    for c in $CONNS; do
+      v="${BEST_TPS[$label|$c]:-FAILED}"
+      printf ' %s |' "$v"
+    done
+    echo
   done
-done
+  echo
+  echo "**Average latency (ms)** — best-of-pass latency for the fastest TPS run:"
+  echo
+  printf '| target |'
+  for c in $CONNS; do printf ' c=%s |' "$c"; done
+  echo
+  printf '|---|'
+  for c in $CONNS; do printf '---|'; done
+  echo
+  for entry in "${TARGETS[@]}"; do
+    label="${entry%%:*}"
+    printf '| %s |' "$label"
+    for c in $CONNS; do
+      printf ' %s |' "${BEST_LAT[$label|$c]:--}"
+    done
+    echo
+  done
+  echo
+  echo "**Overhead versus direct**, as (direct ÷ proxy) latency ratio at the same concurrency:"
+  echo
+  printf '| target |'
+  for c in $CONNS; do printf ' c=%s |' "$c"; done
+  echo
+  printf '|---|'
+  for c in $CONNS; do printf '---|'; done
+  echo
+  for entry in "${TARGETS[@]}"; do
+    label="${entry%%:*}"
+    [ "$label" = "direct" ] && continue
+    printf '| %s |' "$label"
+    for c in $CONNS; do
+      d="${BEST_LAT[direct|$c]:-}"; p="${BEST_LAT[$label|$c]:-}"
+      if [ -n "$d" ] && [ -n "$p" ]; then
+        printf ' %s |' "$(awk "BEGIN{printf \"%.2fx\", $p/$d}")"
+      else
+        printf ' - |'
+      fi
+    done
+    echo
+  done
+  echo
+  echo "Raw per-pass data: \`$(basename "$RAW")\`."
+} > "$OUT"
 
 echo
 echo "wrote $OUT"
+cat "$OUT"

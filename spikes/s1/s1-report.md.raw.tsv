@@ -1,0 +1,12 @@
+1	1	direct	14896.773195	0.067	-
+1	1	pgbouncer-session	9125.706174	0.110	-
+1	1	rust-thread	9397.097809	0.106	-
+1	1	rust-tokio	9715.786728	0.103	-
+1	1	rust-splice	9186.879443	0.109	-
+1	4	direct	51460.722657	0.078	-
+1	4	pgbouncer-session	34661.049382	0.115	-
+1	4	rust-thread	33165.847243	0.121	-
+1	4	rust-tokio	32582.790003	0.123	-
+1	4	rust-splice	32852.572519	0.122	-
+1	16	direct	139686.741054	0.115	-
+1	16	pgbouncer-session	28516.692904	0.561	-
