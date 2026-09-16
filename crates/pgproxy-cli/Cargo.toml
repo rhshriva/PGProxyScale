@@ -13,3 +13,6 @@ path = "src/main.rs"
 
 [dependencies]
 pgproxy-core = { path = "../pgproxy-core" }
+pgproxy-wire = { path = "../pgproxy-wire" }
+clap.workspace = true
+tracing.workspace = true

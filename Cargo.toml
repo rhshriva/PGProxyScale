@@ -1,6 +1,8 @@
 [workspace]
 resolver = "3"
 members = ["crates/*"]
+# Spikes are throwaway experiments with their own lockfiles and dependencies.
+exclude = ["spikes/*", "spikes/s3/harness"]
 
 [workspace.package]
 version = "0.0.0"
@@ -10,17 +12,30 @@ license = "Apache-2.0"          # TODO(ADR-0004): licence undecided
 publish = false
 
 [workspace.dependencies]
-# Intentionally empty for Phase 0 scaffolding.
-# Dependencies are added per-crate as each subsystem is implemented, so that the
-# skeleton builds offline and the dependency surface is a deliberate decision
-# rather than an accident. Expected additions, per ADR-0001 and ADR-0002:
-#   runtime      monoio / tokio        (thread-per-core; see ADR-0001, spike S1)
-#   parser       libpg_query-sys       (FFI; see ADR-0002)
-#   tls          rustls / tokio-rustls
-#   crypto       sha2, hmac, pbkdf2    (SCRAM-SHA-256, MD5)
-#   metrics      metrics / prometheus
-#   tracing      tracing, opentelemetry
-#   fuzzing      libfuzzer-sys (dev)
+# Concurrency: deliberately NO async runtime. Spike S1 measured blocking
+# thread-per-core (thread per connection) as equal to or faster than both Tokio
+# and a splice(2) bypass, so the data path stays simple and auditable.
+# See docs/plans/spike-findings.md and docs/adr/0001-language-and-runtime.md.
+socket2 = { version = "0.5", features = ["all"] }
+signal-hook = "0.3"
+
+# Config
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+
+# Errors, logging, CLI
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+clap = { version = "4", features = ["derive"] }
+
+# Expected additions in later phases (added only when the phase starts):
+#   parser   libpg_query FFI     (ADR-0002; one build per supported PG major)
+#   crypto   sha2, hmac, pbkdf2  (SCRAM-SHA-256, MD5)
+#   tls      rustls
+#   metrics  metrics-exporter-prometheus
+#   otel     opentelemetry
+#   fuzz     libfuzzer-sys (dev, nightly only)
 
 [profile.release]
 lto = "thin"

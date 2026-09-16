@@ -11,6 +11,7 @@
 **/libpg_query/
 **/pg_query_*.a
 **/pg_query_*.o
+/.cargo/
 /bench-results/
 /coverage/
 /target/
@@ -21,6 +22,7 @@
 # Local runtime
 # Rust
 # Spike artefacts: raw upstream sources are re-downloadable via spikes/s2/extract.py
+# Workspace-local cargo home (the sandbox blocks ~/.cargo for host builds)
 spikes/**/s1-report.md.tmp
 spikes/**/target/
 spikes/s1/libpg_query/

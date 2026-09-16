@@ -1,0 +1,29 @@
+# pgproxy configuration
+#
+# Precedence: built-in defaults < this file < PGPROXY_* environment variables < CLI flags.
+# Unknown keys are rejected, so a typo fails at startup rather than silently doing nothing.
+
+[general]
+listen_addr = "0.0.0.0"
+listen_port = 6432
+# 0 = one worker per available CPU. Each worker binds its own SO_REUSEPORT listener.
+workers = 0
+# Users allowed to use the admin console. Empty disables it.
+admin_users = ["postgres"]
+# How long to wait for in-flight work when shutting down.
+shutdown_timeout_secs = 30
+
+[logging]
+# Any `tracing` filter directive, e.g. "pgproxy_wire=debug,info"
+level = "info"
+# "text" for terminals, "json" for log shippers
+format = "text"
+
+# Databases clients may reach through the proxy.
+# `name` is what the client asks for; `host`/`port`/`dbname` are the real backend.
+[[databases]]
+name = "app"
+host = "127.0.0.1"
+port = 5432
+dbname = "app"
+pool_size = 20

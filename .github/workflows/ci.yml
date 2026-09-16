@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  # Keep builds reproducible and avoid surprise MSRV breakage.
+  RUSTFLAGS: -D warnings
+
+jobs:
+  check:
+    name: fmt, clippy, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Tests
+        run: cargo test --workspace
+
+  # The conformance matrix needs real servers and real client drivers, so it lives in
+  # its own job. It runs against direct PostgreSQL first: if the harness cannot pass
+  # against a correct server, its results against the proxy mean nothing.
+  conformance:
+    name: protocol conformance (control: direct postgres)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Control run against direct PostgreSQL 18
+        run: ./tests/conformance/run.sh
+
+  # NOTE: `cargo-fuzz` requires a nightly toolchain and is not yet wired up.
+  # Phase 0 gate G5 remains open — see docs/plans/spike-findings.md.

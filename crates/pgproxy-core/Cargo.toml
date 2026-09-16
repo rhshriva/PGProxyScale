@@ -9,9 +9,15 @@ publish.workspace = true
 
 [dependencies]
 pgproxy-wire = { path = "../pgproxy-wire" }
-pgproxy-parser = { path = "../pgproxy-parser" }
-pgproxy-session = { path = "../pgproxy-session" }
-pgproxy-policy = { path = "../pgproxy-policy" }
-pgproxy-pool = { path = "../pgproxy-pool" }
-pgproxy-admin = { path = "../pgproxy-admin" }
 
+socket2.workspace = true
+# Readiness notification with a *safe* registration API and a safe cross-thread waker.
+# Chosen over `polling` precisely because `polling::Poller::add` is `unsafe`, and this
+# crate is `#![forbid(unsafe_code)]` by ADR-0001.
+mio = { version = "1", features = ["net", "os-poll"] }
+signal-hook = "0.3"
+serde.workspace = true
+toml.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
