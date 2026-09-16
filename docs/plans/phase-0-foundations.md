@@ -78,8 +78,15 @@ The ledger is only safe if we know exactly what can and cannot be virtualised.
 
 ## W2 — Wire protocol (`pgproxy-wire`)
 
-- [ ] Streaming message codec for all v3 messages; zero-copy buffer views
-- [ ] Startup: `StartupMessage`, `SSLRequest`, `GSSENCRequest`, protocol negotiation (3.0 and 3.2)
+- [x] Streaming message codec for all v3 messages, with borrowed views over a reused buffer.
+      Deliberately *not* zero-copy: spike S1 measured a zero-copy `splice(2)` path as
+      statistically identical to userspace copying, so the simpler design wins.
+- [x] Length discipline pinned by golden vectors: the length field includes its own four
+      bytes and excludes the tag; lengths below 4 and above the cap are rejected *before*
+      allocating, so an untrusted client cannot request memory.
+- [x] Startup: `StartupMessage`, `SSLRequest`, `GSSENCRequest`, 3.0 and 3.2 version
+      decoding, `_pq_.` protocol grease detected and rejected clearly, `options=` GUCs
+      parsed out rather than dropped. Validated against bytes captured from real psycopg3.
 - [ ] Auth: trust, MD5, SCRAM-SHA-256 (both directions); cert auth
 - [ ] Auth delegation/passthrough so we never need plaintext secrets (PgBouncer's documented
       weakness against managed Postgres that blocks `pg_authid`)
@@ -89,7 +96,8 @@ The ledger is only safe if we know exactly what can and cannot be virtualised.
 - [ ] Completion counted by `ReadyForQuery`, never `CommandComplete`; error → skip to `Sync`
 - [ ] Pipelining within `Sync`-delimited batches
 - [ ] Simple query protocol; `COPY` framing passthrough without buffering
-- [ ] `CancelRequest` routing — designed, not bolted on (PG18's variable-length cancel keys)
+- [~] `CancelRequest` **parsing** done, including the variable-length key protocol 3.2
+      introduced (4 bytes in 3.0, up to 32 in 3.2). *Routing* still needs ADR-0007.
 - [ ] TLS via `rustls`; server-side TLS
 - [ ] Admin pseudo-database surface
 
