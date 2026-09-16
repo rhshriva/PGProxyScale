@@ -60,10 +60,19 @@ Nothing here is a differentiator. All of it is a prerequisite, and the harness i
 **Exit gates**
 - Zero conformance failures across the driver × version matrix.
 - p50 latency overhead ≤ PgBouncer at 4 clients; ≥ 2× PgBouncer TPS at ≥ 64 clients.
+  - *Spike S1 measured this provisionally: 3.8% behind PgBouncer at c=4 (inside tolerance), +203%
+    at c=64. But the test bed (Docker Desktop on Apple Silicon) cannot be trusted for absolute
+    numbers at high concurrency — **re-measure on bare-metal Linux before signing this gate off**.*
 - Parsing adds < 2% CPU on a pgbench simple-protocol run (fast path working).
+  - *Spike S3 supplies the inputs: a T0 hash is 18 ns versus 2,533 ns for a full parse, so the gate is
+    attainable — but only if the parse cache is actually on the hot path.*
 - Benchmark suite reproduces on a documented Hetzner-class box.
+- Emit real latency **percentiles**, not pgbench's average (pgbench has no percentile output).
 
-**Risk spikes resolved:** S1 (can Rust reach low-concurrency parity?), S3 (is `libpg_query` fast enough?).
+**Risk spikes resolved:** S1 (low-concurrency parity — met, with a small tracked deficit),
+S2 (session-state taxonomy — delivered, stronger than expected), S3 (`libpg_query` — viable, but
+ADR-0002's binding recommendation was wrong and is corrected). Full outcomes:
+[`../plans/spike-findings.md`](../plans/spike-findings.md).
 
 ---
 
@@ -81,6 +90,8 @@ Nothing here is a differentiator. All of it is a prerequisite, and the harness i
 - **Temp tables**: per-client schema namespacing where possible; otherwise *minimal* pinning with an eviction-cost model — pin only while the state exists.
 - **Cursors**: `DECLARE`/`FETCH`/`CLOSE` support (the Django `queryset.iterator()` case that currently forces people to disable a feature).
 - **Fail-closed semantics**: if a statement uses state we cannot virtualise, return a specific, actionable error. Never hand a client a dirty session (`pgagroal`'s silent leak is the anti-pattern).
+- **Bounded parse-cache memory, per principal.** Spike S3 measured **~8.5× tree-size amplification** (a 1.29 MB query produced a 10.9 MB parse tree), so an untrusted or agent client can turn a modest request into a large proxy allocation. Cap the statement size we are willing to parse, and budget cache memory per principal — do not assume proxy memory scales linearly with input.
+- **Session image keyed on client intent, including parser-affecting GUCs.** Spike S2 found 9 client-settable GUCs that change how SQL text is parsed, and only 10 of 154 client-settable GUCs are ever reported by the server. `standard_conforming_strings` and `backslash_quote` must be in the parse-cache key and applied to the parser's own configuration.
 - Diagnostics: a queryable view of exactly what is virtualised, pinned, or refused, per client.
 
 **Exit gates**
