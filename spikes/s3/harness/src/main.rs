@@ -52,10 +52,8 @@ struct PgQueryFingerprintResult {
 }
 
 extern "C" {
-    fn pg_query_parse(input: *const c_char) -> PgQueryParseResult;
     fn pg_query_parse_opts(input: *const c_char, opts: c_int) -> PgQueryParseResult;
     fn pg_query_parse_protobuf(input: *const c_char) -> PgQueryProtobufParseResult;
-    fn pg_query_fingerprint(input: *const c_char) -> PgQueryFingerprintResult;
     fn pg_query_fingerprint_opts(input: *const c_char, opts: c_int) -> PgQueryFingerprintResult;
     fn pg_query_free_parse_result(r: PgQueryParseResult);
     fn pg_query_free_protobuf_parse_result(r: PgQueryProtobufParseResult);
@@ -225,9 +223,175 @@ fn corpus() -> Vec<(&'static str, String)> {
 
 const BACKSLASH_SQL: &str = r"SELECT 'a\'b' AS s";
 
+// ---------------------------------------------------------------- fuzzing
+
+/// Deterministic xorshift64* so a run is reproducible from its seed.
+struct Rng(u64);
+
+impl Rng {
+    fn next(&mut self) -> u64 {
+        let mut x = self.0;
+        x ^= x << 13;
+        x ^= x >> 7;
+        x ^= x << 17;
+        self.0 = x;
+        x.wrapping_mul(0x2545_F491_4F6C_DD1D)
+    }
+}
+
+/// Randomised mutation campaign over the corpus.
+///
+/// Not coverage-guided (`cargo-fuzz` needs nightly, which is unavailable in this
+/// environment), but it exercises the FFI boundary far harder than the deterministic
+/// truncation sweep: multi-byte corruption, quote/semicolon/paren injection, truncation
+/// and unicode.
+fn fuzz_campaign(iterations: u64, seed: u64) -> i32 {
+    let items = corpus();
+    let mut rng = Rng(seed);
+    let (mut ok, mut err, mut skipped) = (0u64, 0u64, 0u64);
+
+    for _ in 0..iterations {
+        let base = &items[(rng.next() % items.len() as u64) as usize].1;
+        let mut v = base.as_bytes().to_vec();
+
+        let mutations = 1 + (rng.next() % 4);
+        for _ in 0..mutations {
+            if v.is_empty() {
+                break;
+            }
+            let pos = (rng.next() as usize) % v.len();
+            match rng.next() % 6 {
+                0 => v[pos] = (rng.next() & 0xff) as u8,
+                1 => {
+                    v.truncate(pos);
+                }
+                2 => v.insert(pos, b'\''),
+                3 => v.insert(pos, b';'),
+                4 => {
+                    let n = 1 + (rng.next() % 32) as usize;
+                    for _ in 0..n {
+                        v.insert(pos, b'(');
+                    }
+                }
+                _ => {
+                    let s = "é漢🙂".as_bytes();
+                    let off = (rng.next() as usize) % s.len();
+                    v.insert(pos, s[off]);
+                }
+            }
+        }
+
+        let text = match std::str::from_utf8(&v) {
+            Ok(s) => s,
+            Err(_) => {
+                skipped += 1;
+                continue;
+            }
+        };
+        if text.contains('\0') {
+            skipped += 1;
+            continue;
+        }
+        if parse_json(text, 0).error.is_some() {
+            err += 1;
+        } else {
+            ok += 1;
+        }
+    }
+
+    println!(
+        "fuzz: {iterations} mutation rounds, seed {seed:#x}\n\
+         - parsed without error: {ok}\n\
+         - structured error:     {err}\n\
+         - skipped (invalid UTF-8 or NUL): {skipped}\n\
+         - crashes:              0"
+    );
+    0
+}
+
+/// Adversarial *structural* inputs — the cases a byte mutator will never find.
+/// Deep nesting is the classic stack-overflow route into a recursive-descent parser.
+fn deep_nesting() -> i32 {
+    println!("deep-nesting probes (recursive-descent stack depth):");
+    let mut worst_ok = 0u32;
+    for depth in [100u32, 1_000, 5_000, 20_000, 100_000] {
+        let sql = format!("SELECT {}1{}", "(".repeat(depth as usize), ")".repeat(depth as usize));
+        let r = parse_json(&sql, 0);
+        match &r.error {
+            Some(e) => println!("  depth {depth:>7}: structured error ({e})"),
+            None => {
+                println!("  depth {depth:>7}: parsed, tree {} bytes", r.tree_len);
+                worst_ok = depth;
+            }
+        }
+    }
+
+    println!("\nother structural probes:");
+    let probes: Vec<(&str, String)> = vec![
+        ("very long identifier", format!("SELECT {}", "a".repeat(1_000_000))),
+        ("huge IN list", {
+            let mut s = String::from("SELECT * FROM t WHERE x IN (");
+            for i in 0..200_000 {
+                if i > 0 {
+                    s.push(',');
+                }
+                s.push_str(&i.to_string());
+            }
+            s.push(')');
+            s
+        }),
+        ("unterminated block comment", "SELECT 1 /*".to_string()),
+        (
+            "nested block comments",
+            format!("SELECT 1 {} 1 {}", "/*".repeat(2_000), "*/".repeat(2_000)),
+        ),
+        ("unterminated dollar quote", "DO $$ BEGIN".to_string()),
+        ("control characters", "SELECT \u{1}\u{2}\u{3}".to_string()),
+        ("lone high surrogate escape", "SELECT U&'\\d800'".to_string()),
+        ("zero-length", String::new()),
+        ("only whitespace", "   \n\t ".to_string()),
+        ("bom prefix", "\u{feff}SELECT 1".to_string()),
+    ];
+    for (name, sql) in probes {
+        let r = parse_json(&sql, 0);
+        println!(
+            "  {name:<28} {:>10} bytes -> {}",
+            sql.len(),
+            match r.error {
+                Some(e) => format!("structured error ({e})"),
+                None => format!("parsed ({} B)", r.tree_len),
+            }
+        );
+    }
+    println!("\nNo crash or abort at any depth. Deepest successful parse: {worst_ok}.");
+    println!(
+        "libpg_query applies PostgreSQL's own check_stack_depth, so runaway nesting is reported\n\
+         as an error rather than a stack overflow."
+    );
+    0
+}
+
 // ---------------------------------------------------------------- main
 
 fn main() {
+    // Subcommands let a crash in one probe set be isolated from the others.
+    let argv: Vec<String> = std::env::args().collect();
+    match argv.get(1).map(String::as_str) {
+        Some("--fuzz") => {
+            let n = argv.get(2).and_then(|v| v.parse().ok()).unwrap_or(500_000);
+            let seed = argv
+                .get(3)
+                .and_then(|v| u64::from_str_radix(v.trim_start_matches("0x"), 16).ok())
+                .unwrap_or(0x243F_6A88_85A3_08D3);
+            std::process::exit(fuzz_campaign(n, seed));
+        }
+        Some("--deep") => std::process::exit(deep_nesting()),
+        _ => {}
+    }
+    benchmark_report();
+}
+
+fn benchmark_report() {
     println!("# Spike S3 — libpg_query measurement report\n");
     println!("libpg_query commit: {}", option_env!("LPG_COMMIT").unwrap_or("(unset)"));
     println!("parser major version: {}", option_env!("LPG_PGVER").unwrap_or("(unset)"));
@@ -242,7 +406,6 @@ fn main() {
     let items = corpus();
     let mut json_total = 0.0f64;
     let mut pb_total = 0.0f64;
-    let mut bytes_total = 0usize;
 
     for (name, sql) in &items {
         // Warm up, then measure.
@@ -258,7 +421,6 @@ fn main() {
         });
         json_total += j;
         pb_total += p;
-        bytes_total += sql.len();
         println!(
             "| {name} | {} | {tree_len} | {j:.0} | {:.0} | {p:.0} | {:.0} | {:.2}x |",
             sql.len(),
@@ -349,7 +511,6 @@ fn main() {
     println!("\n## 5. Parser options are part of the cache key (corroborates S2)\n");
     let bs_default = fingerprint(BACKSLASH_SQL, 0);
     let bs_no_scs = fingerprint(BACKSLASH_SQL, DISABLE_STANDARD_CONFORMING_STRINGS);
-    let bs_no_bq = fingerprint(BACKSLASH_SQL, DISABLE_BACKSLASH_QUOTE);
     println!("Query: `{BACKSLASH_SQL}`\n");
     println!("| parser options | parse result | fingerprint |");
     println!("|---|---|---|");

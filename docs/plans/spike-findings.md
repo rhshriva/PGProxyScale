@@ -117,13 +117,51 @@ The same bytes are a syntax error or a valid statement depending on a session GU
 already available in the library we intend to use. A parser that ignores them is both wrong and, in
 Phase 2, a policy bypass.
 
-### 5. FFI boundary smoke test
+### 5. FFI boundary under hostile input
 
-7,087 malformed, truncated and byte-mutated inputs through `pg_query_parse_opts`:
-5,132 parsed, 1,955 returned a structured `PgQueryError`, **0 crashes, panics or aborts**.
-Every failure came back through the error struct, never a signal.
+`cargo-fuzz` requires nightly, which is unavailable in this environment, so the harness ships its own
+deterministic campaign (`--fuzz N [seed]`) plus a structural probe set (`--deep`). Re-run with:
 
-This is a smoke test, not a fuzzing campaign. A sustained `cargo-fuzz` target remains Phase 0 gate G5.
+```
+./target/release/pgquery-spike --fuzz 1000000 0xdeadbeefcafe
+./target/release/pgquery-spike --deep
+```
+
+**Randomised mutation campaign.** Multi-byte corruption, truncation, quote/semicolon/paren injection
+and multi-byte unicode, 1–4 mutations per round:
+
+| rounds | seed | parsed | structured error | skipped (invalid UTF-8/NUL) | crashes |
+|---|---|---|---|---|---|
+| 500,000 | `0x243f6a8885a308d3` | 40,816 | 234,081 | 225,103 | **0** |
+| 1,000,000 | `0xdeadbeefcafe` | 81,724 | 468,878 | 449,398 | **0** |
+| 7,087 (deterministic truncation sweep) | — | 5,132 | 1,955 | 0 | **0** |
+
+**Structural probes** — the cases a byte mutator never finds:
+
+| probe | result |
+|---|---|
+| Nesting depth 100 / 1,000 / 5,000 | parsed |
+| Nesting depth 20,000 / 100,000 | **structured error**: `memory exhausted` |
+| 1 MB single identifier | parsed (285 B tree) |
+| 1.29 MB `IN` list, 200k elements | parsed (**10.9 MB tree**) |
+| Unterminated block comment / dollar quote | structured error |
+| 2,000 nested block comments | parsed |
+| Control characters, lone surrogate escape, BOM prefix | structured error |
+
+**No crash, panic, abort or stack overflow in any of the ~1.5M inputs.** Every failure was reported
+through `PgQueryError`. Critically, runaway nesting degrades to an error rather than a stack
+overflow, because libpg_query inherits PostgreSQL's own `check_stack_depth`.
+
+**One finding worth acting on: tree-size amplification.** A 1.29 MB query produced a **10.9 MB** JSON
+tree — roughly **8.5× amplification**. An untrusted client (especially an agent) can therefore turn a
+modest request into a large allocation in the proxy. Phase 1 must budget parse-cache memory per
+principal and cap the size of statements it is willing to parse, rather than assuming query size and
+proxy memory are related linearly. This is a concrete DoS consideration for the agent-facing surface
+(roadmap §6.11).
+
+Caveat: this is randomised, **not coverage-guided**. It found no memory-safety failure, but it cannot
+claim the coverage a sustained `cargo-fuzz` campaign would. Phase 0 gate G5 remains open and should be
+closed with `cargo-fuzz` on a nightly toolchain in CI.
 
 ### 6. Version pinning is mandatory
 

@@ -1,73 +1,31 @@
-   Compiling pgquery-spike v0.0.0 (/work/harness)
-warning: variable `bytes_total` is assigned to, but never used
-   --> src/main.rs:245:9
-    |
-245 |     let mut bytes_total = 0usize;
-    |         ^^^^^^^^^^^^^^^
-    |
-    = note: consider using `_bytes_total` instead
-    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
-
-warning: unused variable: `bs_no_bq`
-   --> src/main.rs:352:9
-    |
-352 |     let bs_no_bq = fingerprint(BACKSLASH_SQL, DISABLE_BACKSLASH_QUOTE);
-    |         ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_bs_no_bq`
-
-warning: value assigned to `bytes_total` is never read
-   --> src/main.rs:261:9
-    |
-261 |         bytes_total += sql.len();
-    |         ^^^^^^^^^^^^^^^^^^^^^^^^
-    |
-    = help: maybe it is overwritten before being read?
-    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
-
-warning: function `pg_query_parse` is never used
-  --> src/main.rs:55:8
-   |
-55 |     fn pg_query_parse(input: *const c_char) -> PgQueryParseResult;
-   |        ^^^^^^^^^^^^^^
-   |
-   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
-
-warning: function `pg_query_fingerprint` is never used
-  --> src/main.rs:58:8
-   |
-58 |     fn pg_query_fingerprint(input: *const c_char) -> PgQueryFingerprintResult;
-   |        ^^^^^^^^^^^^^^^^^^^^
-
-warning: `pgquery-spike` (bin "pgquery-spike") generated 5 warnings (run `cargo fix --bin "pgquery-spike" -p pgquery-spike` to apply 1 suggestion)
-    Finished `release` profile [optimized] target(s) in 1.57s
-     Running `target/release/pgquery-spike`
 # Spike S3 — libpg_query measurement report
 
-libpg_query commit: 7632d03
-parser major version: 18
+libpg_query commit: (unset)
+parser major version: (unset)
 build: release, lto, codegen-units=1
 
 ## 1. Parse throughput by API shape
 
 | statement | bytes | JSON tree (B) | JSON ns/op | JSON ops/s | protobuf ns/op | protobuf ops/s | speedup |
 |---|---|---|---|---|---|---|---|
-| pk_select | 41 | 637 | 2438 | 410107 | 8665 | 115409 | 0.28x |
-| select_literal | 41 | 644 | 2486 | 402304 | 8730 | 114554 | 0.28x |
-| oltp_update | 89 | 886 | 3446 | 290209 | 11899 | 84040 | 0.29x |
-| join_agg | 160 | 1944 | 7222 | 138463 | 26184 | 38191 | 0.28x |
-| insert_multi | 115 | 1137 | 4542 | 220183 | 15996 | 62516 | 0.28x |
-| cte | 109 | 1368 | 4605 | 217159 | 15906 | 62871 | 0.29x |
-| ddl_alter | 64 | 588 | 2001 | 499678 | 5328 | 187671 | 0.38x |
-| plpgsql_do | 114 | 280 | 1032 | 968988 | 2272 | 440196 | 0.45x |
-| wide_8kb | 6225 | 77761 | 334151 | 2993 | 1472480 | 679 | 0.23x |
+| pk_select | 41 | 637 | 2217 | 451119 | 8573 | 116647 | 0.26x |
+| select_literal | 41 | 644 | 2207 | 453093 | 8515 | 117442 | 0.26x |
+| oltp_update | 89 | 886 | 3297 | 303278 | 12140 | 82372 | 0.27x |
+| join_agg | 160 | 1944 | 6750 | 148140 | 25936 | 38556 | 0.26x |
+| insert_multi | 115 | 1137 | 4199 | 238169 | 15981 | 62576 | 0.26x |
+| cte | 109 | 1368 | 4691 | 213173 | 16280 | 61426 | 0.29x |
+| ddl_alter | 64 | 588 | 1916 | 522023 | 5226 | 191340 | 0.37x |
+| plpgsql_do | 114 | 280 | 991 | 1008988 | 2272 | 440140 | 0.44x |
+| wide_8kb | 6225 | 77761 | 300830 | 3324 | 1389390 | 720 | 0.22x |
 
-Mean across corpus: JSON 40214 ns/op, protobuf 174162 ns/op (0.23x).
+Mean across corpus: JSON 36344 ns/op, protobuf 164924 ns/op (0.22x).
 
 ## 2. T0 fast path versus T2 full parse
 
 | statement | bytes | hash ns/op | JSON parse ns/op | parse/hash |
 |---|---|---|---|---|
-| pk_select (small) | 41 | 18 | 2533 | **142x** |
-| wide_8kb | 6225 | 6123 | 333044 | **54x** |
+| pk_select (small) | 41 | 16 | 2257 | **144x** |
+| wide_8kb | 6225 | 5574 | 308127 | **55x** |
 
 A T0 decision (hash the text, look it up) is one to two orders of magnitude cheaper than a
 full parse. This is the quantitative case for the tiered design: a proxy that parses every
