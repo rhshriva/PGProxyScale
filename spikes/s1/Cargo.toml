@@ -1,0 +1,20 @@
+[package]
+name = "spike-s1"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "spike-s1"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["rt", "net", "io-util", "macros"] }
+socket2 = { version = "0.5", features = ["all"] }
+libc = "0.2"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"

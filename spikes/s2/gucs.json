@@ -1,0 +1,12049 @@
+{
+"14": {
+"enable_seqscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexonlyscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_bitmapscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_tidscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_incremental_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[]
+],
+"enable_hashagg": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_material": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_memoize": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_nestloop": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_mergejoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashjoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_gathermerge": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_join": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_hash": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partition_pruning": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_async_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"is_superuser": [
+"PGC_INTERNAL",
+"UNGROUPED",
+[
+"GUC_ALLOW_IN_PARALLEL",
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"bonjour": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"track_commit_timestamp": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"ssl": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_passphrase_command_supports_reload": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_prefer_server_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"fsync": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"ignore_checksum_failure": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"zero_damaged_pages": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_invalid_pages": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"full_page_writes": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"wal_log_hints": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"wal_compression": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_init_zero": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_recycle": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"log_checkpoints": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_connections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_disconnections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_replication_commands": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_assertions": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"exit_on_error": [
+"PGC_USERSET",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"restart_after_crash": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"remove_temp_files_after_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_duration": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_parse": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_rewritten": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_plan": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_pretty_print": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"log_parser_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_planner_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_executor_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_statement_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_btree_build_stats": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_activities": [
+"PGC_SUSET",
+"STATS_COLLECTOR",
+[]
+],
+"track_counts": [
+"PGC_SUSET",
+"STATS_COLLECTOR",
+[]
+],
+"track_io_timing": [
+"PGC_SUSET",
+"STATS_COLLECTOR",
+[]
+],
+"track_wal_io_timing": [
+"PGC_SUSET",
+"STATS_COLLECTOR",
+[]
+],
+"update_process_title": [
+"PGC_SUSET",
+"PROCESS_TITLE",
+[]
+],
+"autovacuum": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"trace_notify": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_locks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_userlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lwlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_deadlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_lock_waits": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_recovery_conflict_waits": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_hostname": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"transform_null_equals": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_CLIENT",
+[]
+],
+"db_user_namespace": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"default_transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_REPORT"
+]
+],
+"transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL"
+]
+],
+"default_transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL"
+]
+],
+"row_security": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"check_function_bodies": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"array_nulls": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"default_with_oids": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"logging_collector": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"log_truncate_on_rotation": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"trace_sort": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_syncscan": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_debug": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"integer_datetimes": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"krb_caseins_users": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"escape_string_warning": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"standard_conforming_strings": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_REPORT"
+]
+],
+"synchronize_seqscans": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"recovery_target_inclusive": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"hot_standby": [
+"PGC_POSTMASTER",
+"REPLICATION_STANDBY",
+[]
+],
+"hot_standby_feedback": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"in_hot_standby": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"allow_system_table_mods": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_system_indexes": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"allow_in_place_tablespaces": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lo_compat_privileges": [
+"PGC_SUSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"quote_all_identifiers": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"data_checksums": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"syslog_sequence_numbers": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"syslog_split_messages": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"parallel_leader_participation": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_debugging_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_dump_bitcode": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_expressions": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_profiling_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_tuple_deforming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"data_sync_retry": [
+"PGC_POSTMASTER",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"wal_receiver_create_temp_slot": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"archive_timeout": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[
+"GUC_UNIT_S"
+]
+],
+"post_auth_delay": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"default_statistics_target": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[]
+],
+"from_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"join_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_threshold": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_effort": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_pool_size": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_generations": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"deadlock_timeout": [
+"PGC_SUSET",
+"LOCK_MANAGEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_archive_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_streaming_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"recovery_min_apply_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_receiver_status_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_S"
+]
+],
+"wal_receiver_timeout": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"superuser_reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"min_dynamic_shared_memory": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_MB"
+]
+],
+"shared_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"temp_buffers": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"port": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_permissions": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"log_file_mode": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"data_directory_mode": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_KB"
+]
+],
+"maintenance_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"logical_decoding_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_stack_depth": [
+"PGC_SUSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"temp_file_limit": [
+"PGC_SUSET",
+"RESOURCES_DISK",
+[
+"GUC_UNIT_KB"
+]
+],
+"vacuum_cost_page_hit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_miss": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_dirty": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_limit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"autovacuum_vacuum_cost_limit": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"max_files_per_process": [
+"PGC_POSTMASTER",
+"RESOURCES_KERNEL",
+[]
+],
+"max_prepared_transactions": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"trace_lock_oidmin": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lock_table": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"statement_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"lock_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_in_transaction_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"vacuum_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_defer_cleanup_age": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[]
+],
+"vacuum_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"max_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_relation": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_page": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"authentication_timeout": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_UNIT_S"
+]
+],
+"pre_auth_delay": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"min_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"max_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"checkpoint_timeout": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_warning": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_flush_after": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_buffers": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_writer_delay": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_writer_flush_after": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_skip_threshold": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_wal_senders": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_replication_slots": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_slot_wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"wal_sender_timeout": [
+"PGC_USERSET",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MS"
+]
+],
+"commit_delay": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"commit_siblings": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"extra_float_digits": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_min_duration_sample": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_min_duration_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_autovacuum_min_duration": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_parameter_max_length": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"log_parameter_max_length_on_error": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"bgwriter_delay": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_MS"
+]
+],
+"bgwriter_lru_maxpages": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"bgwriter_flush_after": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"backend_flush_after": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"log_rotation_age": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_MIN"
+]
+],
+"log_rotation_size": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_function_args": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_index_keys": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_identifier_length": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_retrieve_retry_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_BYTE"
+]
+],
+"autovacuum_naptime": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_S"
+]
+],
+"autovacuum_vacuum_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_multixact_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_max_workers": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"max_parallel_maintenance_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[]
+],
+"max_parallel_workers_per_gather": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"max_parallel_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"autovacuum_work_mem": [
+"PGC_SIGHUP",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"old_snapshot_threshold": [
+"PGC_POSTMASTER",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_MIN"
+]
+],
+"tcp_keepalives_idle": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_S"
+]
+],
+"tcp_keepalives_interval": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_S"
+]
+],
+"ssl_renegotiation_limit": [
+"PGC_USERSET",
+"CONN_AUTH_SSL",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"tcp_keepalives_count": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"gin_fuzzy_search_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_OTHER",
+[]
+],
+"effective_cache_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_table_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_index_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"server_version_num": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_temp_files": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_KB"
+]
+],
+"track_activity_query_size": [
+"PGC_POSTMASTER",
+"STATS_COLLECTOR",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"gin_pending_list_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_user_timeout": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"huge_page_size": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"debug_discard_caches": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"client_connection_check_interval": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"seq_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"random_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_index_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_operator_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_setup_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_optimize_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_inline_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cursor_tuple_fraction": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_selection_bias": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_seed": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"hash_mem_multiplier": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN"
+]
+],
+"bgwriter_lru_multiplier": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"seed": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"vacuum_cost_delay": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_cost_delay": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"checkpoint_completion_target": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[]
+],
+"log_statement_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_transaction_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"archive_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"restore_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"archive_cleanup_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_end_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_target_timeline": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_xid": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_time": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_name": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_lsn": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"promote_trigger_file": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"primary_conninfo": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"primary_slot_name": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"client_encoding": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_IS_NAME",
+"GUC_REPORT"
+]
+],
+"log_line_prefix": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_timezone": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"DateStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_LIST_INPUT",
+"GUC_REPORT"
+]
+],
+"default_table_access_method": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"default_tablespace": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"temp_tablespaces": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"dynamic_library_path": [
+"PGC_SUSET",
+"CLIENT_CONN_OTHER",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"krb_server_keyfile": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"bonjour_name": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"lc_collate": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lc_ctype": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lc_messages": [
+"PGC_SUSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_monetary": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_numeric": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_time": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"session_preload_libraries": [
+"PGC_SUSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"shared_preload_libraries": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"local_preload_libraries": [
+"PGC_USERSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"search_path": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_EXPLAIN",
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"server_encoding": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"server_version": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"role": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"session_authorization": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"log_destination": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_LIST_INPUT"
+]
+],
+"log_directory": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"log_filename": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"syslog_ident": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"event_source": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"TimeZone": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"timezone_abbreviations": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"unix_socket_group": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_directories": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"listen_addresses": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT"
+]
+],
+"data_directory": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_AUTO_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"config_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"hba_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ident_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"external_pid_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_library": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ssl_cert_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_key_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_ca_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_dir": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"stats_temp_directory": [
+"PGC_SIGHUP",
+"STATS_COLLECTOR",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"synchronous_standby_names": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"default_text_search_config": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"ssl_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_ecdh_curve": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_dh_params_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_passphrase_command": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"application_name": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"cluster_name": [
+"PGC_POSTMASTER",
+"PROCESS_TITLE",
+[
+"GUC_IS_NAME"
+]
+],
+"wal_consistency_checking": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_provider": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backtrace_functions": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"restrict_nonsystem_relation_kind": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"output_plugin_libraries": [
+"PGC_SUSET",
+"REPLICATION_SENDING",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backslash_quote": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"bytea_output": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"client_min_messages": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"compute_query_id": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"constraint_exclusion": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"default_toast_compression": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"default_transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL"
+]
+],
+"IntervalStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"log_error_verbosity": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_min_messages": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_min_error_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_statement": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"syslog_facility": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"session_replication_role": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"synchronous_commit": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"archive_mode": [
+"PGC_POSTMASTER",
+"WAL_ARCHIVING",
+[]
+],
+"recovery_target_action": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"trace_recovery_messages": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[]
+],
+"track_functions": [
+"PGC_SUSET",
+"STATS_COLLECTOR",
+[]
+],
+"wal_level": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"dynamic_shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"wal_sync_method": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"xmlbinary": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"xmloption": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"huge_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"force_parallel_mode": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_EXPLAIN",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"password_encryption": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[]
+],
+"plan_cache_mode": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"ssl_min_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_max_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"recovery_init_sync_method": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+]
+},
+"15": {
+"enable_seqscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexonlyscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_bitmapscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_tidscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_incremental_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashagg": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_material": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_memoize": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_nestloop": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_mergejoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashjoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_gathermerge": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_join": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_hash": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partition_pruning": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_async_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"is_superuser": [
+"PGC_INTERNAL",
+"UNGROUPED",
+[
+"GUC_ALLOW_IN_PARALLEL",
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"bonjour": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"track_commit_timestamp": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"ssl": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_passphrase_command_supports_reload": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_prefer_server_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"fsync": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"ignore_checksum_failure": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"zero_damaged_pages": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_invalid_pages": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"full_page_writes": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"wal_log_hints": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"wal_init_zero": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_recycle": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"log_checkpoints": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_connections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_disconnections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_replication_commands": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_assertions": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"exit_on_error": [
+"PGC_USERSET",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"restart_after_crash": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"remove_temp_files_after_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_duration": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_parse": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_rewritten": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_plan": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_pretty_print": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"log_parser_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_planner_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_executor_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_statement_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_btree_build_stats": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_activities": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_counts": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_wal_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"update_process_title": [
+"PGC_SUSET",
+"PROCESS_TITLE",
+[]
+],
+"autovacuum": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"trace_notify": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_locks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_userlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lwlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_deadlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_lock_waits": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_recovery_conflict_waits": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_hostname": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"transform_null_equals": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_CLIENT",
+[]
+],
+"db_user_namespace": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"default_transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_REPORT"
+]
+],
+"transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL"
+]
+],
+"default_transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL"
+]
+],
+"row_security": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"check_function_bodies": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"array_nulls": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"default_with_oids": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"logging_collector": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"log_truncate_on_rotation": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"trace_sort": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_syncscan": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_debug": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"integer_datetimes": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"krb_caseins_users": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"escape_string_warning": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"standard_conforming_strings": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_REPORT"
+]
+],
+"synchronize_seqscans": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"recovery_target_inclusive": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"hot_standby": [
+"PGC_POSTMASTER",
+"REPLICATION_STANDBY",
+[]
+],
+"hot_standby_feedback": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"in_hot_standby": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"allow_system_table_mods": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_system_indexes": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"allow_in_place_tablespaces": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lo_compat_privileges": [
+"PGC_SUSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"quote_all_identifiers": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"data_checksums": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"syslog_sequence_numbers": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"syslog_split_messages": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"parallel_leader_participation": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_debugging_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_dump_bitcode": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_expressions": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_profiling_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_tuple_deforming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"data_sync_retry": [
+"PGC_POSTMASTER",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"wal_receiver_create_temp_slot": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"archive_timeout": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[
+"GUC_UNIT_S"
+]
+],
+"post_auth_delay": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"default_statistics_target": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[]
+],
+"from_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"join_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_threshold": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_effort": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_pool_size": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_generations": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"deadlock_timeout": [
+"PGC_SUSET",
+"LOCK_MANAGEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_archive_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_streaming_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"recovery_min_apply_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_receiver_status_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_S"
+]
+],
+"wal_receiver_timeout": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"superuser_reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"min_dynamic_shared_memory": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_MB"
+]
+],
+"shared_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"shared_memory_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_MB"
+]
+],
+"shared_memory_size_in_huge_pages": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"temp_buffers": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"port": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_permissions": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"log_file_mode": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"data_directory_mode": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_KB"
+]
+],
+"maintenance_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"logical_decoding_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_stack_depth": [
+"PGC_SUSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"temp_file_limit": [
+"PGC_SUSET",
+"RESOURCES_DISK",
+[
+"GUC_UNIT_KB"
+]
+],
+"vacuum_cost_page_hit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_miss": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_dirty": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_limit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"autovacuum_vacuum_cost_limit": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"max_files_per_process": [
+"PGC_POSTMASTER",
+"RESOURCES_KERNEL",
+[]
+],
+"max_prepared_transactions": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"trace_lock_oidmin": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lock_table": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"statement_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"lock_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_in_transaction_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"vacuum_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_defer_cleanup_age": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[]
+],
+"vacuum_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"max_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_relation": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_page": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"authentication_timeout": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_UNIT_S"
+]
+],
+"pre_auth_delay": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"wal_decode_buffer_size": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"min_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"max_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"checkpoint_timeout": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_warning": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_flush_after": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_buffers": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_writer_delay": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_writer_flush_after": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_skip_threshold": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_wal_senders": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_replication_slots": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_slot_wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"wal_sender_timeout": [
+"PGC_USERSET",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MS"
+]
+],
+"commit_delay": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"commit_siblings": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"extra_float_digits": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_min_duration_sample": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_min_duration_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_autovacuum_min_duration": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_parameter_max_length": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"log_parameter_max_length_on_error": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"bgwriter_delay": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_MS"
+]
+],
+"bgwriter_lru_maxpages": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"bgwriter_flush_after": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"backend_flush_after": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"log_rotation_age": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_MIN"
+]
+],
+"log_rotation_size": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_function_args": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_index_keys": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_identifier_length": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_retrieve_retry_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_BYTE"
+]
+],
+"autovacuum_naptime": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_S"
+]
+],
+"autovacuum_vacuum_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_multixact_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_max_workers": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"max_parallel_maintenance_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[]
+],
+"max_parallel_workers_per_gather": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"max_parallel_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"autovacuum_work_mem": [
+"PGC_SIGHUP",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"old_snapshot_threshold": [
+"PGC_POSTMASTER",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_MIN"
+]
+],
+"tcp_keepalives_idle": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_S"
+]
+],
+"tcp_keepalives_interval": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_S"
+]
+],
+"ssl_renegotiation_limit": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"tcp_keepalives_count": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"gin_fuzzy_search_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_OTHER",
+[]
+],
+"effective_cache_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_table_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_index_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"server_version_num": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_temp_files": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_KB"
+]
+],
+"track_activity_query_size": [
+"PGC_POSTMASTER",
+"STATS_CUMULATIVE",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"gin_pending_list_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_user_timeout": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"huge_page_size": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"debug_discard_caches": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"client_connection_check_interval": [
+"PGC_USERSET",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_startup_progress_interval": [
+"PGC_SIGHUP",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"seq_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"random_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_index_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_operator_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_setup_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_optimize_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_inline_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cursor_tuple_fraction": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"recursive_worktable_factor": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_selection_bias": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_seed": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"hash_mem_multiplier": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN"
+]
+],
+"bgwriter_lru_multiplier": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"seed": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"vacuum_cost_delay": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_cost_delay": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"checkpoint_completion_target": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[]
+],
+"log_statement_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_transaction_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"archive_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"archive_library": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"restore_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"archive_cleanup_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_end_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_target_timeline": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_xid": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_time": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_name": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_lsn": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"promote_trigger_file": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"primary_conninfo": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"primary_slot_name": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"client_encoding": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_IS_NAME",
+"GUC_REPORT"
+]
+],
+"log_line_prefix": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_timezone": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"DateStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_LIST_INPUT",
+"GUC_REPORT"
+]
+],
+"default_table_access_method": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"default_tablespace": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"temp_tablespaces": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"dynamic_library_path": [
+"PGC_SUSET",
+"CLIENT_CONN_OTHER",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"krb_server_keyfile": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"bonjour_name": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"lc_collate": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lc_ctype": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lc_messages": [
+"PGC_SUSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_monetary": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_numeric": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_time": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"session_preload_libraries": [
+"PGC_SUSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"shared_preload_libraries": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"local_preload_libraries": [
+"PGC_USERSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"search_path": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_EXPLAIN",
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"server_encoding": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"server_version": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"role": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"session_authorization": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"log_destination": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_LIST_INPUT"
+]
+],
+"log_directory": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"log_filename": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"syslog_ident": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"event_source": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"TimeZone": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"timezone_abbreviations": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"unix_socket_group": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_directories": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"listen_addresses": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT"
+]
+],
+"data_directory": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_AUTO_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"config_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"hba_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ident_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"external_pid_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_library": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ssl_cert_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_key_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_ca_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_dir": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"synchronous_standby_names": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"default_text_search_config": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"ssl_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_ecdh_curve": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_dh_params_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_passphrase_command": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"application_name": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"cluster_name": [
+"PGC_POSTMASTER",
+"PROCESS_TITLE",
+[
+"GUC_IS_NAME"
+]
+],
+"wal_consistency_checking": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_provider": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backtrace_functions": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"restrict_nonsystem_relation_kind": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"output_plugin_libraries": [
+"PGC_SUSET",
+"REPLICATION_SENDING",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backslash_quote": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"bytea_output": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"client_min_messages": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"compute_query_id": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"constraint_exclusion": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"default_toast_compression": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"default_transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL"
+]
+],
+"IntervalStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"log_error_verbosity": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_min_messages": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_min_error_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_statement": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"syslog_facility": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"session_replication_role": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"synchronous_commit": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"archive_mode": [
+"PGC_POSTMASTER",
+"WAL_ARCHIVING",
+[]
+],
+"recovery_target_action": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"trace_recovery_messages": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_functions": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"stats_fetch_consistency": [
+"PGC_USERSET",
+"STATS_CUMULATIVE",
+[]
+],
+"wal_compression": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_level": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"dynamic_shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"wal_sync_method": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"xmlbinary": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"xmloption": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"huge_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"recovery_prefetch": [
+"PGC_SIGHUP",
+"WAL_RECOVERY",
+[]
+],
+"force_parallel_mode": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_EXPLAIN",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"password_encryption": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[]
+],
+"plan_cache_mode": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"ssl_min_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_max_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"recovery_init_sync_method": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+]
+},
+"16": {
+"enable_seqscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexonlyscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_bitmapscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_tidscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_incremental_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashagg": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_material": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_memoize": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_nestloop": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_mergejoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashjoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_gathermerge": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_join": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_hash": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partition_pruning": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_presorted_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_async_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"is_superuser": [
+"PGC_INTERNAL",
+"UNGROUPED",
+[
+"GUC_ALLOW_IN_PARALLEL",
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"bonjour": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"track_commit_timestamp": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"ssl": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_passphrase_command_supports_reload": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_prefer_server_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"fsync": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"ignore_checksum_failure": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"zero_damaged_pages": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_invalid_pages": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"full_page_writes": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"wal_log_hints": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"wal_init_zero": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_recycle": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"log_checkpoints": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_connections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_disconnections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_replication_commands": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_assertions": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"exit_on_error": [
+"PGC_USERSET",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"restart_after_crash": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"remove_temp_files_after_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"send_abort_for_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"send_abort_for_kill": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_duration": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_parse": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_rewritten": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_plan": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_pretty_print": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"log_parser_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_planner_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_executor_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_statement_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_btree_build_stats": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_activities": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_counts": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_wal_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"update_process_title": [
+"PGC_SUSET",
+"PROCESS_TITLE",
+[]
+],
+"autovacuum": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"trace_notify": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_locks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_userlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lwlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_deadlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_lock_waits": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_recovery_conflict_waits": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_hostname": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"transform_null_equals": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_CLIENT",
+[]
+],
+"db_user_namespace": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"default_transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_REPORT"
+]
+],
+"transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"default_transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"row_security": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"check_function_bodies": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"array_nulls": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"default_with_oids": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"logging_collector": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"log_truncate_on_rotation": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"trace_sort": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_syncscan": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_debug": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"integer_datetimes": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"krb_caseins_users": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"gss_accept_delegation": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"escape_string_warning": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"standard_conforming_strings": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_REPORT"
+]
+],
+"synchronize_seqscans": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"recovery_target_inclusive": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"hot_standby": [
+"PGC_POSTMASTER",
+"REPLICATION_STANDBY",
+[]
+],
+"hot_standby_feedback": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"in_hot_standby": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"allow_system_table_mods": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_system_indexes": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"allow_in_place_tablespaces": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lo_compat_privileges": [
+"PGC_SUSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"quote_all_identifiers": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"data_checksums": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"syslog_sequence_numbers": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"syslog_split_messages": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"parallel_leader_participation": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_debugging_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_dump_bitcode": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_expressions": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_profiling_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_tuple_deforming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"data_sync_retry": [
+"PGC_POSTMASTER",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"wal_receiver_create_temp_slot": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"archive_timeout": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[
+"GUC_UNIT_S"
+]
+],
+"post_auth_delay": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"default_statistics_target": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[]
+],
+"from_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"join_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_threshold": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_effort": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_pool_size": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_generations": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"deadlock_timeout": [
+"PGC_SUSET",
+"LOCK_MANAGEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_archive_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_streaming_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"recovery_min_apply_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_receiver_status_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_S"
+]
+],
+"wal_receiver_timeout": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"superuser_reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"min_dynamic_shared_memory": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_MB"
+]
+],
+"shared_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"vacuum_buffer_usage_limit": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"shared_memory_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_MB"
+]
+],
+"shared_memory_size_in_huge_pages": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"temp_buffers": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"port": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_permissions": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"log_file_mode": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"data_directory_mode": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_KB"
+]
+],
+"maintenance_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"logical_decoding_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_stack_depth": [
+"PGC_SUSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"temp_file_limit": [
+"PGC_SUSET",
+"RESOURCES_DISK",
+[
+"GUC_UNIT_KB"
+]
+],
+"vacuum_cost_page_hit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_miss": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_dirty": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_limit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"autovacuum_vacuum_cost_limit": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"max_files_per_process": [
+"PGC_POSTMASTER",
+"RESOURCES_KERNEL",
+[]
+],
+"max_prepared_transactions": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"trace_lock_oidmin": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lock_table": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"statement_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"lock_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_in_transaction_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"vacuum_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"max_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_relation": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_page": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"authentication_timeout": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_UNIT_S"
+]
+],
+"pre_auth_delay": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"wal_decode_buffer_size": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"min_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"max_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"checkpoint_timeout": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_warning": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_flush_after": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_buffers": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_writer_delay": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_writer_flush_after": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_skip_threshold": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_wal_senders": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_replication_slots": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_slot_wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"wal_sender_timeout": [
+"PGC_USERSET",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MS"
+]
+],
+"commit_delay": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"commit_siblings": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"extra_float_digits": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_min_duration_sample": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_min_duration_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_autovacuum_min_duration": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_parameter_max_length": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"log_parameter_max_length_on_error": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"bgwriter_delay": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_MS"
+]
+],
+"bgwriter_lru_maxpages": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"bgwriter_flush_after": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"backend_flush_after": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"log_rotation_age": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_MIN"
+]
+],
+"log_rotation_size": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_function_args": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_index_keys": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_identifier_length": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_retrieve_retry_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_BYTE"
+]
+],
+"autovacuum_naptime": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_S"
+]
+],
+"autovacuum_vacuum_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_multixact_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_max_workers": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"max_parallel_maintenance_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[]
+],
+"max_parallel_workers_per_gather": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"max_parallel_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"autovacuum_work_mem": [
+"PGC_SIGHUP",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"old_snapshot_threshold": [
+"PGC_POSTMASTER",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_MIN"
+]
+],
+"tcp_keepalives_idle": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_S"
+]
+],
+"tcp_keepalives_interval": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_S"
+]
+],
+"ssl_renegotiation_limit": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"tcp_keepalives_count": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[]
+],
+"gin_fuzzy_search_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_OTHER",
+[]
+],
+"effective_cache_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_table_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_index_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"server_version_num": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_temp_files": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_KB"
+]
+],
+"track_activity_query_size": [
+"PGC_POSTMASTER",
+"STATS_CUMULATIVE",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"gin_pending_list_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_user_timeout": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_MS"
+]
+],
+"huge_page_size": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"debug_discard_caches": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"client_connection_check_interval": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_startup_progress_interval": [
+"PGC_SIGHUP",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"scram_iterations": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[
+"GUC_REPORT"
+]
+],
+"seq_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"random_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_index_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_operator_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_setup_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_optimize_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_inline_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cursor_tuple_fraction": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"recursive_worktable_factor": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_selection_bias": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_seed": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"hash_mem_multiplier": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN"
+]
+],
+"bgwriter_lru_multiplier": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"seed": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"vacuum_cost_delay": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_cost_delay": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"checkpoint_completion_target": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[]
+],
+"log_statement_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_transaction_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"archive_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"archive_library": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"restore_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"archive_cleanup_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_end_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_target_timeline": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_xid": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_time": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_name": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_lsn": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"primary_conninfo": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"primary_slot_name": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"client_encoding": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_IS_NAME",
+"GUC_REPORT"
+]
+],
+"log_line_prefix": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_timezone": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"DateStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_LIST_INPUT",
+"GUC_REPORT"
+]
+],
+"default_table_access_method": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"default_tablespace": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"temp_tablespaces": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"createrole_self_grant": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT"
+]
+],
+"dynamic_library_path": [
+"PGC_SUSET",
+"CLIENT_CONN_OTHER",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"krb_server_keyfile": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"bonjour_name": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"lc_messages": [
+"PGC_SUSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_monetary": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_numeric": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_time": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"session_preload_libraries": [
+"PGC_SUSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"shared_preload_libraries": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"local_preload_libraries": [
+"PGC_USERSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"search_path": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_EXPLAIN",
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"server_encoding": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"server_version": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"role": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"session_authorization": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"log_destination": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_LIST_INPUT"
+]
+],
+"log_directory": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"log_filename": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"syslog_ident": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"event_source": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"TimeZone": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"timezone_abbreviations": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"unix_socket_group": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_directories": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"listen_addresses": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT"
+]
+],
+"data_directory": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_AUTO_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"config_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"hba_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ident_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"external_pid_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_library": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ssl_cert_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_key_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_ca_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_dir": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"synchronous_standby_names": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"default_text_search_config": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"ssl_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_ecdh_curve": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_dh_params_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_passphrase_command": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"application_name": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"cluster_name": [
+"PGC_POSTMASTER",
+"PROCESS_TITLE",
+[
+"GUC_IS_NAME"
+]
+],
+"wal_consistency_checking": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_provider": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backtrace_functions": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_io_direct": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"restrict_nonsystem_relation_kind": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"output_plugin_libraries": [
+"PGC_SUSET",
+"REPLICATION_SENDING",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backslash_quote": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"bytea_output": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"client_min_messages": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"compute_query_id": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"constraint_exclusion": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"default_toast_compression": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"default_transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"IntervalStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"icu_validation_level": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_error_verbosity": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_min_messages": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_min_error_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_statement": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"syslog_facility": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"session_replication_role": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"synchronous_commit": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"archive_mode": [
+"PGC_POSTMASTER",
+"WAL_ARCHIVING",
+[]
+],
+"recovery_target_action": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"trace_recovery_messages": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_functions": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"stats_fetch_consistency": [
+"PGC_USERSET",
+"STATS_CUMULATIVE",
+[]
+],
+"wal_compression": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_level": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"dynamic_shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"file_extend_method": [
+"PGC_SIGHUP",
+"RESOURCES_DISK",
+[]
+],
+"wal_sync_method": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"xmlbinary": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"xmloption": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"huge_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"recovery_prefetch": [
+"PGC_SIGHUP",
+"WAL_RECOVERY",
+[]
+],
+"debug_parallel_query": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_EXPLAIN",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"password_encryption": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[]
+],
+"plan_cache_mode": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"ssl_min_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_max_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"recovery_init_sync_method": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"debug_logical_replication_streaming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+]
+},
+"17": {
+"enable_seqscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexonlyscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_bitmapscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_tidscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_incremental_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashagg": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_material": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_memoize": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_nestloop": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_mergejoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashjoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_gathermerge": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_join": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_hash": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partition_pruning": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_presorted_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_async_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_group_by_reordering": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"is_superuser": [
+"PGC_INTERNAL",
+"UNGROUPED",
+[
+"GUC_ALLOW_IN_PARALLEL",
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"allow_alter_system": [
+"PGC_SIGHUP",
+"COMPAT_OPTIONS_OTHER",
+[
+"GUC_DISALLOW_IN_AUTO_FILE"
+]
+],
+"bonjour": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"track_commit_timestamp": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"ssl": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_passphrase_command_supports_reload": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_prefer_server_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"fsync": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"ignore_checksum_failure": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"zero_damaged_pages": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_invalid_pages": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"full_page_writes": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"wal_log_hints": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"wal_init_zero": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_recycle": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"log_checkpoints": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_connections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"trace_connection_negotiation": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_disconnections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_replication_commands": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_assertions": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"exit_on_error": [
+"PGC_USERSET",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"restart_after_crash": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"remove_temp_files_after_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"send_abort_for_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"send_abort_for_kill": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_duration": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_parse": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_rewritten": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_plan": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_pretty_print": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"log_parser_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_planner_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_executor_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_statement_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_btree_build_stats": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_activities": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_counts": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_wal_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"update_process_title": [
+"PGC_SUSET",
+"PROCESS_TITLE",
+[]
+],
+"autovacuum": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"trace_notify": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_locks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_userlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lwlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_deadlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_lock_waits": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_recovery_conflict_waits": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_hostname": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"transform_null_equals": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_OTHER",
+[]
+],
+"default_transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_REPORT"
+]
+],
+"transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"default_transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"row_security": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"check_function_bodies": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"array_nulls": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"default_with_oids": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"logging_collector": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"log_truncate_on_rotation": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"trace_sort": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_syncscan": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_debug": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"integer_datetimes": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"krb_caseins_users": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"gss_accept_delegation": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"escape_string_warning": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"standard_conforming_strings": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_REPORT"
+]
+],
+"synchronize_seqscans": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"recovery_target_inclusive": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"summarize_wal": [
+"PGC_SIGHUP",
+"WAL_SUMMARIZATION",
+[]
+],
+"hot_standby": [
+"PGC_POSTMASTER",
+"REPLICATION_STANDBY",
+[]
+],
+"hot_standby_feedback": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"in_hot_standby": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"allow_system_table_mods": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_system_indexes": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"allow_in_place_tablespaces": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lo_compat_privileges": [
+"PGC_SUSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"quote_all_identifiers": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"data_checksums": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"syslog_sequence_numbers": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"syslog_split_messages": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"parallel_leader_participation": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_debugging_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_dump_bitcode": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_expressions": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_profiling_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_tuple_deforming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"data_sync_retry": [
+"PGC_POSTMASTER",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"wal_receiver_create_temp_slot": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"event_triggers": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"sync_replication_slots": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"archive_timeout": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[
+"GUC_UNIT_S"
+]
+],
+"post_auth_delay": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"default_statistics_target": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[]
+],
+"from_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"join_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_threshold": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_effort": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_pool_size": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_generations": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"deadlock_timeout": [
+"PGC_SUSET",
+"LOCK_MANAGEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_archive_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_streaming_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"recovery_min_apply_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_receiver_status_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_S"
+]
+],
+"wal_receiver_timeout": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"superuser_reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"min_dynamic_shared_memory": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_MB"
+]
+],
+"shared_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"vacuum_buffer_usage_limit": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"shared_memory_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_MB"
+]
+],
+"shared_memory_size_in_huge_pages": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"commit_timestamp_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"multixact_member_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"multixact_offset_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"notify_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"serializable_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"subtransaction_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"transaction_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"temp_buffers": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"port": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_permissions": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"log_file_mode": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"data_directory_mode": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_KB"
+]
+],
+"maintenance_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"logical_decoding_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_stack_depth": [
+"PGC_SUSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"temp_file_limit": [
+"PGC_SUSET",
+"RESOURCES_DISK",
+[
+"GUC_UNIT_KB"
+]
+],
+"vacuum_cost_page_hit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_miss": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_page_dirty": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"vacuum_cost_limit": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[]
+],
+"autovacuum_vacuum_cost_limit": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"max_files_per_process": [
+"PGC_POSTMASTER",
+"RESOURCES_KERNEL",
+[]
+],
+"max_prepared_transactions": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"trace_lock_oidmin": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lock_table": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"statement_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"lock_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_in_transaction_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"transaction_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"vacuum_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_min_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_freeze_table_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"vacuum_multixact_failsafe_age": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"max_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_relation": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_page": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"authentication_timeout": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_UNIT_S"
+]
+],
+"pre_auth_delay": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"max_notify_queue_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_DISK",
+[]
+],
+"wal_decode_buffer_size": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"min_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"max_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"checkpoint_timeout": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_warning": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_flush_after": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_buffers": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_writer_delay": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_writer_flush_after": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_skip_threshold": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_wal_senders": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_replication_slots": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_slot_wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"wal_sender_timeout": [
+"PGC_USERSET",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MS"
+]
+],
+"commit_delay": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"commit_siblings": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"extra_float_digits": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_min_duration_sample": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_min_duration_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_autovacuum_min_duration": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_parameter_max_length": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"log_parameter_max_length_on_error": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"bgwriter_delay": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_MS"
+]
+],
+"bgwriter_lru_maxpages": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"bgwriter_flush_after": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"backend_flush_after": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"log_rotation_age": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_MIN"
+]
+],
+"log_rotation_size": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_function_args": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_index_keys": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_identifier_length": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_retrieve_retry_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_BYTE"
+]
+],
+"wal_summary_keep_time": [
+"PGC_SIGHUP",
+"WAL_SUMMARIZATION",
+[
+"GUC_UNIT_MIN"
+]
+],
+"autovacuum_naptime": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_S"
+]
+],
+"autovacuum_vacuum_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_threshold": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_multixact_freeze_max_age": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_max_workers": [
+"PGC_POSTMASTER",
+"AUTOVACUUM",
+[]
+],
+"max_parallel_maintenance_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[]
+],
+"max_parallel_workers_per_gather": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"max_parallel_workers": [
+"PGC_USERSET",
+"RESOURCES_ASYNCHRONOUS",
+[
+"GUC_EXPLAIN"
+]
+],
+"autovacuum_work_mem": [
+"PGC_SIGHUP",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_keepalives_idle": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_S"
+]
+],
+"tcp_keepalives_interval": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_S"
+]
+],
+"ssl_renegotiation_limit": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"tcp_keepalives_count": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[]
+],
+"gin_fuzzy_search_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_OTHER",
+[]
+],
+"effective_cache_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_table_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_index_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"server_version_num": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_temp_files": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_KB"
+]
+],
+"track_activity_query_size": [
+"PGC_POSTMASTER",
+"STATS_CUMULATIVE",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"gin_pending_list_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_user_timeout": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_MS"
+]
+],
+"huge_page_size": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"debug_discard_caches": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"client_connection_check_interval": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_startup_progress_interval": [
+"PGC_SIGHUP",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"scram_iterations": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[
+"GUC_REPORT"
+]
+],
+"seq_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"random_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_index_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_operator_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_setup_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_optimize_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_inline_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cursor_tuple_fraction": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"recursive_worktable_factor": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_selection_bias": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_seed": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"hash_mem_multiplier": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN"
+]
+],
+"bgwriter_lru_multiplier": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"seed": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"vacuum_cost_delay": [
+"PGC_USERSET",
+"RESOURCES_VACUUM_DELAY",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_cost_delay": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_scale_factor": [
+"PGC_SIGHUP",
+"AUTOVACUUM",
+[]
+],
+"checkpoint_completion_target": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[]
+],
+"log_statement_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_transaction_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"archive_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"archive_library": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"restore_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"archive_cleanup_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_end_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_target_timeline": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_xid": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_time": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_name": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_lsn": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"primary_conninfo": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"primary_slot_name": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"client_encoding": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_IS_NAME",
+"GUC_REPORT"
+]
+],
+"log_line_prefix": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_timezone": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"DateStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_LIST_INPUT",
+"GUC_REPORT"
+]
+],
+"default_table_access_method": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"default_tablespace": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"temp_tablespaces": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"createrole_self_grant": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT"
+]
+],
+"dynamic_library_path": [
+"PGC_SUSET",
+"CLIENT_CONN_OTHER",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"krb_server_keyfile": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"bonjour_name": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"lc_messages": [
+"PGC_SUSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_monetary": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_numeric": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_time": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"session_preload_libraries": [
+"PGC_SUSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"shared_preload_libraries": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"local_preload_libraries": [
+"PGC_USERSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"search_path": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_EXPLAIN",
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"server_encoding": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"server_version": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"role": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"session_authorization": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"log_destination": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_LIST_INPUT"
+]
+],
+"log_directory": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"log_filename": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"syslog_ident": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"event_source": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"TimeZone": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"timezone_abbreviations": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"unix_socket_group": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_directories": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"listen_addresses": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT"
+]
+],
+"data_directory": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_AUTO_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"config_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"hba_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ident_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"external_pid_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_library": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ssl_cert_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_key_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_ca_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_dir": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"synchronous_standby_names": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"default_text_search_config": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"ssl_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_ecdh_curve": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_dh_params_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_passphrase_command": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"application_name": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"cluster_name": [
+"PGC_POSTMASTER",
+"PROCESS_TITLE",
+[
+"GUC_IS_NAME"
+]
+],
+"wal_consistency_checking": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_provider": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backtrace_functions": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_io_direct": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"synchronized_standby_slots": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"restrict_nonsystem_relation_kind": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"output_plugin_libraries": [
+"PGC_SUSET",
+"REPLICATION_SENDING",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backslash_quote": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"bytea_output": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"client_min_messages": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"compute_query_id": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"constraint_exclusion": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"default_toast_compression": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"default_transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"IntervalStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"icu_validation_level": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_error_verbosity": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_min_messages": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_min_error_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_statement": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"syslog_facility": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"session_replication_role": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"synchronous_commit": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"archive_mode": [
+"PGC_POSTMASTER",
+"WAL_ARCHIVING",
+[]
+],
+"recovery_target_action": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"track_functions": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"stats_fetch_consistency": [
+"PGC_USERSET",
+"STATS_CUMULATIVE",
+[]
+],
+"wal_compression": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_level": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"dynamic_shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"file_extend_method": [
+"PGC_SIGHUP",
+"RESOURCES_DISK",
+[]
+],
+"wal_sync_method": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"xmlbinary": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"xmloption": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"huge_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"huge_pages_status": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"recovery_prefetch": [
+"PGC_SIGHUP",
+"WAL_RECOVERY",
+[]
+],
+"debug_parallel_query": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_EXPLAIN",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"password_encryption": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[]
+],
+"plan_cache_mode": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"ssl_min_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_max_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"recovery_init_sync_method": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"debug_logical_replication_streaming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+]
+},
+"18": {
+"enable_seqscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_indexonlyscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_bitmapscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_tidscan": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_incremental_sort": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashagg": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_material": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_memoize": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_nestloop": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_mergejoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_hashjoin": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_gathermerge": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_join": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partitionwise_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_parallel_hash": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_partition_pruning": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_presorted_aggregate": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_async_append": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_self_join_elimination": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_group_by_reordering": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"enable_distinct_reordering": [
+"PGC_USERSET",
+"QUERY_TUNING_METHOD",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"is_superuser": [
+"PGC_INTERNAL",
+"UNGROUPED",
+[
+"GUC_ALLOW_IN_PARALLEL",
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"allow_alter_system": [
+"PGC_SIGHUP",
+"COMPAT_OPTIONS_OTHER",
+[
+"GUC_DISALLOW_IN_AUTO_FILE"
+]
+],
+"bonjour": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"track_commit_timestamp": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"ssl": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_passphrase_command_supports_reload": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_prefer_server_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"fsync": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"ignore_checksum_failure": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"zero_damaged_pages": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_invalid_pages": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"full_page_writes": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"wal_log_hints": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"wal_init_zero": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_recycle": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"log_checkpoints": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"trace_connection_negotiation": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_disconnections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[]
+],
+"log_replication_commands": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_assertions": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"exit_on_error": [
+"PGC_USERSET",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"restart_after_crash": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"remove_temp_files_after_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"send_abort_for_crash": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"send_abort_for_kill": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_duration": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_copy_parse_plan_trees": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_write_read_parse_plan_trees": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_raw_expression_coverage_test": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_print_parse": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_rewritten": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_print_plan": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"debug_pretty_print": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[]
+],
+"log_parser_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_planner_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_executor_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_statement_stats": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"log_btree_build_stats": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"track_activities": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_counts": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_cost_delay_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"track_wal_io_timing": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"update_process_title": [
+"PGC_SUSET",
+"PROCESS_TITLE",
+[]
+],
+"autovacuum": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"trace_notify": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_locks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_userlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lwlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_deadlocks": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_lock_waits": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_lock_failures": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_recovery_conflict_waits": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_hostname": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"transform_null_equals": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_OTHER",
+[]
+],
+"default_transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_REPORT"
+]
+],
+"transaction_read_only": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"default_transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_deferrable": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"row_security": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"check_function_bodies": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"array_nulls": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"default_with_oids": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"logging_collector": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"log_truncate_on_rotation": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"trace_sort": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_syncscan": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_debug": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"integer_datetimes": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"krb_caseins_users": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"gss_accept_delegation": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[]
+],
+"escape_string_warning": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"standard_conforming_strings": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_REPORT"
+]
+],
+"synchronize_seqscans": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"recovery_target_inclusive": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"summarize_wal": [
+"PGC_SIGHUP",
+"WAL_SUMMARIZATION",
+[]
+],
+"hot_standby": [
+"PGC_POSTMASTER",
+"REPLICATION_STANDBY",
+[]
+],
+"hot_standby_feedback": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"in_hot_standby": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"allow_system_table_mods": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ignore_system_indexes": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"allow_in_place_tablespaces": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"lo_compat_privileges": [
+"PGC_SUSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"quote_all_identifiers": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"data_checksums": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"syslog_sequence_numbers": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"syslog_split_messages": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"parallel_leader_participation": [
+"PGC_USERSET",
+"RESOURCES_WORKER_PROCESSES",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_debugging_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_dump_bitcode": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_expressions": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_profiling_support": [
+"PGC_SU_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_tuple_deforming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"data_sync_retry": [
+"PGC_POSTMASTER",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"wal_receiver_create_temp_slot": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"event_triggers": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"sync_replication_slots": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"md5_password_warnings": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[]
+],
+"vacuum_truncate": [
+"PGC_USERSET",
+"VACUUM_DEFAULT",
+[]
+],
+"archive_timeout": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[
+"GUC_UNIT_S"
+]
+],
+"post_auth_delay": [
+"PGC_BACKEND",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"default_statistics_target": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[]
+],
+"from_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"join_collapse_limit": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_threshold": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_effort": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_pool_size": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_generations": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"deadlock_timeout": [
+"PGC_SUSET",
+"LOCK_MANAGEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_archive_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_standby_streaming_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"recovery_min_apply_delay": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_receiver_status_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_S"
+]
+],
+"wal_receiver_timeout": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"max_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"superuser_reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"reserved_connections": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"min_dynamic_shared_memory": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_MB"
+]
+],
+"shared_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"vacuum_buffer_usage_limit": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"shared_memory_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_MB"
+]
+],
+"shared_memory_size_in_huge_pages": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"num_os_semaphores": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"commit_timestamp_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"multixact_member_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"multixact_offset_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"notify_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"serializable_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"subtransaction_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"transaction_buffers": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"temp_buffers": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"port": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_permissions": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"log_file_mode": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"data_directory_mode": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED"
+]
+],
+"work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_KB"
+]
+],
+"maintenance_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"logical_decoding_work_mem": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_stack_depth": [
+"PGC_SUSET",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"temp_file_limit": [
+"PGC_SUSET",
+"RESOURCES_DISK",
+[
+"GUC_UNIT_KB"
+]
+],
+"vacuum_cost_page_hit": [
+"PGC_USERSET",
+"VACUUM_COST_DELAY",
+[]
+],
+"vacuum_cost_page_miss": [
+"PGC_USERSET",
+"VACUUM_COST_DELAY",
+[]
+],
+"vacuum_cost_page_dirty": [
+"PGC_USERSET",
+"VACUUM_COST_DELAY",
+[]
+],
+"vacuum_cost_limit": [
+"PGC_USERSET",
+"VACUUM_COST_DELAY",
+[]
+],
+"autovacuum_vacuum_cost_limit": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"max_files_per_process": [
+"PGC_POSTMASTER",
+"RESOURCES_KERNEL",
+[]
+],
+"max_prepared_transactions": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"trace_lock_oidmin": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"trace_lock_table": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"statement_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"lock_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_in_transaction_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"transaction_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_session_timeout": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_MS"
+]
+],
+"vacuum_freeze_min_age": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"vacuum_freeze_table_age": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"vacuum_multixact_freeze_min_age": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"vacuum_multixact_freeze_table_age": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"vacuum_failsafe_age": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"vacuum_multixact_failsafe_age": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"max_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_transaction": [
+"PGC_POSTMASTER",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_relation": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"max_pred_locks_per_page": [
+"PGC_SIGHUP",
+"LOCK_MANAGEMENT",
+[]
+],
+"authentication_timeout": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_UNIT_S"
+]
+],
+"pre_auth_delay": [
+"PGC_SIGHUP",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_S"
+]
+],
+"max_notify_queue_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_DISK",
+[]
+],
+"wal_decode_buffer_size": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"min_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"max_wal_size": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_MB"
+]
+],
+"checkpoint_timeout": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_warning": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_S"
+]
+],
+"checkpoint_flush_after": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_buffers": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_writer_delay": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_writer_flush_after": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_XBLOCKS"
+]
+],
+"wal_skip_threshold": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_wal_senders": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_replication_slots": [
+"PGC_POSTMASTER",
+"REPLICATION_SENDING",
+[]
+],
+"max_slot_wal_keep_size": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MB"
+]
+],
+"wal_sender_timeout": [
+"PGC_USERSET",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_MS"
+]
+],
+"idle_replication_slot_timeout": [
+"PGC_SIGHUP",
+"REPLICATION_SENDING",
+[
+"GUC_UNIT_S"
+]
+],
+"commit_delay": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"commit_siblings": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"extra_float_digits": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_min_duration_sample": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_min_duration_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_autovacuum_min_duration": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_parameter_max_length": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"log_parameter_max_length_on_error": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"bgwriter_delay": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_MS"
+]
+],
+"bgwriter_lru_maxpages": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"bgwriter_flush_after": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"backend_flush_after": [
+"PGC_USERSET",
+"RESOURCES_IO",
+[
+"GUC_UNIT_BLOCKS"
+]
+],
+"log_rotation_age": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_MIN"
+]
+],
+"log_rotation_size": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_UNIT_KB"
+]
+],
+"max_function_args": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_index_keys": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"max_identifier_length": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_UNIT_BLOCKS"
+]
+],
+"wal_block_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"wal_retrieve_retry_interval": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_UNIT_MS"
+]
+],
+"wal_segment_size": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_RUNTIME_COMPUTED",
+"GUC_UNIT_BYTE"
+]
+],
+"wal_summary_keep_time": [
+"PGC_SIGHUP",
+"WAL_SUMMARIZATION",
+[
+"GUC_UNIT_MIN"
+]
+],
+"autovacuum_naptime": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[
+"GUC_UNIT_S"
+]
+],
+"autovacuum_vacuum_threshold": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_max_threshold": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_threshold": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_threshold": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_freeze_max_age": [
+"PGC_POSTMASTER",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_multixact_freeze_max_age": [
+"PGC_POSTMASTER",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_worker_slots": [
+"PGC_POSTMASTER",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_max_workers": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"max_parallel_maintenance_workers": [
+"PGC_USERSET",
+"RESOURCES_WORKER_PROCESSES",
+[]
+],
+"max_parallel_workers_per_gather": [
+"PGC_USERSET",
+"RESOURCES_WORKER_PROCESSES",
+[
+"GUC_EXPLAIN"
+]
+],
+"max_parallel_workers": [
+"PGC_USERSET",
+"RESOURCES_WORKER_PROCESSES",
+[
+"GUC_EXPLAIN"
+]
+],
+"autovacuum_work_mem": [
+"PGC_SIGHUP",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_keepalives_idle": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_S"
+]
+],
+"tcp_keepalives_interval": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_S"
+]
+],
+"ssl_renegotiation_limit": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_SHOW_ALL"
+]
+],
+"tcp_keepalives_count": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[]
+],
+"gin_fuzzy_search_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_OTHER",
+[]
+],
+"effective_cache_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_table_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"min_parallel_index_scan_size": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN",
+"GUC_UNIT_BLOCKS"
+]
+],
+"server_version_num": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"log_temp_files": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[
+"GUC_UNIT_KB"
+]
+],
+"track_activity_query_size": [
+"PGC_POSTMASTER",
+"STATS_CUMULATIVE",
+[
+"GUC_UNIT_BYTE"
+]
+],
+"gin_pending_list_limit": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_UNIT_KB"
+]
+],
+"tcp_user_timeout": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_MS"
+]
+],
+"huge_page_size": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[
+"GUC_UNIT_KB"
+]
+],
+"debug_discard_caches": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"client_connection_check_interval": [
+"PGC_USERSET",
+"CONN_AUTH_TCP",
+[
+"GUC_UNIT_MS"
+]
+],
+"log_startup_progress_interval": [
+"PGC_SIGHUP",
+"LOGGING_WHEN",
+[
+"GUC_UNIT_MS"
+]
+],
+"scram_iterations": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[
+"GUC_REPORT"
+]
+],
+"seq_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"random_page_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_index_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cpu_operator_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_tuple_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"parallel_setup_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_optimize_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"jit_inline_above_cost": [
+"PGC_USERSET",
+"QUERY_TUNING_COST",
+[
+"GUC_EXPLAIN"
+]
+],
+"cursor_tuple_fraction": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"recursive_worktable_factor": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_selection_bias": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"geqo_seed": [
+"PGC_USERSET",
+"QUERY_TUNING_GEQO",
+[
+"GUC_EXPLAIN"
+]
+],
+"hash_mem_multiplier": [
+"PGC_USERSET",
+"RESOURCES_MEM",
+[
+"GUC_EXPLAIN"
+]
+],
+"bgwriter_lru_multiplier": [
+"PGC_SIGHUP",
+"RESOURCES_BGWRITER",
+[]
+],
+"seed": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"vacuum_cost_delay": [
+"PGC_USERSET",
+"VACUUM_COST_DELAY",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_cost_delay": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[
+"GUC_UNIT_MS"
+]
+],
+"autovacuum_vacuum_scale_factor": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_vacuum_insert_scale_factor": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"autovacuum_analyze_scale_factor": [
+"PGC_SIGHUP",
+"VACUUM_AUTOVACUUM",
+[]
+],
+"checkpoint_completion_target": [
+"PGC_SIGHUP",
+"WAL_CHECKPOINTS",
+[]
+],
+"log_statement_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_transaction_sample_rate": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"vacuum_max_eager_freeze_failure_rate": [
+"PGC_USERSET",
+"VACUUM_FREEZING",
+[]
+],
+"archive_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"archive_library": [
+"PGC_SIGHUP",
+"WAL_ARCHIVING",
+[]
+],
+"restore_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"archive_cleanup_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_end_command": [
+"PGC_SIGHUP",
+"WAL_ARCHIVE_RECOVERY",
+[]
+],
+"recovery_target_timeline": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_xid": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_time": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_name": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"recovery_target_lsn": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"primary_conninfo": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"primary_slot_name": [
+"PGC_SIGHUP",
+"REPLICATION_STANDBY",
+[]
+],
+"client_encoding": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_IS_NAME",
+"GUC_REPORT"
+]
+],
+"log_line_prefix": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"log_timezone": [
+"PGC_SIGHUP",
+"LOGGING_WHAT",
+[]
+],
+"DateStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_LIST_INPUT",
+"GUC_REPORT"
+]
+],
+"default_table_access_method": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"default_tablespace": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_IS_NAME"
+]
+],
+"temp_tablespaces": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"createrole_self_grant": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT"
+]
+],
+"dynamic_library_path": [
+"PGC_SUSET",
+"CLIENT_CONN_OTHER",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"extension_control_path": [
+"PGC_SUSET",
+"CLIENT_CONN_OTHER",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"krb_server_keyfile": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"bonjour_name": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"lc_messages": [
+"PGC_SUSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_monetary": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_numeric": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"lc_time": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"session_preload_libraries": [
+"PGC_SUSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"shared_preload_libraries": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"local_preload_libraries": [
+"PGC_USERSET",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE"
+]
+],
+"search_path": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_EXPLAIN",
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_REPORT"
+]
+],
+"server_encoding": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"server_version": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"role": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL"
+]
+],
+"session_authorization": [
+"PGC_USERSET",
+"UNGROUPED",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NOT_WHILE_SEC_REST",
+"GUC_NO_RESET_ALL",
+"GUC_NO_SHOW_ALL",
+"GUC_REPORT"
+]
+],
+"log_destination": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_LIST_INPUT"
+]
+],
+"log_directory": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"log_filename": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"syslog_ident": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"event_source": [
+"PGC_POSTMASTER",
+"LOGGING_WHERE",
+[]
+],
+"TimeZone": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"timezone_abbreviations": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"unix_socket_group": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[]
+],
+"unix_socket_directories": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"listen_addresses": [
+"PGC_POSTMASTER",
+"CONN_AUTH_SETTINGS",
+[
+"GUC_LIST_INPUT"
+]
+],
+"data_directory": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_AUTO_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"config_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"hba_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ident_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"external_pid_file": [
+"PGC_POSTMASTER",
+"FILE_LOCATIONS",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_library": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"ssl_cert_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_key_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_ca_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"ssl_crl_dir": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[]
+],
+"synchronous_standby_names": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"default_text_search_config": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"ssl_tls13_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_ciphers": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_groups": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_dh_params_file": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_passphrase_command": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"application_name": [
+"PGC_USERSET",
+"LOGGING_WHAT",
+[
+"GUC_IS_NAME",
+"GUC_NOT_IN_SAMPLE",
+"GUC_REPORT"
+]
+],
+"cluster_name": [
+"PGC_POSTMASTER",
+"PROCESS_TITLE",
+[
+"GUC_IS_NAME"
+]
+],
+"wal_consistency_checking": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"jit_provider": [
+"PGC_POSTMASTER",
+"CLIENT_CONN_PRELOAD",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"backtrace_functions": [
+"PGC_SUSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"debug_io_direct": [
+"PGC_POSTMASTER",
+"DEVELOPER_OPTIONS",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"synchronized_standby_slots": [
+"PGC_SIGHUP",
+"REPLICATION_PRIMARY",
+[
+"GUC_LIST_INPUT"
+]
+],
+"restrict_nonsystem_relation_kind": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_LIST_INPUT",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"oauth_validator_libraries": [
+"PGC_SIGHUP",
+"CONN_AUTH_AUTH",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"output_plugin_libraries": [
+"PGC_SUSET",
+"REPLICATION_SENDING",
+[
+"GUC_LIST_INPUT",
+"GUC_LIST_QUOTE",
+"GUC_SUPERUSER_ONLY"
+]
+],
+"log_connections": [
+"PGC_SU_BACKEND",
+"LOGGING_WHAT",
+[
+"GUC_LIST_INPUT"
+]
+],
+"backslash_quote": [
+"PGC_USERSET",
+"COMPAT_OPTIONS_PREVIOUS",
+[]
+],
+"bytea_output": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"client_min_messages": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"compute_query_id": [
+"PGC_SUSET",
+"STATS_MONITORING",
+[]
+],
+"constraint_exclusion": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"default_toast_compression": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"default_transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"transaction_isolation": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE",
+"GUC_NO_RESET",
+"GUC_NO_RESET_ALL"
+]
+],
+"IntervalStyle": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[
+"GUC_REPORT"
+]
+],
+"icu_validation_level": [
+"PGC_USERSET",
+"CLIENT_CONN_LOCALE",
+[]
+],
+"log_error_verbosity": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"log_min_messages": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_min_error_statement": [
+"PGC_SUSET",
+"LOGGING_WHEN",
+[]
+],
+"log_statement": [
+"PGC_SUSET",
+"LOGGING_WHAT",
+[]
+],
+"syslog_facility": [
+"PGC_SIGHUP",
+"LOGGING_WHERE",
+[]
+],
+"session_replication_role": [
+"PGC_SUSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"synchronous_commit": [
+"PGC_USERSET",
+"WAL_SETTINGS",
+[]
+],
+"archive_mode": [
+"PGC_POSTMASTER",
+"WAL_ARCHIVING",
+[]
+],
+"recovery_target_action": [
+"PGC_POSTMASTER",
+"WAL_RECOVERY_TARGET",
+[]
+],
+"track_functions": [
+"PGC_SUSET",
+"STATS_CUMULATIVE",
+[]
+],
+"stats_fetch_consistency": [
+"PGC_USERSET",
+"STATS_CUMULATIVE",
+[]
+],
+"wal_compression": [
+"PGC_SUSET",
+"WAL_SETTINGS",
+[]
+],
+"wal_level": [
+"PGC_POSTMASTER",
+"WAL_SETTINGS",
+[]
+],
+"dynamic_shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"shared_memory_type": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"file_copy_method": [
+"PGC_USERSET",
+"RESOURCES_DISK",
+[]
+],
+"file_extend_method": [
+"PGC_SIGHUP",
+"RESOURCES_DISK",
+[]
+],
+"wal_sync_method": [
+"PGC_SIGHUP",
+"WAL_SETTINGS",
+[]
+],
+"xmlbinary": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"xmloption": [
+"PGC_USERSET",
+"CLIENT_CONN_STATEMENT",
+[]
+],
+"huge_pages": [
+"PGC_POSTMASTER",
+"RESOURCES_MEM",
+[]
+],
+"huge_pages_status": [
+"PGC_INTERNAL",
+"PRESET_OPTIONS",
+[
+"GUC_DISALLOW_IN_FILE",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"recovery_prefetch": [
+"PGC_SIGHUP",
+"WAL_RECOVERY",
+[]
+],
+"debug_parallel_query": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_EXPLAIN",
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"password_encryption": [
+"PGC_USERSET",
+"CONN_AUTH_AUTH",
+[]
+],
+"plan_cache_mode": [
+"PGC_USERSET",
+"QUERY_TUNING_OTHER",
+[
+"GUC_EXPLAIN"
+]
+],
+"ssl_min_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"ssl_max_protocol_version": [
+"PGC_SIGHUP",
+"CONN_AUTH_SSL",
+[
+"GUC_SUPERUSER_ONLY"
+]
+],
+"recovery_init_sync_method": [
+"PGC_SIGHUP",
+"ERROR_HANDLING_OPTIONS",
+[]
+],
+"debug_logical_replication_streaming": [
+"PGC_USERSET",
+"DEVELOPER_OPTIONS",
+[
+"GUC_NOT_IN_SAMPLE"
+]
+],
+"io_method": [
+"PGC_POSTMASTER",
+"RESOURCES_IO",
+[]
+]
+}
+}

@@ -39,7 +39,38 @@ PgDog profiled its parser and found that converting the AST across a protobuf bo
 - deparse throughput **759 → 7,319 queries/s**
 - and yielded **+25% on pgbench**
 
-**Consequence for us:** bind `libpg_query` directly over FFI from day one. Never route the AST through an intermediate serialisation. Keep the AST in a borrowed view over the C-allocated tree and avoid copying nodes into Rust structs unless a subsystem genuinely needs an owned tree.
+**Corrected by spike S3** — see [`../plans/spike-findings.md`](../plans/spike-findings.md). The
+paragraph that used to sit here assumed protobuf was the faster intermediate serialisation. It is not.
+Measured with libpg_query commit `7632d03` (PG 18 grammar), release + LTO, in a Linux container:
+
+| API | `pk_select` (41 B) | `oltp_update` (89 B) | `wide_8kb` (6,225 B) |
+|---|---|---|---|
+| `pg_query_parse` (JSON) | 2,194 ns | 3,089 ns | 311,030 ns |
+| `pg_query_parse_protobuf` | 8,631 ns | 11,636 ns | 1,415,299 ns |
+
+**Protobuf is 2–5× slower than JSON, not faster.** Verified in the source rather than taken on faith:
+both paths call `pg_query_raw_parse` and differ only in the serialiser — `pg_query_nodes_to_json` is a
+hand-written writer, while `pg_query_nodes_to_protobuf` goes through protobuf-c, and protobuf-c loses
+badly. The correct reading of PgDog's "replacing protobuf with Rust to go 5× faster" is that they
+stopped serialising **at all**, not that they changed format.
+
+**Consequence for us:** bind the **JSON** API for Phase 0 — it is the best available public API — and
+do not use protobuf. But treat this as a waypoint, not the destination: **both public APIs materialise
+a serialised copy of the tree**, and the fast path is walking the raw C `RawStmt`/`Node` tree in place.
+That tree is deliberately absent from `pg_query.h`, which is exactly why PgDog wrote a separate
+`pg_raw_parse` crate to reach it. A raw-tree accessor is therefore a *measured optimisation on the
+roadmap*, not a prerequisite.
+
+### Parsing must be cached, because a parse is not cheap
+
+| statement | bytes | T0 hash | T2 parse | parse ÷ hash |
+|---|---|---|---|---|
+| `pk_select` | 41 | 18 ns | 2,533 ns | **142×** |
+| `wide_8kb` | 6,225 | 6,123 ns | 333,044 ns | **54×** |
+
+At 50k queries/s, parsing every small statement costs roughly 11% of a core, and a single 8 KB
+statement costs 333 µs. "Parse once per unique statement, keyed by hash" is an architectural
+requirement, not an optimisation.
 
 ---
 
