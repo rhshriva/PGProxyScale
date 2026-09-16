@@ -1,0 +1,17 @@
+[package]
+name = "pgproxy-core"
+description = "Runtime bootstrap, configuration and supervision"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+pgproxy-wire = { path = "../pgproxy-wire" }
+pgproxy-parser = { path = "../pgproxy-parser" }
+pgproxy-session = { path = "../pgproxy-session" }
+pgproxy-policy = { path = "../pgproxy-policy" }
+pgproxy-pool = { path = "../pgproxy-pool" }
+pgproxy-admin = { path = "../pgproxy-admin" }
+

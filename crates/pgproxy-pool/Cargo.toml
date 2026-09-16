@@ -1,0 +1,12 @@
+[package]
+name = "pgproxy-pool"
+description = "Backend pools, checkout/checkin, fairness and admission control"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+pgproxy-session = { path = "../pgproxy-session" }
+

@@ -1,0 +1,13 @@
+[package]
+name = "pgproxy-admin"
+description = "Admin SQL surface, metrics and health"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+pgproxy-pool = { path = "../pgproxy-pool" }
+pgproxy-session = { path = "../pgproxy-session" }
+

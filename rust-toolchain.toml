@@ -1,0 +1,6 @@
+# Pinned to the installed stable toolchain rather than an exact version so that
+# `cargo` never needs network access to resolve a toolchain.
+# The compiler floor is declared separately as `rust-version` in Cargo.toml.
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]

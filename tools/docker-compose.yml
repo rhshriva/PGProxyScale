@@ -1,0 +1,76 @@
+# PostgreSQL version matrix for development and conformance testing.
+#
+# All features are developed against vanilla PostgreSQL first (roadmap §7).
+# PostgreSQL 18 is the primary target: it brings protocol 3.2, OAUTHBEARER
+# authentication, and variable-length cancel keys (which break the fixed
+# 12-byte BackendKeyData assumption every current proxy implementation makes).
+#
+#   docker compose -f tools/docker-compose.yml up -d
+#   psql "postgres://postgres:postgres@127.0.0.1:5418/postgres"
+#
+name: pgproxyscale
+
+services:
+  pg14:
+    image: postgres:14-alpine
+    environment: &env
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    command: &cmd >
+      postgres
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c log_statement=none
+      -c log_min_duration_statement=200
+      -c track_io_timing=on
+    ports: ["5414:5432"]
+    healthcheck: &hc
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  pg15:
+    image: postgres:15-alpine
+    environment: *env
+    command: *cmd
+    ports: ["5415:5432"]
+    healthcheck: *hc
+
+  pg16:
+    image: postgres:16-alpine
+    environment: *env
+    command: *cmd
+    ports: ["5416:5432"]
+    healthcheck: *hc
+
+  pg17:
+    image: postgres:17-alpine
+    environment: *env
+    command: *cmd
+    ports: ["5417:5432"]
+    healthcheck: *hc
+
+  # Primary development target: protocol 3.2, OAuth2, variable-length cancel keys.
+  pg18:
+    image: postgres:18-alpine
+    environment: *env
+    command: *cmd
+    ports: ["5418:5432"]
+    healthcheck: *hc
+
+  # A second PG18 with streaming replication configured, for the failover drill.
+  # Enabled with:  docker compose -f tools/docker-compose.yml --profile ha up -d
+  pg18-replica:
+    image: postgres:18-alpine
+    profiles: ["ha"]
+    environment:
+      <<: *env
+      PGUSER: postgres
+    command: *cmd
+    ports: ["5419:5432"]
+    depends_on:
+      pg18:
+        condition: service_healthy
+    healthcheck: *hc

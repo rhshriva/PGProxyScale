@@ -1,0 +1,32 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.91"
+license = "Apache-2.0"          # TODO(ADR-0004): licence undecided
+publish = false
+
+[workspace.dependencies]
+# Intentionally empty for Phase 0 scaffolding.
+# Dependencies are added per-crate as each subsystem is implemented, so that the
+# skeleton builds offline and the dependency surface is a deliberate decision
+# rather than an accident. Expected additions, per ADR-0001 and ADR-0002:
+#   runtime      monoio / tokio        (thread-per-core; see ADR-0001, spike S1)
+#   parser       libpg_query-sys       (FFI; see ADR-0002)
+#   tls          rustls / tokio-rustls
+#   crypto       sha2, hmac, pbkdf2    (SCRAM-SHA-256, MD5)
+#   metrics      metrics / prometheus
+#   tracing      tracing, opentelemetry
+#   fuzzing      libfuzzer-sys (dev)
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+
+[profile.bench]
+lto = "thin"
+codegen-units = 1

@@ -1,0 +1,13 @@
+[package]
+name = "pgproxy-session"
+description = "Session-State Ledger: session image, statement registry, DDL stream, lock leases (ADR-0003)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+pgproxy-wire = { path = "../pgproxy-wire" }
+pgproxy-parser = { path = "../pgproxy-parser" }
+

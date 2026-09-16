@@ -1,0 +1,25 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+
+# libpg_query build artefacts (vendored C, built by build.rs)
+**/libpg_query/
+**/pg_query_*.o
+**/pg_query_*.a
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local runtime
+*.log
+/tmp/
+.env
+.env.local
+
+# Benchmarks and test output
+/bench-results/
+/coverage/
