@@ -47,12 +47,20 @@ Thread-per-core (ADR 0001). The consequences are load-bearing and must be design
 
 ## 3. Data path, in order of preference
 
-1. **Bypass / splice** — when a session is assigned a backend and no policy, ledger or inspection requirement applies, hand the bytes off (`splice(2)`, `sendfile`, or fd passing) so bulk traffic never traverses a shared event loop. This is what makes the low-concurrency latency claim defensible against libevent.
-2. **Passthrough with framing only** — parse headers, not SQL. Correct for `COPY` and large result sets.
+1. **Passthrough** — relay bytes with `TCP_NODELAY` on both sockets, no SQL inspection. This is the
+   default fast path and, per spike S1, it is as fast as anything more exotic: a zero-copy
+   `splice(2)` bypass measured **statistically identical** to plain userspace `io::copy`
+   (217,867 vs 215,827 TPS at c=64). **The bottleneck is not byte copying**, so the data path stays
+   simple and auditable. Do not build a splice path in Phase 0.
+2. **Framed inspection** — parse message headers, not SQL. Correct for `COPY` and large result sets.
 3. **Classified (T1)** — statement class for routing.
 4. **Full (T2)** — parse and enforce. Only when the ledger or policy requires it.
 
-Nothing forces us into tier 4 by default. A pooler that parses every statement is a pooler that loses the benchmark.
+Nothing forces us into tier 4 by default. A pooler that parses every statement is a pooler that loses
+the benchmark: S3 measured a full parse at 2.5 µs for a small statement and 333 µs for an 8 KB one,
+versus 18 ns to hash the same text.
+
+`io_uring` and fd-passing remain *later, measured* optimisations, not Phase 0 requirements.
 
 ## 4. Crate responsibilities
 

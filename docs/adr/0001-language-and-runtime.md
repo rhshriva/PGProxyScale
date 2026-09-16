@@ -1,6 +1,6 @@
 # ADR 0001 — Implementation Language and Runtime
 
-- **Status:** Accepted (runtime sub-decision provisional, pending spike S1)
+- **Status:** Accepted — language settled, runtime **confirmed by spike S1**
 - **Date:** 2026-09-16
 - **Decides:** the implementation language for the data path and the surrounding services
 
@@ -74,17 +74,40 @@ Two languages, two build systems, two skill sets — and it puts the **security-
 
 ---
 
-## Runtime decision (provisional)
+## Runtime decision — **CONFIRMED by spike S1**
 
-The language is settled; the concurrency model is a measured question, and the evidence points away from a default work-stealing runtime:
+The language is settled; the concurrency model was a measured question, and the evidence pointed away from a default work-stealing runtime:
 
 - PgDog on 2 Tokio threads beats single-threaded PgBouncer only past ~50 connections, and its throughput **plateaus from c16 to c64** (76,850 → 76,789 TPS).
 - SPQR (Go) **scales linearly to c64** (25,105 → 80,247 TPS), suggesting the concurrency model matters more than the language.
 - PgBouncer's own multi-core answer is N processes behind `SO_REUSEPORT` with a `[peers]` cancel-forwarding protocol — effective (~336k TPS on a 16-process fleet) but operationally fragile: pool limits are not shared across processes, and query cancellation silently no-ops when peering is misconfigured.
 
-**Therefore:** thread-per-core, per-core state, `SO_REUSEPORT` accept, no cross-core synchronisation on the hot path, `io_uring` for batched syscalls, and a **bypass/splice path** so that bulk traffic can be handed off without traversing a shared event loop. Cancellation gets a first-class design rather than a peering bolt-on — note that PostgreSQL 18's protocol 3.2 makes cancel keys variable-length (up to 256 bits), which breaks the fixed 12-byte assumption every current implementation makes.
+**Therefore:** thread-per-core, per-core state, `SO_REUSEPORT` accept, no cross-core synchronisation on the hot path. Cancellation gets a first-class design rather than a peering bolt-on — note that PostgreSQL 18's protocol 3.2 makes cancel keys variable-length (up to 256 bits), which breaks the fixed 12-byte assumption every current implementation makes.
 
-**Revisit trigger (spike S1):** if we cannot get within 10% of PgBouncer at 4 clients once the bypass path exists, the runtime is wrong — not the language. In that case the fallback is a hybrid: a per-core blocking-I/O reactor for the fast path with the same Rust codebase.
+### Spike S1 result
+
+Measured on a pass-through relay (no pooling, no parsing), best of 2 passes, in containers on one
+bridge network — full data in [`../plans/spike-findings.md`](../plans/spike-findings.md):
+
+| runtime | c=1 | c=4 | c=16 | c=64 |
+|---|---|---|---|---|
+| PgBouncer 1.18 (single process) | 9,486 | **34,347** | 70,253 | 71,183 |
+| Rust, `io::copy` + thread-per-core | 9,678 | 33,049 | 107,599 | **215,827** |
+| Rust, `splice(2)` bypass | **9,808** | 32,518 | 109,345 | **217,867** |
+| Rust, **Tokio work-stealing** | 9,563 | 33,919 | 91,013 | 93,625 |
+
+1. **Parity at low concurrency, decisively ahead at high.** The 10% tolerance holds (3.8% behind
+   PgBouncer at c=4, marginally ahead at c=1) and the scale win is 3.0× at c=64.
+2. **The work-stealing plateau reproduces.** Tokio flattens at ~92k TPS from c=16 to c=64 while
+   thread-per-core keeps scaling under an identical harness — the runtime, not the language, is the
+   variable. **Thread-per-core is confirmed; the "hybrid fallback" trigger is not met.**
+3. **The bypass/splice path earns nothing and is dropped from Phase 0.** `splice(2)` is
+   indistinguishable from userspace `io::copy` (217,867 vs 215,827 TPS at c=64). The bottleneck is not
+   byte copying, so the data path should stay simple, auditable userspace copying with `TCP_NODELAY`.
+   `io_uring` remains a later, measured optimisation rather than a Phase 0 requirement.
+4. **Caveat carried forward:** this substrate cannot be trusted for absolute numbers at high
+   concurrency (the relay appeared to beat direct PostgreSQL, which is physically impossible); gates
+   G2/G3 must be re-measured on bare-metal Linux before absolutes are quoted.
 
 ---
 
@@ -108,7 +131,7 @@ The language is settled; the concurrency model is a measured question, and the e
 
 **Negative**
 - Slower initial velocity than Go, and a smaller hiring pool than C++.
-- We must actively defeat the low-concurrency latency regression that libevent currently wins (~10–15% at 1–10 clients). The bypass path is the answer, and it must be built, not assumed.
+- libevent still wins a small amount at low concurrency: measured at **3.8% behind PgBouncer at c=4** (spike S1). This is a real but bounded deficit, inside the 10% tolerance, and it must be tracked rather than assumed away.
 - Build times and binary size are worse than C.
 
 **Neutral**

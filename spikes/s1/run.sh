@@ -150,8 +150,8 @@ done
   printf '| target |'
   for c in $CONNS; do printf ' c=%s |' "$c"; done
   echo
-  printf '|---|'
-  for c in $CONNS; do printf '---|'; done
+  printf -- '---|'
+  for c in $CONNS; do printf -- '---|'; done
   echo
   for entry in "${TARGETS[@]}"; do
     label="${entry%%:*}"
@@ -168,8 +168,8 @@ done
   printf '| target |'
   for c in $CONNS; do printf ' c=%s |' "$c"; done
   echo
-  printf '|---|'
-  for c in $CONNS; do printf '---|'; done
+  printf -- '---|'
+  for c in $CONNS; do printf -- '---|'; done
   echo
   for entry in "${TARGETS[@]}"; do
     label="${entry%%:*}"
@@ -185,8 +185,8 @@ done
   printf '| target |'
   for c in $CONNS; do printf ' c=%s |' "$c"; done
   echo
-  printf '|---|'
-  for c in $CONNS; do printf '---|'; done
+  printf -- '---|'
+  for c in $CONNS; do printf -- '---|'; done
   echo
   for entry in "${TARGETS[@]}"; do
     label="${entry%%:*}"
