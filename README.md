@@ -31,29 +31,51 @@ decision records, and the plan.
 ```
 docs/
   vision/roadmap.md            sequencing plan and phase gates       ← start here
-  vision/product-thesis.md     (todo)
+  vision/product-thesis.md     positioning, buyers, non-goals
   adr/                         architecture decision records
   architecture/overview.md     component map, threading, data path
-  plans/                       per-phase implementation plans (todo)
+  architecture/                session-state-taxonomy.md = Phase 1 spec
+  plans/                       phase-0 plan + measured spike findings
   research/                    the competitive and technical research base
 crates/                        Rust workspace (see ADR 0001)
-benches/                       hard-case benchmark suite
-tests/conformance/             driver × PostgreSQL version conformance matrix
-tools/                         docker-compose matrix, driver harnesses
+tests/conformance/             wire-protocol conformance harness (run against
+                               direct PostgreSQL first - it is the control)
+spikes/                        the throwaway experiments behind the ADR revisions
+benches/                       hard-case benchmark suite (not yet built)
+tools/                         PostgreSQL version matrix
+pgproxy.toml                   example configuration
 ```
 
 ## Decisions so far
 
 | ADR | Decision |
 |---|---|
-| [0001](docs/adr/0001-language-and-runtime.md) | **Rust**, thread-per-core runtime, one C dependency (`libpg_query`) |
+| [0001](docs/adr/0001-language-and-runtime.md) | **Rust**, thread-per-core runtime (confirmed by spike S1); no async runtime, no splice bypass |
 | [0002](docs/adr/0002-parser-strategy.md) | `libpg_query` over FFI; three-tier parsing; never parse per `Bind`/`Execute` |
 | [0003](docs/adr/0003-session-state-ledger.md) | Explicit per-client session image with a three-class state taxonomy; fail closed on the unclassifiable |
+| [0004](docs/adr/0004-licence.md) | Licence — **deliberately deferred** |
+| [0005](docs/adr/0005-deliverable-shape.md) | **Standalone binary first**; sidecar/library kept open structurally |
+
+## Status
+
+Phase 0 workstreams **W0 (spikes), W1 (foundation) and W5 (conformance harness)** are done.
+`pgproxy` binds per-core `SO_REUSEPORT` listeners, accepts, dispatches to a `Service`, and drains
+in 0.03s on `SIGTERM`. The wire protocol (W2) is next — until it lands the binary deliberately
+refuses every connection with a log line saying so.
+
+```sh
+cargo build --workspace
+cargo test  --workspace
+./target/debug/pgproxy --config pgproxy.toml --check    # validate config only
+./tests/conformance/run.sh                              # control run against PostgreSQL 18
+```
 
 ## Open questions
 
-The licence, the first deliverable shape (binary vs sidecar vs embeddable library), and the v1
-conformance scope are unresolved — see `docs/vision/roadmap.md` §8.
+The **licence** is deferred (ADR-0004) and only becomes urgent before external contributions. The
+**v1 conformance scope** — which drivers and PostgreSQL majors are launch requirements — is still
+open; the harness currently covers psycopg3 × PostgreSQL 18, and the M0 milestone calls for a
+second driver.
 
 ## Building
 
