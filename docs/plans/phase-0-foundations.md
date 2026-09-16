@@ -87,9 +87,19 @@ The ledger is only safe if we know exactly what can and cannot be virtualised.
 - [x] Startup: `StartupMessage`, `SSLRequest`, `GSSENCRequest`, 3.0 and 3.2 version
       decoding, `_pq_.` protocol grease detected and rejected clearly, `options=` GUCs
       parsed out rather than dropped. Validated against bytes captured from real psycopg3.
-- [ ] Auth: trust, MD5, SCRAM-SHA-256 (both directions); cert auth
-- [ ] Auth delegation/passthrough so we never need plaintext secrets (PgBouncer's documented
-      weakness against managed Postgres that blocks `pg_authid`)
+- [~] Auth primitives: SCRAM-SHA-256 in **both directions** (RFC 7677 vectors pinned as
+      known-answer tests) and MD5, plus the whole `Authentication*` message set. Verified
+      against a real driver, not just against itself: `examples/scram_probe` +
+      `tests/conformance/scram_interop.sh` connect psycopg to our server and assert the
+      right password is accepted and the wrong one is rejected with no information leak.
+      **Not implemented:** cert auth, and channel binding (`SCRAM-SHA-256-PLUS`) — a client
+      demanding channel binding is refused rather than silently downgraded, because
+      downgrading removes the protection it asked for.
+- [ ] Auth **wiring**: the state machine choosing terminate vs passthrough per database.
+      Both directions of the crypto exist; which one runs is a connection-lifecycle
+      decision. Passthrough needs no secret and is the answer to PgBouncer's documented
+      managed-cloud weakness; terminate is needed for the policy engine to reject a client
+      before touching a backend.
 - [ ] Extended-protocol state machine: `Parse`/`Bind`/`Describe`/`Execute`/`Sync`/`Flush`/`Close`,
       **including unnamed statements** and their documented death on the next `Parse` *or any simple
       `Query`*

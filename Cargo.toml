@@ -19,6 +19,18 @@ publish = false
 socket2 = { version = "0.5", features = ["all"] }
 signal-hook = "0.3"
 
+# Authentication cryptography (SCRAM-SHA-256, MD5). RustCrypto crates rather than one
+# monolithic crypto stack, so each primitive is independently auditable.
+sha2 = "0.10"
+hmac = "0.12"
+pbkdf2 = "0.12"
+md-5 = "0.10"
+base64 = "0.22"
+# Constant-time comparison. Hand-rolled comparison is a classic timing-oracle mistake;
+# this crate exists to prevent exactly that.
+subtle = "2"
+rand = "0.8"
+
 # Config
 serde = { version = "1", features = ["derive"] }
 toml = "0.8"

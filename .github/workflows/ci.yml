@@ -51,5 +51,12 @@ jobs:
       - name: Control run against direct PostgreSQL 18
         run: ./tests/conformance/run.sh
 
+      # Proves a real driver (libpq via psycopg) accepts the handshake our server
+      # actually emits, including the AuthenticationOk / ParameterStatus /
+      # BackendKeyData / ReadyForQuery sequence. The unit tests only prove we agree
+      # with RFC 7677.
+      - name: SCRAM-SHA-256 interop against a real driver
+        run: ./tests/conformance/scram_interop.sh
+
   # NOTE: `cargo-fuzz` requires a nightly toolchain and is not yet wired up.
   # Phase 0 gate G5 remains open — see docs/plans/spike-findings.md.

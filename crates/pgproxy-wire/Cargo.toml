@@ -9,4 +9,15 @@ publish.workspace = true
 
 [dependencies]
 pgproxy-parser = { path = "../pgproxy-parser" }
+thiserror.workspace = true
 
+# Authentication cryptography. These are RustCrypto crates, chosen over a single
+# monolithic TLS/crypto stack because we need exactly these primitives and want them
+# independently auditable.
+sha2.workspace = true
+hmac.workspace = true
+pbkdf2.workspace = true
+md-5.workspace = true
+base64.workspace = true
+subtle.workspace = true
+rand.workspace = true
