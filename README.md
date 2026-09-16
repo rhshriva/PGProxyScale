@@ -58,17 +58,27 @@ pgproxy.toml                   example configuration
 
 ## Status
 
-Phase 0 workstreams **W0 (spikes), W1 (foundation) and W5 (conformance harness)** are done.
-`pgproxy` binds per-core `SO_REUSEPORT` listeners, accepts, dispatches to a `Service`, and drains
-in 0.03s on `SIGTERM`. The wire protocol (W2) is next — until it lands the binary deliberately
-refuses every connection with a log line saying so.
+**M0 reached.** `pgproxy` serves real sessions: it reads the startup packet, routes the client's
+database to a configured backend, relays authentication (passthrough — it never needs the password
+or the SCRAM verifier), and proxies the session.
+
+All 17 conformance scenarios pass **through** the proxy, not just against direct PostgreSQL:
+extended protocol, named and unnamed prepared statements, SQL-level `PREPARE`, `search_path`,
+`WITH HOLD` cursors, advisory locks, `LISTEN`/`NOTIFY`, `COPY FROM STDIN`, a 50k-row result set,
+and 16 concurrent clients.
 
 ```sh
 cargo build --workspace
 cargo test  --workspace
 ./target/debug/pgproxy --config pgproxy.toml --check    # validate config only
 ./tests/conformance/run.sh                              # control run against PostgreSQL 18
+PROXY=1 ./tests/conformance/run.sh                      # the same scenarios, through pgproxy
+./tests/conformance/scram_interop.sh                    # SCRAM verified against real libpq
 ```
+
+**Not yet implemented**, and refused rather than faked: TLS (the proxy answers `SSLRequest` with
+`N`), cancellation routing (ADR-0007), transaction pooling (W4), the admin console, and the
+Session-State Ledger (Phase 1).
 
 ## Open questions
 
