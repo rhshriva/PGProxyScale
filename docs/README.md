@@ -5,6 +5,7 @@
 | [`vision/roadmap.md`](vision/roadmap.md) | **The plan.** Phase order, deliverables, exit gates, risk spikes, non-goals. Start here. |
 | [`vision/product-thesis.md`](vision/product-thesis.md) | Positioning, buyers, non-goals, honest risks. |
 | [`adr/`](adr/README.md) | Architecture decision records — what we decided and what we rejected. |
+| [`architecture/design-explained.md`](architecture/design-explained.md) | **The design, explained with diagrams.** Written to be shared: the problem, the architecture, the two auth models, the ledger, and how to pitch it at three lengths. |
 | [`architecture/overview.md`](architecture/overview.md) | Component map, threading model, data-path tiers, crate responsibilities. |
 | [`architecture/session-state-taxonomy.md`](architecture/session-state-taxonomy.md) | **Spike S2 output.** The PostgreSQL 14–18 session-state surface and what can be virtualised. This is the Phase 1 specification. |
 | [`plans/phase-0-foundations.md`](plans/phase-0-foundations.md) | The Phase 0 workstreams, gates and risk spikes. |
@@ -15,7 +16,8 @@
 
 1. `vision/roadmap.md` — what we are building and in what order.
 2. `adr/0001` → `adr/0003` — language, parsing, and the central architectural decision.
-3. `architecture/overview.md` — how the pieces fit.
+3. `architecture/design-explained.md` — the design with diagrams, and how to explain it.
+4. `architecture/overview.md` — how the pieces fit.
 4. `plans/spike-findings.md` — what the experiments actually showed.
 5. `research/00-landscape-and-innovation-map.md` — the full evidence base, if you want the source material.
 
