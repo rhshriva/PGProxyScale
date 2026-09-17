@@ -9,6 +9,7 @@ publish.workspace = true
 
 [dependencies]
 pgproxy-parser = { path = "../pgproxy-parser" }
+pgproxy-pool = { path = "../pgproxy-pool" }
 thiserror.workspace = true
 tracing.workspace = true
 

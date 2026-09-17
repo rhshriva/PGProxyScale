@@ -65,7 +65,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => {
             let text = e.to_string();
-            println!("BAD QUERY rejected as expected: {}", &text[..text.len().min(90)]);
+            println!(
+                "BAD QUERY rejected as expected: {}",
+                &text[..text.len().min(90)]
+            );
             if !text.contains("SQLSTATE") {
                 println!("  WARNING: the error carried no SQLSTATE");
             }

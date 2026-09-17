@@ -6,11 +6,15 @@
 //! of configuration; this implements it.
 
 use std::collections::HashMap;
+use std::time::Duration;
 
+use pgproxy_wire::BackendCredentials;
 use pgproxy_wire::StartupParams;
-use pgproxy_wire::{BackendTarget, DatabaseRouter, RouteError};
+use pgproxy_wire::{
+    BackendTarget, DatabaseRouter, PoolMode, PoolSettings, ResolvedBackend, RouteError,
+};
 
-use crate::config::Config;
+use crate::config::{Config, PoolMode as ConfigPoolMode};
 
 /// Resolves database names from configuration.
 #[derive(Debug, Clone)]
@@ -25,6 +29,12 @@ struct Route {
     host: String,
     port: u16,
     dbname: Option<String>,
+    pool_mode: ConfigPoolMode,
+    user: Option<String>,
+    password: Option<String>,
+    checkout_timeout_secs: u64,
+    connect_timeout_secs: u64,
+    pool_size: usize,
 }
 
 impl ConfigRouter {
@@ -40,6 +50,12 @@ impl ConfigRouter {
                         host: db.host.clone(),
                         port: db.port,
                         dbname: db.dbname.clone(),
+                        pool_mode: db.pool_mode,
+                        user: db.user.clone(),
+                        password: db.password.clone(),
+                        checkout_timeout_secs: db.checkout_timeout_secs,
+                        connect_timeout_secs: db.connect_timeout_secs,
+                        pool_size: db.pool_size,
                     },
                 )
             })
@@ -69,7 +85,7 @@ impl ConfigRouter {
 }
 
 impl DatabaseRouter for ConfigRouter {
-    fn route(&self, params: &StartupParams) -> Result<BackendTarget, RouteError> {
+    fn route(&self, params: &StartupParams) -> Result<ResolvedBackend, RouteError> {
         // PostgreSQL's own rule: an absent `database` means "the username". Reproducing
         // it matters for drop-in compatibility -- libpq omits `database` whenever the
         // caller did not set it, which is common in scripts and ORMs.
@@ -85,14 +101,40 @@ impl DatabaseRouter for ConfigRouter {
             .get(&requested)
             .ok_or_else(|| RouteError::UnknownDatabase(requested.clone()))?;
 
-        Ok(BackendTarget {
-            host: route.host.clone(),
-            port: route.port,
-            // The backend may know the database by a different name.
-            database: Some(route.dbname.clone().unwrap_or_else(|| requested.clone())),
-            // Deliberately not overridden: forwarding the client's user is what makes
-            // per-user authentication and per-user pools possible.
-            user: None,
+        let client_user = params.get("user").unwrap_or("").to_string();
+        // A configured user replaces the client's; otherwise the client's own role is
+        // used, which yields one pool per (database, user) as PgBouncer does.
+        let backend_user = route.user.clone().unwrap_or_else(|| client_user.clone());
+
+        Ok(ResolvedBackend {
+            target: BackendTarget {
+                host: route.host.clone(),
+                port: route.port,
+                // The backend may know the database by a different name.
+                database: Some(route.dbname.clone().unwrap_or_else(|| requested.clone())),
+                // Session mode forwards the client's user, so per-user backend
+                // authentication keeps working. Transaction mode uses the resolved user,
+                // because the connection is not the one the client logged in on.
+                user: match route.pool_mode {
+                    ConfigPoolMode::Session => None,
+                    ConfigPoolMode::Transaction => route.user.clone(),
+                },
+            },
+            mode: match route.pool_mode {
+                ConfigPoolMode::Session => PoolMode::Session,
+                ConfigPoolMode::Transaction => PoolMode::Transaction,
+            },
+            credentials: Some(BackendCredentials {
+                user: backend_user,
+                password: route.password.clone(),
+                database: Some(route.dbname.clone().unwrap_or_else(|| requested.clone())),
+                application_name: Some("pgproxy".to_string()),
+            }),
+            pool: PoolSettings {
+                max_size: route.pool_size,
+                checkout_timeout: Duration::from_secs(route.checkout_timeout_secs),
+            },
+            connect_timeout: Duration::from_secs(route.connect_timeout_secs),
         })
     }
 }
@@ -100,26 +142,31 @@ impl DatabaseRouter for ConfigRouter {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::config::{Config, Database};
+    use crate::config::{Config, Database, PoolMode as ConfigPoolMode};
     use pgproxy_wire::protocol::{PROTOCOL_3_0, StartupRequest, parse_startup};
 
+    fn database(name: &str, host: &str, port: u16, dbname: Option<&str>) -> Database {
+        Database {
+            name: name.to_string(),
+            host: host.to_string(),
+            port,
+            dbname: dbname.map(str::to_string),
+            pool_size: 10,
+            pool_mode: ConfigPoolMode::Session,
+            user: None,
+            password: None,
+            checkout_timeout_secs: 5,
+            connect_timeout_secs: 10,
+        }
+    }
+
     fn config() -> Config {
+        let mut analytics = database("analytics", "10.0.0.2", 5433, None);
+        analytics.pool_size = 5;
         Config {
             databases: vec![
-                Database {
-                    name: "app".to_string(),
-                    host: "10.0.0.1".to_string(),
-                    port: 5432,
-                    dbname: Some("app_production".to_string()),
-                    pool_size: 10,
-                },
-                Database {
-                    name: "analytics".to_string(),
-                    host: "10.0.0.2".to_string(),
-                    port: 5433,
-                    dbname: None,
-                    pool_size: 5,
-                },
+                database("app", "10.0.0.1", 5432, Some("app_production")),
+                analytics,
             ],
             ..Default::default()
         }
@@ -143,23 +190,81 @@ mod tests {
     #[test]
     fn routes_a_named_database_and_rewrites_its_name() {
         let router = ConfigRouter::new(&config());
-        let target = router
+        let resolved = router
             .route(&params(&[("user", "alice"), ("database", "app")]))
             .unwrap();
 
-        assert_eq!(target.host, "10.0.0.1");
-        assert_eq!(target.port, 5432);
-        assert_eq!(target.database.as_deref(), Some("app_production"));
-        assert_eq!(target.user, None, "the client's user must be forwarded");
+        assert_eq!(resolved.target.host, "10.0.0.1");
+        assert_eq!(resolved.target.port, 5432);
+        assert_eq!(resolved.target.database.as_deref(), Some("app_production"));
+    }
+
+    #[test]
+    fn session_mode_forwards_the_clients_user_so_relayed_auth_still_works() {
+        // The client authenticates to the backend through the proxy, so the backend must
+        // see the client's own role.
+        let router = ConfigRouter::new(&config());
+        let resolved = router
+            .route(&params(&[("user", "alice"), ("database", "app")]))
+            .unwrap();
+
+        assert_eq!(resolved.mode, PoolMode::Session);
+        assert_eq!(
+            resolved.target.user, None,
+            "session mode must not override the user"
+        );
+        assert_eq!(resolved.credentials.as_ref().unwrap().user, "alice");
+    }
+
+    #[test]
+    fn transaction_mode_uses_the_configured_user_for_the_backend() {
+        let mut cfg = config();
+        cfg.databases[0].pool_mode = ConfigPoolMode::Transaction;
+        cfg.databases[0].user = Some("pool_role".to_string());
+        cfg.databases[0].password = Some("secret".to_string());
+        let router = ConfigRouter::new(&cfg);
+
+        let resolved = router
+            .route(&params(&[("user", "alice"), ("database", "app")]))
+            .unwrap();
+
+        assert_eq!(resolved.mode, PoolMode::Transaction);
+        assert_eq!(resolved.target.user.as_deref(), Some("pool_role"));
+        let credentials = resolved.credentials.unwrap();
+        assert_eq!(credentials.user, "pool_role");
+        assert_eq!(credentials.password.as_deref(), Some("secret"));
+    }
+
+    #[test]
+    fn transaction_mode_without_a_configured_user_pools_per_client_role() {
+        let mut cfg = config();
+        cfg.databases[0].pool_mode = ConfigPoolMode::Transaction;
+        let router = ConfigRouter::new(&cfg);
+
+        let alice = router
+            .route(&params(&[("user", "alice"), ("database", "app")]))
+            .unwrap();
+        let bob = router
+            .route(&params(&[("user", "bob"), ("database", "app")]))
+            .unwrap();
+
+        assert_eq!(alice.credentials.as_ref().unwrap().user, "alice");
+        assert_eq!(bob.credentials.as_ref().unwrap().user, "bob");
+        assert_ne!(
+            alice.pool_key(),
+            bob.pool_key(),
+            "different roles must never share a pooled backend connection"
+        );
     }
 
     #[test]
     fn a_database_without_an_explicit_dbname_keeps_the_client_name() {
         let router = ConfigRouter::new(&config());
-        let target = router
+        let resolved = router
             .route(&params(&[("user", "alice"), ("database", "analytics")]))
             .unwrap();
-        assert_eq!(target.database.as_deref(), Some("analytics"));
+        assert_eq!(resolved.target.database.as_deref(), Some("analytics"));
+        assert_eq!(resolved.pool.max_size, 5);
     }
 
     #[test]
@@ -170,8 +275,8 @@ mod tests {
         cfg.databases[0].name = "alice".to_string();
         let router = ConfigRouter::new(&cfg);
 
-        let target = router.route(&params(&[("user", "alice")])).unwrap();
-        assert_eq!(target.database.as_deref(), Some("app_production"));
+        let resolved = router.route(&params(&[("user", "alice")])).unwrap();
+        assert_eq!(resolved.target.database.as_deref(), Some("app_production"));
     }
 
     #[test]
@@ -196,17 +301,17 @@ mod tests {
     #[test]
     fn a_default_database_can_be_configured() {
         let router = ConfigRouter::new(&config()).with_default_database("app");
-        let target = router.route(&params(&[])).unwrap();
-        assert_eq!(target.database.as_deref(), Some("app_production"));
+        let resolved = router.route(&params(&[])).unwrap();
+        assert_eq!(resolved.target.database.as_deref(), Some("app_production"));
     }
 
     #[test]
     fn the_explicit_database_beats_the_default() {
         let router = ConfigRouter::new(&config()).with_default_database("app");
-        let target = router
+        let resolved = router
             .route(&params(&[("user", "x"), ("database", "analytics")]))
             .unwrap();
-        assert_eq!(target.database.as_deref(), Some("analytics"));
+        assert_eq!(resolved.target.database.as_deref(), Some("analytics"));
     }
 
     #[test]

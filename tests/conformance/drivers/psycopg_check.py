@@ -17,6 +17,7 @@ bugs in the harness.
 from __future__ import annotations
 
 import argparse
+import signal
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -323,6 +324,12 @@ def main() -> int:
         help="password to authenticate with, if the endpoint requires one",
     )
     parser.add_argument("--only", default=None, help="substring filter on scenario name")
+    parser.add_argument(
+        "--scenario-timeout",
+        type=int,
+        default=20,
+        help="seconds before a scenario is declared hung (0 disables)",
+    )
     args = parser.parse_args()
 
     try:
@@ -331,17 +338,31 @@ def main() -> int:
         print(f"FATAL: cannot reach {args.host}:{args.port} ({type(exc).__name__}: {exc})")
         return 2
 
+    # A harness that can hang is useless: a proxy bug must surface as a failed scenario,
+    # not as a run that never returns. Each scenario gets a wall-clock budget, which also
+    # catches deadlocks the server-side statement_timeout cannot see.
+    def on_alarm(_signum, _frame):
+        raise TimeoutError(f"scenario exceeded {args.scenario_timeout}s")
+
+    if args.scenario_timeout > 0:
+        signal.signal(signal.SIGALRM, on_alarm)
+
     results: list[tuple[str, str, float, str]] = []
     for name, fn in SCENARIOS:
         if args.only and args.only not in name:
             continue
         started = time.perf_counter()
+        if args.scenario_timeout > 0:
+            signal.alarm(args.scenario_timeout)
         try:
             fn(args)
             results.append((name, "PASS", time.perf_counter() - started, ""))
         except Exception as exc:  # noqa: BLE001 - a scenario failure is data, not a crash
             detail = f"{type(exc).__name__}: {exc}".replace("\n", " ")[:160]
             results.append((name, "FAIL", time.perf_counter() - started, detail))
+        finally:
+            if args.scenario_timeout > 0:
+                signal.alarm(0)
 
     print(f"\n=== conformance: {args.label} ({args.host}:{args.port}) ===")
     print(f"{'scenario':<32} {'result':<6} {'ms':>8}  detail")

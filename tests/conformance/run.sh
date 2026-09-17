@@ -7,6 +7,7 @@
 #   ./run.sh                        # control run against direct PostgreSQL 18
 #   PROXY=1 ./run.sh                # build pgproxy, run it in-network, test through it
 #   TARGET=host:port ./run.sh       # test any other endpoint
+#   POOL_MODE=transaction PROXY=1 ./run.sh   # exercise transaction pooling
 #   PG_VERSION=17 ./run.sh          # against a different server major
 #   ONLY=cursor ./run.sh            # a single scenario
 #
@@ -32,6 +33,9 @@ DB=conformance
 TARGET="${TARGET:-}"
 PROXY="${PROXY:-}"
 ONLY="${ONLY:-}"
+# Which of the configured routing names to use. The control run always uses the real
+# database; a proxy run uses a name that selects a pooling mode.
+POOL_MODE="${POOL_MODE:-session}"
 
 cleanup() {
   docker rm -f "$PG_NAME" "$PROXY_NAME" >/dev/null 2>&1
@@ -53,6 +57,14 @@ for _ in $(seq 1 60); do
   sleep 1
 done
 
+# A conformance harness that can hang is useless: a proxy bug should show up as a failed
+# scenario, not as a run that never returns. A server-side statement timeout turns any
+# deadlock into an error the harness can report. It applies to every session regardless of
+# pooling mode, unlike a client-side `SET`, which transaction pooling would drop.
+echo "== setting a server-side statement timeout (10s) =="
+docker exec "$PG_NAME" psql -U postgres -d "$DB" -q -c \
+  "ALTER DATABASE $DB SET statement_timeout = '10s'" >/dev/null 2>&1
+
 if [ -n "$PROXY" ]; then
   echo "== building pgproxy for linux =="
   docker run --rm -v "$REPO:/app" -v "$TARGET_VOLUME:/target" -w /app \
@@ -72,7 +84,8 @@ if [ -n "$PROXY" ]; then
   for _ in $(seq 1 30); do
     # Ask for the database the proxy actually serves: a probe for an unconfigured one
     # gets a correct FATAL and would look like a dead listener.
-    if docker exec "$PG_NAME" pg_isready -h "$PROXY_NAME" -p 6432 -U postgres -d "$DB" >/dev/null 2>&1; then
+    if docker exec "$PG_NAME" pg_isready -h "$PROXY_NAME" -p 6432 -U postgres \
+         -d "conformance_$POOL_MODE" >/dev/null 2>&1; then
       ready=1
       break
     fi
@@ -89,7 +102,9 @@ if [ -n "$PROXY" ]; then
   # client must authenticate *to the backend* through the proxy, with the proxy holding
   # no credential at all. Enforce that rather than assert it - a password in the proxy's
   # config would make the test pass for the wrong reason.
-  if [ "${PG_AUTH:-trust}" = "scram-sha-256" ]; then
+  if [ "${PG_AUTH:-trust}" = "scram-sha-256" ] && [ "$POOL_MODE" = "session" ]; then
+    # Session mode must work with no credential at all, or the test proves nothing.
+    # Transaction mode is the opposite case and is expected to hold one.
     if grep -qi 'password' "$ROOT/pgproxy.toml"; then
       echo "FAIL: pgproxy.toml mentions a password, so this would not prove passthrough"
       exit 5
@@ -100,13 +115,17 @@ if [ -n "$PROXY" ]; then
   TARGET="$PROXY_NAME:6432"
 fi
 
+# A proxy run addresses a routing name that selects the pooling mode; the control run
+# addresses the real database directly.
 if [ -n "$TARGET" ]; then
   HOST="${TARGET%%:*}"
   PORT="${TARGET##*:}"
-  LABEL="target($TARGET)"
+  QUERY_DB="conformance_$POOL_MODE"
+  LABEL="target($TARGET) mode=$POOL_MODE"
 else
   HOST=pg
   PORT=5432
+  QUERY_DB="$DB"
   LABEL="direct-control"
 fi
 
@@ -117,7 +136,7 @@ docker run --rm --network "$NET" \
   "$PY_IMAGE" bash -c "
     pip install --quiet 'psycopg[binary]' >/dev/null 2>&1 || { echo 'pip install failed'; exit 3; }
     python3 drivers/psycopg_check.py \
-      --host '$HOST' --port '$PORT' --user postgres --dbname '$DB' \
+      --host '$HOST' --port '$PORT' --user postgres --dbname '$QUERY_DB' \
       --password '${PG_PASSWORD:-conformance}' \
       --label '$LABEL' ${ONLY:+--only '$ONLY'}
   "
@@ -132,7 +151,7 @@ if [ -n "$PROXY" ] && [ "${PG_AUTH:-trust}" = "scram-sha-256" ]; then
        -v "$PIP_VOLUME:/root/.cache/pip" "$PY_IMAGE" bash -c "
          pip install --quiet 'psycopg[binary]' >/dev/null 2>&1
          python3 drivers/negative_auth_check.py \
-           --host '$HOST' --port '$PORT' --user postgres --dbname '$DB' \
+           --host '$HOST' --port '$PORT' --user postgres --dbname '$QUERY_DB' \
            --password 'definitely-wrong'
        "; then
     echo "  authentication is genuinely happening end to end"

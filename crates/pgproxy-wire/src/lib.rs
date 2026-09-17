@@ -24,5 +24,6 @@ pub use protocol::codec::{Frame, FrameReader, FrameWriter};
 pub use protocol::startup::{CancelRequest, StartupParams, StartupRequest, parse_startup};
 pub use service::{Connection, Service, ShutdownToken};
 pub use session::{
-    BackendTarget, DatabaseRouter, RouteError, SessionOptions, SessionService, SessionStats,
+    BackendTarget, DatabaseRouter, PoolMode, PoolSettings, ResolvedBackend, RouteError,
+    SessionOptions, SessionService, SessionStats,
 };

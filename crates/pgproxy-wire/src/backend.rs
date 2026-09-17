@@ -60,6 +60,7 @@ pub struct BackendConnection {
     user: String,
     database: String,
     healthy: bool,
+    transaction_status: u8,
 }
 
 impl BackendConnection {
@@ -206,7 +207,19 @@ impl BackendConnection {
             user: credentials.user.clone(),
             database,
             healthy: true,
+            transaction_status: b'I',
         })
+    }
+
+    /// Bound how long a read from the backend may block.
+    ///
+    /// A transaction-pooling loop that forwards one client message and waits for
+    /// `ReadyForQuery` self-deadlocks on the extended query protocol, where that only
+    /// arrives after `Sync`. Without a bound the session thread parks forever holding a
+    /// pooled connection, the pool starves, and the only symptom is "too many clients
+    /// already". With it, the deadlock costs one discarded connection and one clear error.
+    pub fn set_read_timeout(&self, timeout: Option<Duration>) -> io::Result<()> {
+        self.reader.get_ref().set_read_timeout(timeout)
     }
 
     /// Borrow the reader and writer together.
@@ -246,7 +259,9 @@ impl BackendConnection {
                 .ok_or_else(|| io::Error::other("backend closed during reset"))?;
             match frame.tag {
                 backend::READY_FOR_QUERY => {
-                    return Ok(frame.payload.first().copied().unwrap_or(b'I'));
+                    let status = frame.payload.first().copied().unwrap_or(b'I');
+                    self.transaction_status = status;
+                    return Ok(status);
                 }
                 backend::ERROR_RESPONSE => {
                     let message = parse_error_message(frame.payload)
@@ -292,6 +307,42 @@ impl BackendConnection {
     /// Database this connection is attached to.
     pub fn database(&self) -> &str {
         &self.database
+    }
+
+    /// Last transaction status the backend reported: `I`, `T` or `E`.
+    pub fn transaction_status(&self) -> u8 {
+        self.transaction_status
+    }
+
+    /// Record the transaction status observed by the relay.
+    pub fn set_transaction_status(&mut self, status: u8) {
+        self.transaction_status = status;
+    }
+
+    /// Whether a transaction is currently open.
+    pub fn in_transaction(&self) -> bool {
+        self.transaction_status != b'I'
+    }
+
+    /// Prepare the connection to be handed to a different client.
+    ///
+    /// This is what makes transaction pooling *safe*. Without it, session state — a
+    /// changed `search_path`, a temp table, an open transaction — leaks into whoever gets
+    /// the connection next, which is a correctness and tenant-isolation bug rather than a
+    /// performance one. PgBouncer's equivalent is `server_reset_query = DISCARD ALL`;
+    /// pgagroal's transaction pipeline does not do it at all and leaks.
+    ///
+    /// `DISCARD ALL` is also exactly why prepared statements break under transaction
+    /// pooling, which is the trade-off Phase 1 exists to remove.
+    pub fn reset_for_reuse(&mut self) -> io::Result<()> {
+        // A connection abandoned mid-transaction cannot run DISCARD ALL, so roll back
+        // first. Ignoring a rollback failure here is deliberate: the DISCARD ALL that
+        // follows will fail too, and that is the error the caller acts on.
+        if self.in_transaction() {
+            let _ = self.simple_query("ROLLBACK");
+        }
+        self.simple_query("DISCARD ALL")?;
+        Ok(())
     }
 
     /// Mark the connection as unsafe to reuse.

@@ -43,6 +43,11 @@ fn test_config(workers: usize) -> Config {
             port: 5432,
             dbname: None,
             pool_size: 4,
+            pool_mode: pgproxy_core::config::PoolMode::Session,
+            user: None,
+            password: None,
+            checkout_timeout_secs: 5,
+            connect_timeout_secs: 10,
         }],
         ..Default::default()
     }

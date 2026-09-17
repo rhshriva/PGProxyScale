@@ -394,6 +394,7 @@ dependencies = [
  "md-5",
  "pbkdf2",
  "pgproxy-parser",
+ "pgproxy-pool",
  "rand",
  "sha2",
  "subtle",

@@ -1,8 +1,13 @@
 # pgproxy configuration used by the conformance harness.
 #
-# The addresses are Docker network names, because this file is only ever used by a
-# pgproxy container running on the conformance network alongside the PostgreSQL
-# container it points at.
+# Addresses are Docker network names: this file is only used by a pgproxy container on the
+# conformance network, alongside the PostgreSQL container it points at.
+#
+# Three routing names point at the same backend database so the harness can exercise each
+# pooling mode against identical data:
+#   conformance_session             session mode, authentication relayed (passthrough)
+#   conformance_transaction         transaction mode, backend trusts the proxy
+#   conformance_transaction_scram   transaction mode, proxy authenticates to the backend
 
 [general]
 listen_addr = "0.0.0.0"
@@ -16,9 +21,33 @@ shutdown_timeout_secs = 10
 level = "info"
 format = "text"
 
+# Session mode: one backend per client, everything relayed. No credential is needed
+# because the client authenticates to the backend *through* the proxy.
 [[databases]]
-name = "conformance"
+name = "conformance_session"
 host = "pg"
 port = 5432
 dbname = "conformance"
 pool_size = 20
+pool_mode = "session"
+
+# Transaction mode with a backend that trusts the proxy.
+[[databases]]
+name = "conformance_transaction"
+host = "pg"
+port = 5432
+dbname = "conformance"
+pool_size = 20
+pool_mode = "transaction"
+
+# Transaction mode against a backend that challenges. This is the case that *requires* a
+# credential, because a pooled connection is not the one the client logged in on. The
+# password lives here exactly as it would in PgBouncer's auth_file.
+[[databases]]
+name = "conformance_transaction_scram"
+host = "pg"
+port = 5432
+dbname = "conformance"
+pool_size = 20
+pool_mode = "transaction"
+password = "conformance"

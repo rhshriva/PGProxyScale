@@ -33,6 +33,8 @@ pub mod sqlstate {
     pub const FEATURE_NOT_SUPPORTED: &str = "0A000";
     /// `42501` — insufficient privilege.
     pub const INSUFFICIENT_PRIVILEGE: &str = "42501";
+    /// `25P03` — idle-in-transaction session timeout.
+    pub const IDLE_IN_TRANSACTION: &str = "25P03";
     /// `XX000` — internal error.
     pub const INTERNAL_ERROR: &str = "XX000";
 }

@@ -17,6 +17,10 @@ pub const DEFAULT_LISTEN_ADDR: &str = "0.0.0.0";
 pub const DEFAULT_LISTEN_PORT: u16 = 6432;
 /// Default server connections per database.
 pub const DEFAULT_POOL_SIZE: usize = 20;
+/// Default wait for a pooled backend connection.
+pub const DEFAULT_CHECKOUT_TIMEOUT_SECS: u64 = 5;
+/// Default wait for a backend TCP connection.
+pub const DEFAULT_CONNECT_TIMEOUT_SECS: u64 = 10;
 /// Default graceful-shutdown budget.
 pub const DEFAULT_SHUTDOWN_TIMEOUT_SECS: u64 = 30;
 /// Upper bound on worker threads. Above this, per-core state stops being a sane model.
@@ -33,6 +37,12 @@ fn default_pg_port() -> u16 {
 }
 fn default_pool_size() -> usize {
     DEFAULT_POOL_SIZE
+}
+fn default_checkout_timeout() -> u64 {
+    DEFAULT_CHECKOUT_TIMEOUT_SECS
+}
+fn default_connect_timeout() -> u64 {
+    DEFAULT_CONNECT_TIMEOUT_SECS
 }
 fn default_shutdown_timeout() -> u64 {
     DEFAULT_SHUTDOWN_TIMEOUT_SECS
@@ -114,6 +124,23 @@ impl Default for Logging {
     }
 }
 
+/// How connections are pooled for a database.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
+pub enum PoolMode {
+    /// One backend per client, held for the whole session.
+    ///
+    /// Authentication is relayed, so the proxy needs no backend credential. This is the
+    /// default because it is the only mode that cannot corrupt a session.
+    #[default]
+    Session,
+    /// One backend per transaction, returned to the pool at each transaction boundary.
+    ///
+    /// Requires a backend credential: authentication cannot be relayed because the
+    /// connection serving a query is not the one the client logged in on.
+    Transaction,
+}
+
 /// Log output format.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -141,6 +168,30 @@ pub struct Database {
     /// Maximum server connections for this database.
     #[serde(default = "default_pool_size")]
     pub pool_size: usize,
+    /// How connections to this database are pooled.
+    #[serde(default)]
+    pub pool_mode: PoolMode,
+    /// Role to connect to the backend as, ignoring the client's choice.
+    ///
+    /// Unset means each client's own role is used, which gives one pool per
+    /// `(database, user)` as PgBouncer does.
+    #[serde(default)]
+    pub user: Option<String>,
+    /// Password for the backend role.
+    ///
+    /// Only needed when the backend challenges the proxy, which transaction pooling
+    /// requires and session mode does not. Note that this stores a secret in the
+    /// configuration file, exactly as PgBouncer's `auth_file` does — a deliberate,
+    /// documented trade-off rather than an oversight.
+    #[serde(default)]
+    pub password: Option<String>,
+    /// How long a session waits for a pooled backend before being told there are too many
+    /// clients.
+    #[serde(default = "default_checkout_timeout")]
+    pub checkout_timeout_secs: u64,
+    /// How long to wait for the backend TCP connection.
+    #[serde(default = "default_connect_timeout")]
+    pub connect_timeout_secs: u64,
 }
 
 /// Overrides applied after the file is read, from the CLI or an embedder.
@@ -257,6 +308,28 @@ impl Config {
                     db.name
                 )));
             }
+            if db.checkout_timeout_secs == 0 {
+                return Err(Error::Config(format!(
+                    "database {:?} has checkout_timeout_secs = 0, which would refuse every \
+                     connection the moment the pool is busy",
+                    db.name
+                )));
+            }
+            if db.connect_timeout_secs == 0 {
+                return Err(Error::Config(format!(
+                    "database {:?} has connect_timeout_secs = 0",
+                    db.name
+                )));
+            }
+            if db.pool_mode == PoolMode::Session && db.password.is_some() {
+                // Not an error - a session-mode database may still want a credential for
+                // future use - but it is almost always a mistake worth naming.
+                tracing::warn!(
+                    database = %db.name,
+                    "a password is configured for a session-mode database; session mode \
+                     relays authentication and does not need one"
+                );
+            }
             if db.pool_size == 0 {
                 return Err(Error::Config(format!(
                     "database {:?} has pool_size = 0, which would never serve a query",
@@ -342,6 +415,11 @@ mod tests {
                 port: 5432,
                 dbname: None,
                 pool_size: 10,
+                pool_mode: PoolMode::Session,
+                user: None,
+                password: None,
+                checkout_timeout_secs: DEFAULT_CHECKOUT_TIMEOUT_SECS,
+                connect_timeout_secs: DEFAULT_CONNECT_TIMEOUT_SECS,
             }],
             ..Default::default()
         }
