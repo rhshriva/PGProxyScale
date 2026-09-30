@@ -1,37 +1,35 @@
-# ADR index
+# Current architecture decisions
 
-Architecture decision records. Once accepted, an ADR is not edited — supersede it with a new one.
+This is the maintained summary of the current decisions. Older decision documents
+have been consolidated here; their revisions remain available in Git.
 
-| # | Title | Status |
-|---|---|---|
-| [0001](0001-language-and-runtime.md) | Implementation language and runtime | Accepted (runtime confirmed by spike S1) |
-| [0002](0002-parser-strategy.md) | SQL parsing strategy | Accepted (corrected by spike S3) |
-| [0003](0003-session-state-ledger.md) | Session-State Ledger | Accepted (taxonomy delivered by spike S2) |
-| [0004](0004-licence.md) | Licence | **Proposed — deliberately deferred** |
-| [0005](0005-deliverable-shape.md) | Deliverable shape | Accepted |
-| [0006](0006-session-state-virtualization-boundary.md) | Session-state virtualization boundary and the PostgreSQL-side component | **Proposed — decision required** |
-| [0007](0007-shared-role-tenant-cost-attribution.md) | Exclusive tenant cost attribution for shared backend roles | **Proposed — decision required** |
+| Topic | Current decision or implementation boundary |
+|---|---|
+| Language/runtime (0001) | Rust; SO_REUSEPORT worker listeners and one OS thread per client connection. Shared pool synchronization exists; per-core pools and io_uring execution are not implemented. |
+| Parser (0002) | Vendored libpg_query 18 through bounded, audited FFI; JSON-derived ASTs, parser context, versioned fingerprints and bounded caching. Governed SQL uses full parsing. One grammar is currently built. |
+| Session state (0003) | Confirmed per-client state, rollback/savepoints, preparation contexts and safe backend ownership. Replay reconstructible state; retain affinity or refuse unsupported effects. Complete resource migration and comprehensive DDL invalidation remain open. |
+| Licence (0004) | Deliberately unresolved. Cargo metadata currently says Apache-2.0 with a TODO; settle the release licence and supporting files before a release claim. |
+| Packaging (0005) | Standalone pgproxy binary first. Embedding, sidecar-specific packaging and an operator remain future options. |
+| Operations/configuration | Validated service generations and authenticated loopback HTTP controls. Existing sessions retain their generation. Listener/process limits require restart. See the reload guide. |
+| Cancellation | Proxy client keys map to current physical backend ownership across reload generations; ownership changes invalidate stale routing. See the current architecture and protocol tests. |
 
-Measured outcomes of the spikes that inform these: [`../plans/spike-findings.md`](../plans/spike-findings.md).
+## Unresolved proposals
 
-## Proposed / not yet written
+| Proposal | Status |
+|---|---|
+| [0006 — State virtualization boundary](0006-session-state-virtualization-boundary.md) | Proposed: define a PostgreSQL-side contract before transparent temp/lock/notification migration |
+| [0007 — Shared-role tenant cost attribution](0007-shared-role-tenant-cost-attribution.md) | Proposed: choose distinct backend identities, server-side measurement, or non-exclusive accounting |
 
-- **0008 — Admin and configuration surface.** Config-as-code, validation, dry-run, hot reload semantics.
-- **0009 — Cancellation and identity.** First-class `CancelRequest` routing; PostgreSQL 18's variable-length cancel keys break the fixed 12-byte assumption that PgBouncer's `[peers]` protocol relies on.
-- **0010 — Plugin ABI.** WASM (wasmtime) vs native, and the resource-budget model.
+These proposals are not recorded approvals. Current affinity and non-exclusive
+counter reporting remain the implemented behavior.
 
-## Template
+## Implementation references
 
-```markdown
-# ADR NNNN — Title
+- [Current architecture](../architecture/overview.md)
+- [Implementation status](../plans/implementation-status.md)
+- [Reload and capacity](../testing/reload-and-capacity.md)
+- [Credential and usage semantics](../testing/credentials-and-usage.md)
 
-- Status: Proposed | Accepted | Superseded by ADR-XXXX
-- Date: YYYY-MM-DD
-- Depends on: ADR-XXXX
-
-## Context
-## Decision
-## Alternatives considered
-## Consequences (positive / negative / neutral)
-## Open questions
-```
+Any new server dependency, changed user-visible semantics, licence selection or
+new plugin ABI needs an explicit decision. Update this summary when a decision is
+made; do not treat a target roadmap as proof of implementation or acceptance.

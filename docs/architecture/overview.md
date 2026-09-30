@@ -1,97 +1,127 @@
-# Architecture Overview
+# Architecture overview
 
-> Phase 0 target architecture. Anything marked *(later)* is not built yet.
+Current implementation: 2026-09-30. This page describes the code, while
+[the roadmap](../vision/roadmap.md) describes acceptance targets. See
+[implementation status](../plans/implementation-status.md) for verification evidence.
 
-## 1. Component map
+## Component map
 
-```
-                         client drivers
-        psycopg3 · asyncpg · pgjdbc · node-postgres · pgx · npgsql · Rails
-                                │
-                                │  PostgreSQL wire protocol v3 / 3.2
-                                ▼
-┌───────────────────────────────────────────────────────────────────────────┐
-│                              pgproxy (single binary)                      │
-│                                                                           │
-│  ┌────────────────────────── per-core worker ──────────────────────────┐   │
-│  │  pgproxy-wire      protocol codec + connection state machine       │   │
-│  │        │                                                           │   │
-│  │        ├─► pgproxy-parser   T0/T1/T2 classification, fingerprints  │   │
-│  │        │                                                           │   │
-│  │        ├─► pgproxy-session  Session-State Ledger (ADR 0003)        │   │
-│  │        │        · session image · statement registry · DDL stream  │   │
-│  │        │        · advisory-lock leases · LISTEN fan-out            │   │
-│  │        │                                                           │   │
-│  │        ├─► pgproxy-policy   (later) capability + AST enforcement   │   │
-│  │        │                                                           │   │
-│  │        └─► pgproxy-pool     per-core pools, fairness, admission    │   │
-│  └────────────────────────────────────────────────────────────────────┘   │
-│                                                                           │
-│  pgproxy-admin     admin SQL surface, metrics, health   (control plane)   │
-│  pgproxy-core      config, runtime bootstrap, TLS, auth (control plane)   │
-│  pgproxy-cli       the `pgproxy` binary                                   │
-└───────────────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-                     PostgreSQL 14 · 15 · 16 · 17 · 18
+```text
+PostgreSQL wire clients                    MCP stdio client
+           |                                    |
+           v                                    v
+   pgproxy-core Runtime                 pgproxy-core MCP executor
+   per-worker SO_REUSEPORT                       |
+   listener + connection threads                |
+           |                                    |
+           v                                    |
+   pgproxy-wire service <----- shared policy/context/budgets
+   framing, authentication,                     |
+   frontend/backend TLS, cancellation           |
+           |                                    |
+           +--> pgproxy-parser: PG18 grammar, bounded cache, fingerprints
+           +--> pgproxy-session: confirmed state, prepares, cursor snapshots
+           +--> pgproxy-policy: SQL grants, admission, fairness, cache rules
+           +--> pgproxy-pool: reusable connections, waits, physical socket cap
+           |                                    |
+           +------------------+-----------------+
+                              v
+                    PostgreSQL 14–18
+
+Control plane: validated config/service generations, credential adapters,
+loopback operations HTTP, diagnostics, tracing and server-cost exports.
+Packaging: one pgproxy binary from pgproxy-cli.
 ```
 
-## 2. Threading and state ownership
+## Threading and ownership
 
-Thread-per-core (ADR 0001). The consequences are load-bearing and must be designed in from the first commit, not retrofitted:
+The runtime creates worker listeners using `SO_REUSEPORT` and runs each accepted
+client connection on its own OS thread. Transaction relay advances frontend and
+backend frames using socket readiness. This is a blocking connection-thread
+implementation, not a monoio/io_uring executor.
 
-- Each core owns its listener (via `SO_REUSEPORT`), its accept loop, its slice of pooled backend connections, and its parse/fingerprint caches. **No cross-core locking on the hot path.**
-- Client connections are pinned to a core for their lifetime. Backend connections belong to the core that created them.
-- Cross-core coordination is confined to the control plane: metrics aggregation, config reload, and the admin surface. It uses channels and snapshots, never shared mutable hot state.
-- Consequence to accept consciously: **pool limits are per-core**, and aggregate limits must be enforced globally by coordination. This is the exact weakness of PgBouncer's `so_reuseport` workaround (pool limits are not shared across processes) — we must not reproduce it. A global admission decision made on the control plane, with per-core enforcement, is the design.
+Routing services and backend pools are shared within a service generation. Pool
+state uses a mutex and condition variable; admission, parser caches, scheduling
+and diagnostics also have shared synchronization. Fully per-core backend pool
+ownership and a lock-free hot path remain goals, not current properties.
 
-## 3. Data path, in order of preference
+A process-wide permit bounds authenticated physical data sockets across session
+mode, transaction pools and reload generations, including idle pooled sockets.
+Cancellation/control sockets are additional transient connections. Reload stages a
+new validated service; existing sessions retain their generation until disconnect.
+See [reload and capacity semantics](../testing/reload-and-capacity.md).
 
-1. **Passthrough** — relay bytes with `TCP_NODELAY` on both sockets, no SQL inspection. This is the
-   default fast path and, per spike S1, it is as fast as anything more exotic: a zero-copy
-   `splice(2)` bypass measured **statistically identical** to plain userspace `io::copy`
-   (217,867 vs 215,827 TPS at c=64). **The bottleneck is not byte copying**, so the data path stays
-   simple and auditable. Do not build a splice path in Phase 0.
-2. **Framed inspection** — parse message headers, not SQL. Correct for `COPY` and large result sets.
-3. **Classified (T1)** — statement class for routing.
-4. **Full (T2)** — parse and enforce. Only when the ledger or policy requires it.
+## Protocol and session state
 
-Nothing forces us into tier 4 by default. A pooler that parses every statement is a pooler that loses
-the benchmark: S3 measured a full parse at 2.5 µs for a small statement and 333 µs for an 8 KB one,
-versus 18 ns to hash the same text.
+Session mode can relay backend authentication and keep a native backend for the
+client's lifetime. Transaction mode terminates client authentication and obtains
+separately authenticated backend connections. TLS, certificate authentication,
+SCRAM channel binding and cancellation routing are implemented with documented
+configuration requirements. Startup negotiation supports downgrade/fallback;
+full native protocol 3.2 extension support is not claimed.
 
-`io_uring` and fd-passing remain *later, measured* optimisations, not Phase 0 requirements.
+The ledger records confirmed successful changes and transaction/savepoint state.
+Settings, roles and wire/SQL prepared statements are restored with preparation
+context. A backend is released only at a safe idle protocol boundary with no
+outstanding completion or resource ownership. Error, cancellation and uncertain
+session effects can retain ownership or discard a connection.
 
-## 4. Crate responsibilities
+Opt-in bounded held-cursor snapshots support a restricted set of types and simple
+and extended access. Extended access inside explicit transactions and mixed
+physical/virtual cycles remain restricted. Temporary relations, session advisory
+locks, LISTEN subscriptions and opaque effects retain native affinity. There is
+no listener fan-out, lock-lease migration or durable notification service.
+See [ledger semantics](../testing/ledger-semantics.md) and
+[remaining virtualization](remaining-state-virtualization.md).
 
-| Crate | Owns | Depends on |
+## Parsing, governance and caches
+
+The parser wraps vendored libpg_query 18 through audited FFI, exposes JSON-derived
+AST data and versioned fingerprints, and bounds input, tree and cache memory.
+The implementation has one grammar; the compatibility matrix does not establish
+separate per-major grammar selection. Governed SQL uses full parsing and a
+conservative deny-by-default policy. Reviewed database roles, RLS, functions and
+objects remain part of the security boundary. Protected columns are denied;
+result masking and OAuth/token exchange are not implemented.
+
+Wire and MCP clients share configured principal identities, policy, trusted
+context and budgets. Fairness uses bounded weighted queues and concurrency
+limits. MCP stdio tools execute on fresh read-only backends with a shared deadline.
+Literal caching admits immutable relation-free SQL. Restricted relation caching
+requires fresh snapshot validation; it is not a logical-decoding invalidation feed.
+See [operations and governance](../testing/operations-and-governance.md).
+
+## Crate responsibilities and dependencies
+
+Direct internal dependencies below reflect the Cargo manifests.
+
+| Crate | Current responsibility | Direct internal dependencies |
 |---|---|---|
-| `pgproxy-wire` | Protocol codec, message framing, connection state machine, auth, TLS, cancel routing | `pgproxy-parser` (weak) |
-| `pgproxy-parser` | `libpg_query` FFI, AST views, fingerprints, sharded parse cache, T0/T1/T2 classification | — |
-| `pgproxy-session` | Session image, statement registry, DDL event stream, advisory-lock leases, `LISTEN` fan-out | wire, parser |
-| `pgproxy-pool` | Backend pools, checkout/checkin, health checks, fairness, admission control | session |
-| `pgproxy-policy` *(later)* | Principal model, capability model, AST policy, masking, audit | parser, session |
-| `pgproxy-admin` | Admin SQL surface, Prometheus/OTel, health, introspection of ledger state | all |
-| `pgproxy-core` | Config, runtime bootstrap, supervision, TLS, shutdown | all |
-| `pgproxy-cli` | The binary | core |
+| `pgproxy-parser` | libpg_query FFI, AST data, fingerprints, bounded parse cache | — |
+| `pgproxy-session` | Session image, prepared registry, rollback, cursor snapshots/portals | parser |
+| `pgproxy-pool` | Generic reusable pools and shared physical admission cap | — |
+| `pgproxy-policy` | SQL capabilities, context, scheduling, MCP contracts and cache eligibility | parser, session |
+| `pgproxy-admin` | HTTP operations, metrics, diagnostics and usage ledger | pool, session |
+| `pgproxy-wire` | Protocol, auth/TLS, session relay/replay, failover, credentials and usage | policy, admin, parser, pool, session |
+| `pgproxy-core` | Config, runtime, router, reload, credential/MCP execution and server-cost export | parser, policy, admin, pool, wire |
+| `pgproxy-cli` | Binary arguments and private report publication | policy, core, wire |
 
-Dependency direction is strictly downward. `pgproxy-wire` and `pgproxy-parser` are the only crates permitted `unsafe` (ADR 0001).
+## Operations and measurement
 
-## 5. What the ledger means for the pool
+The loopback HTTP surface exposes health/readiness and authenticated metrics,
+clients, pools, usage, reload and planned-drain controls. It is not an admin SQL
+pseudo-database. Latency uses bounded histogram buckets with approximate
+percentiles, not HDR per-statement server timings. Structured tracing is
+implemented; a complete OpenTelemetry context/export integration remains a goal.
 
-The pool does not hand out "a connection". It hands out **a backend that has been reconciled to a client's session image**, and takes it back with a known delta. That inverts the usual ownership model and is why `pgproxy-pool` depends on `pgproxy-session` rather than the other way round.
+Per-principal wire usage measures delivered rows/bytes, elapsed exchanges and
+errors. Separate server-cost exports collect cumulative database/role/queryid
+WAL and buffer counters from pg_stat_statements and optional execution CPU from
+pg_stat_kcache. They do not establish exclusive tenant allocation for shared roles.
+See [credentials and usage](../testing/credentials-and-usage.md).
 
-Checkout becomes: acquire backend → diff image → batched restore → serve.
-Checkin becomes: apply reset policy → record delta → mark clean or owned.
-
-## 6. Observability as a first-class subsystem
-
-The research is unambiguous: `SHOW POOLS`-style text consoles are the reason operators cannot diagnose pinning. Therefore introspection is designed in, not bolted on:
-
-- Every client exposes: principal, session-image digest, pinned/owned state and why, queued time, parse tier in use.
-- Metrics are Prometheus-native with HDR histograms (p50/p90/p99) and OpenTelemetry traces.
-- Trace context is carried in a **proxy-side index keyed by `(connection, Bind)`**, never injected as SQL comments — comments change the query string and pollute plan caches.
-
-## 7. Non-goals for Phase 0
-
-Policy engine, agent/MCP surface, caching, read-your-writes, failover automation, sharding, WASM plugins. See `docs/vision/roadmap.md` §6.
+Endpoint acquisition can fail over to a verified writable candidate before user
+SQL. PostgreSQL promotion and authoritative infrastructure fencing remain external.
+Uncertain writes are not automatically replayed. Local smoke benchmarks and fault
+fixtures do not satisfy independent security, real-provider, production fencing
+or bare-metal performance/soak certification gates.

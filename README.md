@@ -31,13 +31,13 @@ Backend TLS, authenticated operations, SQL policy, tenant scheduling, trusted ro
 
 ```
 docs/
-  vision/roadmap.md            sequencing plan and phase gates       ← start here
+  plans/implementation-status.md  current features, limits and evidence ← start here
   vision/product-thesis.md     positioning, buyers, non-goals
   adr/                         architecture decision records
   architecture/overview.md     component map, threading, data path
-  architecture/                session-state-taxonomy.md = Phase 1 spec
-  plans/                       phase-0 plan + measured spike findings
-  research/                    the competitive and technical research base
+  architecture/remaining-state-virtualization.md  remaining migration boundaries
+  vision/roadmap.md            remaining work and acceptance gates
+  testing/                    current verification and semantics guides
 crates/                        Rust workspace (see ADR 0001)
 tests/conformance/             wire-protocol conformance harness (run against
                                direct PostgreSQL first - it is the control)
@@ -49,13 +49,9 @@ pgproxy.toml                   example configuration
 
 ## Decisions so far
 
-| ADR | Decision |
-|---|---|
-| [0001](docs/adr/0001-language-and-runtime.md) | **Rust**, thread-per-core runtime (confirmed by spike S1); no async runtime, no splice bypass |
-| [0002](docs/adr/0002-parser-strategy.md) | `libpg_query` over FFI; three-tier parsing; never parse per `Bind`/`Execute` |
-| [0003](docs/adr/0003-session-state-ledger.md) | Explicit per-client session image with a three-class state taxonomy; fail closed on the unclassifiable |
-| [0004](docs/adr/0004-licence.md) | Licence — **deliberately deferred** |
-| [0005](docs/adr/0005-deliverable-shape.md) | **Standalone binary first**; sidecar/library kept open structurally |
+See [current architecture decisions](docs/adr/README.md) for language/runtime,
+parser, ledger, packaging, operations and cancellation. Licence selection and
+the state-migration/cost-allocation proposals remain unresolved.
 
 ## Status
 
@@ -153,6 +149,6 @@ Reproducible fixture and driver instructions live in
 [implementation status](docs/plans/implementation-status.md).
 
 The additional work and its precise limits are documented in
-[remaining-feature integration](docs/plans/remaining-features-implementation.md).
+[current architecture](docs/architecture/overview.md).
 `tests/certification/run.py` collects reproducible evidence, source hashes and unmet external
 security/fencing/provider/performance gates; a passing local run does not certify deployment.

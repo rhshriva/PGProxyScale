@@ -2,8 +2,8 @@
 
 Operations is opt-in. Configure `[operations]` with `listen = "127.0.0.1:6433"`
 and a private random bearer token of at least 32 bytes. Non-loopback addresses
-are rejected. `/health` and `/ready` are public on loopback; `/metrics`, `/clients`
-and `/pools` require `Authorization: Bearer <token>`. Diagnostics omit SQL,
+are rejected. `/health` and `/ready` are public on loopback; `/metrics`, `/clients`,
+`/pools` and `/usage` require `Authorization: Bearer <token>`. Diagnostics omit SQL,
 passwords and certificate material. Client output is bounded to 256 entries.
 Read/write deadlines and header size are bounded; request bodies are refused.
 
@@ -56,7 +56,12 @@ listener. Logging goes to stderr and JSON-RPC responses to stdout.
 Query, non-ANALYZE explain and filtered schema tools share policy and budgets.
 Execution uses fresh authenticated backend connections, BEGIN READ ONLY,
 trusted context/search path and timeout. Request, row and byte ceilings are checked.
-Cache hits remain budgeted; only immutable relation-free literals can be cached.
+Cache hits remain authorized and budgeted. The literal cache admits only proven
+immutable relation-free SQL. A separate restricted ordinary-heap projection cache
+requires fresh database snapshot validation; views, RLS, replicas and complex
+expressions bypass it. See [the relation-cache acceptance fixture](../../tests/conformance/governance/README.md)
+for admission, invalidation and accounting checks. Validation requires a database
+round trip; no latency benefit is implied.
 
 Drivers `governance_check.py`, `mcp_check.py`, `rls_fairness_check.py` and
 `mcp_rls_check.py` exercise wire enforcement, prepared provenance, adversarial

@@ -1,28 +1,22 @@
-# Docs index
+# Documentation
 
-| Path | What it is |
+Current documentation, reviewed 2026-09-30. Start with implementation status.
+Each topic has one maintained page; previous versions are available in Git.
+
+| Page | Purpose |
 |---|---|
-| [`vision/roadmap.md`](vision/roadmap.md) | **The plan.** Phase order, deliverables, exit gates, risk spikes, non-goals. Start here. |
-| [`vision/product-thesis.md`](vision/product-thesis.md) | Positioning, buyers, non-goals, honest risks. |
-| [`adr/`](adr/README.md) | Architecture decision records — what we decided and what we rejected. |
-| [`architecture/design-explained.md`](architecture/design-explained.md) | **The design, explained with diagrams.** Written to be shared: the problem, the architecture, the two auth models, the ledger, and how to pitch it at three lengths. |
-| [`architecture/overview.md`](architecture/overview.md) | Component map, threading model, data-path tiers, crate responsibilities. |
-| [`architecture/session-state-taxonomy.md`](architecture/session-state-taxonomy.md) | **Spike S2 output.** The PostgreSQL 14–18 session-state surface and what can be virtualised. This is the Phase 1 specification. |
-| [`plans/phase-0-foundations.md`](plans/phase-0-foundations.md) | The Phase 0 workstreams, gates and risk spikes. |
-| [`plans/spike-findings.md`](plans/spike-findings.md) | **Measured outcomes of spikes S1–S3**, including results that contradicted our assumptions. |
-| [`research/`](research/README.md) | The research base: competitive landscape, pain points, technical frontier. |
+| [Implementation status](plans/implementation-status.md) | Implemented behavior, limitations and latest verification |
+| [Architecture overview](architecture/overview.md) | Current components, threading, dependencies and data flow |
+| [Remaining state virtualization](architecture/remaining-state-virtualization.md) | Cursor restrictions and temp/lock/notification migration requirements |
+| [Roadmap](vision/roadmap.md) | Remaining work and acceptance criteria |
+| [Product thesis](vision/product-thesis.md) | Audience, value proposition and product boundaries |
+| [Architecture decisions](adr/README.md) | Current decisions and unresolved proposals |
+| [Ledger testing](testing/ledger-semantics.md) | State replay and cursor semantics |
+| [Operations and governance](testing/operations-and-governance.md) | HTTP operations, policy, fairness and MCP |
+| [Reload and capacity](testing/reload-and-capacity.md) | Generations, draining and shared backend limits |
+| [Credentials and usage](testing/credentials-and-usage.md) | Credential adapters and measurement semantics |
+| [Latest verification evidence](../deliverables/verification-next/README.md) | Source-bound results and certification gaps |
 
-## Reading order
-
-1. `vision/roadmap.md` — what we are building and in what order.
-2. `adr/0001` → `adr/0003` — language, parsing, and the central architectural decision.
-3. `architecture/design-explained.md` — the design with diagrams, and how to explain it.
-4. `architecture/overview.md` — how the pieces fit.
-4. `plans/spike-findings.md` — what the experiments actually showed.
-5. `research/00-landscape-and-innovation-map.md` — the full evidence base, if you want the source material.
-
-## Conventions
-
-- **ADRs are immutable once accepted.** Supersede rather than edit; a changed decision gets a new ADR that references the old one.
-- **Every phase gate is a measurable claim.** If a phase cannot state one, the phase is not ready.
-- **Research documents are dated and cite primary sources.** They are evidence, not living docs.
+Implemented mechanisms, compatibility fallbacks, planned features and verified
+acceptance gates are distinct. Proposed decisions require approval; local test
+results do not establish production certification.
