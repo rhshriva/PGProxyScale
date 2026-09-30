@@ -84,50 +84,69 @@ impl StartupParams {
         self.entries.is_empty()
     }
 
-    /// Parse the `options` parameter into individual settings.
-    ///
-    /// PostgreSQL accepts command-line style options here, chiefly `-c name=value`
-    /// (equivalently `--name=value`). Returns an empty list when `options` is absent or
-    /// unparseable — an unparseable `options` is the server's problem to reject, and the
-    /// proxy must not refuse a connection over it.
-    ///
-    /// Recognised shapes: `-c key=value`, `--key=value`, and bare `-c` with the setting
-    /// as the next token.
+    /// Parse startup GUC switches, returning no settings on malformed input.
+    /// Use `checked_options` when the proxy terminates startup instead of forwarding it.
     pub fn options(&self) -> Vec<(String, String)> {
-        let Some(raw) = self.get_bytes("options") else {
-            return Vec::new();
-        };
-        let text = String::from_utf8_lossy(raw);
-        let mut out = Vec::new();
-        let mut tokens = text.split_whitespace().peekable();
+        self.checked_options().unwrap_or_default()
+    }
 
-        while let Some(token) = tokens.next() {
-            if token == "-c" || token == "--" {
-                if let Some(setting) = tokens.next() {
-                    push_setting(&mut out, setting);
+    /// Parse every startup option or reject the entire string. PostgreSQL splits
+    /// ASCII whitespace and permits backslash escapes, not shell quote syntax.
+    /// Only GUC switches can be represented safely by the transaction ledger.
+    pub fn checked_options(&self) -> io::Result<Vec<(String, String)>> {
+        let Some(raw) = self.get_bytes("options") else {
+            return Ok(Vec::new());
+        };
+        let text = std::str::from_utf8(raw)
+            .map_err(|_| invalid_data("startup options require UTF8".to_string()))?;
+        let mut tokens = Vec::new();
+        let mut token = String::new();
+        let mut escaped = false;
+        for ch in text.chars() {
+            if escaped {
+                token.push(ch);
+                escaped = false;
+            } else if ch == '\\' {
+                escaped = true;
+            } else if ch.is_ascii_whitespace() {
+                if !token.is_empty() {
+                    tokens.push(std::mem::take(&mut token));
                 }
-            } else if let Some(rest) = token.strip_prefix("-c") {
-                // `-ckey=value`, without a space.
-                push_setting(&mut out, rest);
-            } else if let Some(rest) = token.strip_prefix("--") {
-                push_setting(&mut out, rest);
+            } else {
+                token.push(ch);
             }
         }
-        out
+        // PostgreSQL drops a trailing escape when splitting an option.
+        if !token.is_empty() {
+            tokens.push(token);
+        }
+        let mut tokens = tokens.into_iter();
+        let mut out = Vec::new();
+        while let Some(token) = tokens.next() {
+            let setting = if token == "-c" {
+                tokens
+                    .next()
+                    .ok_or_else(|| invalid_data("missing startup setting".to_string()))?
+            } else if let Some(rest) = token
+                .strip_prefix("-c")
+                .or_else(|| token.strip_prefix("--"))
+            {
+                rest.to_string()
+            } else {
+                return Err(invalid_data("unsupported startup option".to_string()));
+            };
+            let (name, value) = setting
+                .split_once('=')
+                .filter(|(name, _)| !name.is_empty())
+                .ok_or_else(|| invalid_data("invalid startup setting".to_string()))?;
+            out.push((name.to_string(), value.to_string()));
+        }
+        Ok(out)
     }
 
     /// Whether the client negotiated protocol 3.0 exactly.
     pub fn is_protocol_3_0(&self) -> bool {
         self.protocol_version == PROTOCOL_3_0
-    }
-}
-
-fn push_setting(out: &mut Vec<(String, String)>, setting: &str) {
-    // Let-chain: the guard belongs to the same condition, not a nested `if`.
-    if let Some((k, v)) = setting.split_once('=')
-        && !k.is_empty()
-    {
-        out.push((k.to_string(), v.to_string()));
     }
 }
 
@@ -198,7 +217,7 @@ pub fn parse_startup(body: &[u8]) -> io::Result<StartupRequest> {
                 key: rest[4..].to_vec(),
             }))
         }
-        version if version >= PROTOCOL_3_0 => Ok(StartupRequest::Startup(StartupParams {
+        version if (version >> 16) == 3 => Ok(StartupRequest::Startup(StartupParams {
             protocol_version: version,
             entries: parse_parameters(&body[4..])?,
         })),
@@ -315,6 +334,12 @@ mod tests {
             }
             other => panic!("expected Startup, got {other:?}"),
         }
+    }
+
+    #[test]
+    fn rejects_unknown_protocol_major() {
+        let body = startup_body(4 << 16, &[("user", "postgres")]);
+        assert!(parse_startup(&body).is_err());
     }
 
     #[test]
@@ -526,5 +551,37 @@ mod tests {
             panic!("expected Startup");
         };
         assert!(p.options().is_empty());
+    }
+    #[test]
+    fn startup_options_are_atomic_and_preserve_escapes() {
+        for (input, expected) in [
+            (r"-c application_name=hello\ world", "hello world"),
+            (r"-c application_name=hello\\world", r"hello\world"),
+            (r"-c application_name='hello'", "'hello'"),
+            ("-c application_name=", ""),
+        ] {
+            let body = startup_body(PROTOCOL_3_0, &[("options", input)]);
+            let StartupRequest::Startup(p) = parse_startup(&body).unwrap() else {
+                panic!()
+            };
+            assert_eq!(
+                p.checked_options().unwrap(),
+                vec![("application_name".to_string(), expected.to_string())]
+            );
+        }
+        for input in [
+            "-c application_name=ok nonsense",
+            "-c application_name=ok -c",
+            "--",
+            "-c =value",
+            "-c missing",
+        ] {
+            let body = startup_body(PROTOCOL_3_0, &[("options", input)]);
+            let StartupRequest::Startup(p) = parse_startup(&body).unwrap() else {
+                panic!()
+            };
+            assert!(p.checked_options().is_err(), "{input}");
+            assert!(p.options().is_empty(), "must not partially apply {input}");
+        }
     }
 }

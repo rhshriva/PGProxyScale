@@ -28,3 +28,10 @@ spikes/**/target/
 spikes/s1/libpg_query/
 spikes/s2/guc_tables_pg*.c
 spikes/s3/libpg_query/
+
+# Private presentation build and validation output
+/.pitch-build/
+
+# Generated Python driver/benchmark bytecode
+__pycache__/
+*.pyc

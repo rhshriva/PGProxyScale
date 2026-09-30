@@ -13,14 +13,23 @@
 //! on measurement, not preference — see `docs/plans/spike-findings.md` (spike S1).
 #![forbid(unsafe_code)]
 
+pub mod attribution;
 pub mod config;
+pub mod credentials;
 pub mod error;
 pub mod listener;
 pub mod router;
 pub mod runtime;
 pub mod telemetry;
+pub mod usage;
 
 pub use config::Config;
 pub use error::{Error, Result};
 pub use router::ConfigRouter;
 pub use runtime::Runtime;
+
+mod admission;
+
+pub mod mcp_executor;
+
+pub mod reload;

@@ -1,0 +1,26 @@
+{
+  "purpose": "local_smoke_only_not_production_certification",
+  "workloads": {
+    "simple_select": {
+      "clients": 4,
+      "duration_secs": 2,
+      "min_samples": 100,
+      "max_p99_ms": 500,
+      "min_throughput_ops_per_sec": 10
+    },
+    "prepared_select": {
+      "clients": 4,
+      "duration_secs": 2,
+      "min_samples": 100,
+      "max_p99_ms": 500,
+      "min_throughput_ops_per_sec": 10
+    },
+    "transaction_rollback": {
+      "clients": 4,
+      "duration_secs": 2,
+      "min_samples": 100,
+      "max_p99_ms": 500,
+      "min_throughput_ops_per_sec": 10
+    }
+  }
+}

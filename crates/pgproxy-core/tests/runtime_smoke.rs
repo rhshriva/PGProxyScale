@@ -34,8 +34,13 @@ fn test_config(workers: usize) -> Config {
             listen_addr: "127.0.0.1".to_string(),
             listen_port: 0, // any free port; the runtime reports which
             workers,
+            max_client_connections: 1024,
+            max_backend_connections: 200,
+            connection_rate_per_second: 1000,
             admin_users: Vec::new(),
             shutdown_timeout_secs: 5,
+            session: Default::default(),
+            tls: None,
         },
         databases: vec![Database {
             name: "app".to_string(),
@@ -44,10 +49,17 @@ fn test_config(workers: usize) -> Config {
             dbname: None,
             pool_size: 4,
             pool_mode: pgproxy_core::config::PoolMode::Session,
+            client_auth: Default::default(),
+            auth_users: Default::default(),
             user: None,
             password: None,
             checkout_timeout_secs: 5,
             connect_timeout_secs: 10,
+            require_primary: false,
+            backend_tls: None,
+            policy: None,
+            failover: Vec::new(),
+            credential_provider: None,
         }],
         ..Default::default()
     }
@@ -226,4 +238,43 @@ fn multiple_workers_share_one_port_and_shutdown_drains() {
     );
 
     shutdown_promptly(token, handle);
+}
+
+#[test]
+fn admission_is_shared_across_workers_and_shutdown_waits_for_clients() {
+    struct HeldService(mpsc::Sender<()>);
+    impl Service for HeldService {
+        fn handle(&self, mut conn: Connection) -> std::io::Result<()> {
+            self.0.send(()).unwrap();
+            let mut byte = [0];
+            conn.stream.read_exact(&mut byte)
+        }
+    }
+    let mut cfg = test_config(2);
+    cfg.general.max_client_connections = 1;
+    let (entered_tx, entered_rx) = mpsc::channel();
+    let (ready_tx, ready_rx) = mpsc::channel();
+    let (done_tx, done_rx) = mpsc::channel();
+    let token = ShutdownToken::new();
+    let runtime = Runtime::new(cfg, Arc::new(HeldService(entered_tx)))
+        .with_ready_signal(ready_tx)
+        .with_shutdown_token(token.clone());
+    let handle = thread::spawn(move || {
+        runtime.run().unwrap();
+        done_tx.send(()).unwrap();
+    });
+    let addr = ready_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+    let mut admitted = TcpStream::connect(addr).unwrap();
+    entered_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+    let mut rejected = TcpStream::connect(addr).unwrap();
+    rejected
+        .set_read_timeout(Some(Duration::from_secs(2)))
+        .unwrap();
+    assert_eq!(rejected.read(&mut [0]).unwrap(), 0);
+    assert!(entered_rx.try_recv().is_err());
+    token.trigger();
+    assert!(done_rx.recv_timeout(Duration::from_millis(150)).is_err());
+    admitted.write_all(&[1]).unwrap();
+    done_rx.recv_timeout(Duration::from_secs(2)).unwrap();
+    handle.join().unwrap();
 }

@@ -1,0 +1,21 @@
+[general]
+listen_addr = "127.0.0.1"
+listen_port = 6472
+workers = 1
+[general.session]
+query_timeout_secs = 3
+[[databases]]
+name = "cache_app"
+host = "127.0.0.1"
+port = 55439
+dbname = "conformance"
+user = "pgproxy_cache_service"
+pool_mode = "transaction"
+client_auth = "scram-sha256"
+auth_users = { postgres = "SCRAM-SHA-256$4096:cGdwcm94eS10ZXN0LXNhbHQ=$bnjU9GCMHxxI3hDk0aVJDUeTKPSt4QiWNyBMZTvsAyQ=:kCVRr5z13WVeARjoFmm9DsfXmHiNS/d4xgbRjwP+Py8=" }
+pool_size = 2
+require_primary = true
+[[databases.policy.grants]]
+principal = { user = "postgres", tenant = "cache-test", agent = "cache-agent" }
+capabilities = { read = ["public.pgproxy_cache_table", "public.pgproxy_cache_view", "public.pgproxy_cache_rls"], write = [], functions = ["pg_catalog.random"], denied_columns = [] }
+quota = { concurrency = 1, burst = 1000, per_second = 1000, lifetime_queries = 10000 }

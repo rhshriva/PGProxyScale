@@ -1,0 +1,29 @@
+name: Bounded parser and codec fuzzing
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'fuzz/**'
+      - 'crates/pgproxy-parser/**'
+      - 'crates/pgproxy-wire/src/protocol/**'
+      - '.github/workflows/fuzz.yml'
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - name: Build dependencies
+        run: sudo apt-get update -qq && sudo apt-get install -y make gcc clang
+      - name: Install cargo-fuzz
+        run: cargo install cargo-fuzz --locked
+      - name: Codec campaign
+        run: cargo +nightly fuzz run codec -- -max_len=65536 -max_total_time=60
+      - name: Parser FFI campaign
+        run: cargo +nightly fuzz run parser -- -max_len=65536 -max_total_time=60
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: fuzz-failure
+          path: fuzz/artifacts/

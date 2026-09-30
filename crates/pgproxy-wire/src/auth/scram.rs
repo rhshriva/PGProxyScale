@@ -25,13 +25,11 @@
 //!
 //! ## Deliberate gaps
 //!
-//! * **Channel binding** (`SCRAM-SHA-256-PLUS`) is not implemented. A client that demands
-//!   it is rejected, never silently downgraded.
-//! * **SASLprep** (RFC 4013) normalisation is not applied to passwords. PostgreSQL applies
-//!   it and falls back to the raw bytes when it fails; we always use the raw bytes. For
-//!   the ASCII passwords that account for essentially all deployments this is identical,
-//!   but a password containing characters SASLprep would normalise will not authenticate.
-//!   Recorded here rather than left implicit.
+//! * **Channel binding** uses `tls-server-end-point` for supported certificate signature
+//!   algorithms; PLUS is advertised only when a verified binding is available.
+//! * Passwords use RFC 4013 SASLprep, with PostgreSQL's documented raw-byte
+//!   fallback for invalid UTF8 or prohibited input. See PostgreSQL protocol docs:
+//!   https://www.postgresql.org/docs/current/sasl-authentication.html
 
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD as BASE64;
@@ -91,7 +89,11 @@ fn sha256(data: &[u8]) -> [u8; KEY_LEN] {
 
 fn salted_password(password: &[u8], salt: &[u8], iterations: u32) -> [u8; KEY_LEN] {
     let mut out = [0u8; KEY_LEN];
-    pbkdf2_hmac::<Sha256>(password, salt, iterations, &mut out);
+    let prepared = std::str::from_utf8(password)
+        .ok()
+        .and_then(|value| stringprep::saslprep(value).ok());
+    let bytes = prepared.as_ref().map_or(password, |value| value.as_bytes());
+    pbkdf2_hmac::<Sha256>(bytes, salt, iterations, &mut out);
     out
 }
 
@@ -272,6 +274,7 @@ pub struct ScramServer {
     combined_nonce: String,
     gs2_header: String,
     client_username: String,
+    channel_binding: Option<Vec<u8>>,
 }
 
 impl ScramServer {
@@ -291,7 +294,14 @@ impl ScramServer {
             combined_nonce: String::new(),
             gs2_header: String::new(),
             client_username: String::new(),
+            channel_binding: None,
         }
+    }
+
+    /// Bind the proof to the authenticated TLS server certificate digest.
+    pub fn with_channel_binding(mut self, data: Vec<u8>) -> Self {
+        self.channel_binding = Some(data);
+        self
     }
 
     /// The username the client claimed. Informational only.
@@ -326,17 +336,10 @@ impl ScramServer {
         let gs2_header = &message[..header_end + 2];
         let bare = &message[header_end + 2..];
 
-        match gs2_header.chars().next() {
-            // 'n': client does not support channel binding. 'y': it supports it but
-            // believes we do not. Both are fine to continue without channel binding.
-            Some('n') | Some('y') => {}
-            Some('p') => return Err(AuthError::ChannelBindingRequired),
-            _ => {
-                return Err(AuthError::Malformed {
-                    context: "SCRAM client-first-message",
-                    detail: format!("unrecognised GS2 channel-binding flag in {gs2_header:?}"),
-                });
-            }
+        match (gs2_header, self.channel_binding.as_ref()) {
+            ("p=tls-server-end-point,,", Some(_)) => {}
+            ("n,," | "y,,", None) => {}
+            (_, _) => return Err(AuthError::ChannelBindingRequired),
         }
 
         let attributes = parse_attributes(bare, "SCRAM client-first-message")?;
@@ -388,7 +391,11 @@ impl ScramServer {
         let channel_binding = require(&attributes, 'c', "SCRAM client-final-message")?;
         let nonce = require(&attributes, 'r', "SCRAM client-final-message")?;
 
-        let expected_binding = BASE64.encode(self.gs2_header.as_bytes());
+        let mut binding = self.gs2_header.as_bytes().to_vec();
+        if let Some(data) = &self.channel_binding {
+            binding.extend_from_slice(data);
+        }
+        let expected_binding = BASE64.encode(binding);
         if channel_binding != expected_binding {
             return Err(AuthError::Protocol(
                 "channel-binding attribute does not match the GS2 header",
@@ -445,6 +452,7 @@ pub struct ScramClient {
     auth_message: String,
     server_key: [u8; KEY_LEN],
     state: ServerState,
+    channel_binding: Option<Vec<u8>>,
 }
 
 impl ScramClient {
@@ -464,6 +472,19 @@ impl ScramClient {
             auth_message: String::new(),
             server_key: [0u8; KEY_LEN],
             state: ServerState::AwaitingClientFirst,
+            channel_binding: None,
+        }
+    }
+
+    pub fn with_channel_binding(mut self, data: Vec<u8>) -> Self {
+        self.channel_binding = Some(data);
+        self
+    }
+    fn gs2_header(&self) -> &'static str {
+        if self.channel_binding.is_some() {
+            "p=tls-server-end-point,,"
+        } else {
+            GS2_HEADER_NO_CHANNEL_BINDING
         }
     }
 
@@ -477,7 +498,11 @@ impl ScramClient {
 
     /// The mechanism name to request.
     pub fn mechanism(&self) -> &'static str {
-        MECHANISM
+        if self.channel_binding.is_some() {
+            MECHANISM_PLUS
+        } else {
+            MECHANISM
+        }
     }
 
     /// Build the client-first-message.
@@ -485,7 +510,7 @@ impl ScramClient {
         // PostgreSQL clients send an empty username here; the real one travels in the
         // startup packet and PostgreSQL ignores this field.
         self.client_first_bare = format!("n={},r={}", self.username, self.client_nonce);
-        format!("{GS2_HEADER_NO_CHANNEL_BINDING}{}", self.client_first_bare)
+        format!("{}{}", self.gs2_header(), self.client_first_bare)
     }
 
     /// Consume the server-first-message, returning the client-final-message.
@@ -526,11 +551,11 @@ impl ScramClient {
         let stored_key = sha256(&client_key);
         self.server_key = hmac_sha256(&salted, SERVER_KEY);
 
-        let without_proof = format!(
-            "c={},r={}",
-            BASE64.encode(GS2_HEADER_NO_CHANNEL_BINDING),
-            nonce
-        );
+        let mut binding = self.gs2_header().as_bytes().to_vec();
+        if let Some(data) = &self.channel_binding {
+            binding.extend_from_slice(data);
+        }
+        let without_proof = format!("c={},r={}", BASE64.encode(binding), nonce);
         self.server_first = message.to_string();
         self.auth_message = format!(
             "{},{},{}",
@@ -923,5 +948,49 @@ mod tests {
         // Advertised over the wire; changing them silently would break every client.
         assert_eq!(MECHANISM, "SCRAM-SHA-256");
         assert_eq!(MECHANISM_PLUS, "SCRAM-SHA-256-PLUS");
+    }
+    #[test]
+    fn plus_proof_binds_to_the_tls_endpoint_and_rejects_substitution() {
+        let verifier = ScramVerifier::generate(b"secret");
+        for (server_binding, success) in [(vec![1; 32], true), (vec![2; 32], false)] {
+            let mut server =
+                ScramServer::new(verifier.clone()).with_channel_binding(server_binding);
+            let mut client = ScramClient::new(b"secret").with_channel_binding(vec![1; 32]);
+            assert_eq!(client.mechanism(), MECHANISM_PLUS);
+            let first = server.handle_client_first(&client.client_first()).unwrap();
+            let final_message = client.handle_server_first(&first).unwrap();
+            let result = server.handle_client_final(&final_message);
+            assert_eq!(result.is_ok(), success);
+            if let Ok(signature) = result {
+                client.handle_server_final(&signature).unwrap();
+            }
+        }
+        let mut server = ScramServer::new(verifier).with_channel_binding(vec![1; 32]);
+        assert!(server.handle_client_first("n,,n=,r=nonce").is_err());
+    }
+    #[test]
+    fn saslprep_rfc_vectors_normalize_before_hashing() {
+        for (original, normalized) in [
+            ("I\u{00ad}X", "IX"),
+            ("\u{00aa}", "a"),
+            ("\u{2168}", "IX"),
+            ("a\u{00a0}b", "a b"),
+        ] {
+            let actual =
+                ScramVerifier::derive(original.as_bytes(), 4096, b"public-test-salt").to_secret();
+            assert_eq!(
+                actual,
+                ScramVerifier::derive(normalized.as_bytes(), 4096, b"public-test-salt").to_secret()
+            );
+        }
+    }
+    #[test]
+    fn saslprep_postgres_fallback_preserves_prohibited_and_invalid_utf8() {
+        for password in [b"abc\x07".as_slice(), b"abc\xff"] {
+            let salt = b"public-test-salt";
+            let mut expected = [0u8; KEY_LEN];
+            pbkdf2_hmac::<Sha256>(password, salt, 4096, &mut expected);
+            assert_eq!(salted_password(password, salt, 4096), expected);
+        }
     }
 }

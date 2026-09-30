@@ -1,0 +1,9 @@
+{
+  "hardware_id": "0d1166eefda612a808e875414bb7e7634dc0dc72fd7601a3cc425050f2c1c57c",
+  "platform": "Linux-7.0.12-linuxkit-aarch64-with-glibc2.41",
+  "cpu_count": 16,
+  "platform_class": "unknown",
+  "virtualization_detected": null,
+  "physical_inventory_ref": null,
+  "scope": "load_generator_only"
+}

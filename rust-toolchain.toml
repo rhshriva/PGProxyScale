@@ -1,6 +1,13 @@
-# Pinned to the installed stable toolchain rather than an exact version so that
-# `cargo` never needs network access to resolve a toolchain.
-# The compiler floor is declared separately as `rust-version` in Cargo.toml.
+# Pinned to the project's minimum supported Rust version (see `rust-version` in
+# Cargo.toml) rather than the floating `stable` channel. `stable` silently becomes a
+# new compiler every six weeks, which under CI's `RUSTFLAGS=-D warnings` turns newly
+# promoted lints into build failures caused by no code change. A minor-version pin
+# still picks up 1.91.x patch releases (rustfmt/clippy fixes); moving to a new minor
+# is an explicit, reviewable edit here. CI must install the same channel -- see
+# .github/workflows/ci.yml.
+# `profile = "minimal"` keeps the toolchain identical on a laptop and in CI, where
+# dtolnay/rust-toolchain installs with `--profile minimal`.
 [toolchain]
-channel = "stable"
+channel = "1.91"
+profile = "minimal"
 components = ["rustfmt", "clippy"]

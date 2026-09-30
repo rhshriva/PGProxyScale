@@ -1,0 +1,5 @@
+{
+  "owned_proxy_pid": 58604,
+  "release_binary_sha256": "d7f0d2208d0a19402575780bbf00b11eded6efe96966402ba9e1abd16de703b0",
+  "scope": "owned local release process; not remote deployment or bare-metal proof"
+}

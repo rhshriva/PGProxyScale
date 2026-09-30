@@ -1,0 +1,9 @@
+# Release evidence gates
+
+Run `python3 tests/certification/run.py --live --linux` to collect current workspace unit/integration tests, strict lint, physical-replica failover acceptance, and isolated Linux verification. Reports and full logs are written to `target/certification/`. A passing executable returns zero; failures return nonzero. Optional omitted gates are explicitly marked `not-run`.
+
+This is an evidence harness, not a production certification. Reports record exact source SHA256 at start and end, fail if source changes, and identify platform/Rust toolchain. Documentation and deliverables are excluded from source identity. Its report always marks `production_certified: false`. An independent security review, real credential-provider acceptance, deployed fencing/split-brain validation and bare-metal load/soak tests require evidence from the actual deployment. The local Docker failover fixture promotes a standby externally after externally stopping or demoting the old primary in a controlled fixture; the proxy never promotes PostgreSQL or retries uncertain user statements. Blocking operating-system DNS lookup is outside the socket deadline guarantee.
+
+PG14–18 driver compatibility, verified TLS/mTLS, instrumentation-backed fuzzing and comparative benchmarks have separate runners under `tests/conformance/` and `fuzz/`; run those appropriate to the release target. Prior results do not certify a changed working tree.
+
+The separate authenticated external-evidence decision engine is documented in [EXTERNAL-EVIDENCE.md](EXTERNAL-EVIDENCE.md). Its positive decision requires a genuinely supplied out-of-band trust root and all deployment-bound issuer attestations; synthetic unit-test fixtures never constitute release evidence. The local runner now also runs evidence-engine contract tests and an explicit Docker power-off fencing scenario.

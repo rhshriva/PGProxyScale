@@ -1,0 +1,5 @@
+libpg_query 18.0.0, PostgreSQL 18.4
+Source: https://github.com/pganalyze/libpg_query
+Commit: 7632d033ba08bd1343228f1570f8b49bde46072b
+SHA256: f4c756dc1cc36083528c11d77bf9ccd96c4453d280d4712cd5cd656e9ab28635
+Archive contains generated C sources and headers, upstream licence and PostgreSQL copyright.

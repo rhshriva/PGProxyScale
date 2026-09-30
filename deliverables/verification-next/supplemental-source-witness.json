@@ -1,0 +1,30 @@
+{
+  "source_sha256_start": "447283fc2ce7cffaeb76a73b6fb1698a913e9f6b626da94aca17ad9d1948fe74",
+  "binary_sha256_start": "ea3f755f7c0acc4624d0dbaa21786ad9411e88845217c55854a280b5f8bc41a5",
+  "source_sha256_end": "447283fc2ce7cffaeb76a73b6fb1698a913e9f6b626da94aca17ad9d1948fe74",
+  "binary_sha256_end": "ea3f755f7c0acc4624d0dbaa21786ad9411e88845217c55854a280b5f8bc41a5",
+  "source_stable": true,
+  "binary_stable": true,
+  "gates": {
+    "server-cost-postgres-14-18": {
+      "checks_passed": 35,
+      "checks_failed": 0,
+      "log": "server-cost-postgres-14-18.log"
+    },
+    "server-cost-cpu": {
+      "checks_passed": 7,
+      "checks_failed": 0,
+      "log": "server-cost-cpu.log"
+    },
+    "mcp-live": {
+      "checks_passed": 16,
+      "checks_failed": 0,
+      "log": "mcp-live.log"
+    },
+    "relation-cache-live": {
+      "checks_passed": 10,
+      "checks_failed": 0,
+      "log": "relation-cache-live.log"
+    }
+  }
+}

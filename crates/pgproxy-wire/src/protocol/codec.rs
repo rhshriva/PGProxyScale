@@ -48,6 +48,9 @@ pub struct FrameReader<R> {
     inner: R,
     buf: Vec<u8>,
     max_message_len: usize,
+    header: [u8; 5],
+    message_read: usize,
+    message_len: usize,
 }
 
 impl<R: Read> FrameReader<R> {
@@ -57,6 +60,9 @@ impl<R: Read> FrameReader<R> {
             inner,
             buf: Vec::new(),
             max_message_len: DEFAULT_MAX_MESSAGE_LEN,
+            header: [0; 5],
+            message_read: 0,
+            message_len: 5,
         }
     }
 
@@ -66,6 +72,9 @@ impl<R: Read> FrameReader<R> {
             inner,
             buf: Vec::new(),
             max_message_len,
+            header: [0; 5],
+            message_read: 0,
+            message_len: 5,
         }
     }
 
@@ -131,50 +140,72 @@ impl<R: Read> FrameReader<R> {
     /// error, because silently treating a truncated frame as a clean close would hide
     /// real protocol corruption.
     pub fn read_message(&mut self) -> io::Result<Option<Frame<'_>>> {
-        // Read the tag separately so a clean EOF is distinguishable from a truncation.
-        let mut tag_buf = [0u8; 1];
-        match self.inner.read(&mut tag_buf) {
-            Ok(0) => return Ok(None),
-            Ok(_) => {}
-            Err(e) if e.kind() == io::ErrorKind::Interrupted => return self.read_message(),
-            Err(e) => return Err(e),
+        self.read_message_checked(|_| Ok(()))
+    }
+
+    /// Run a deadline or transport check before every underlying read, including
+    /// partial headers and payloads. Ordinary relays use `read_message`.
+    pub fn read_message_checked(
+        &mut self,
+        mut before_read: impl FnMut(&R) -> io::Result<()>,
+    ) -> io::Result<Option<Frame<'_>>> {
+        // Preserve partial headers and payloads across WouldBlock. This lets a
+        // readiness-driven relay service both directions without losing framing.
+        if self.message_read == 0 {
+            self.message_len = 5;
         }
-        let tag = tag_buf[0];
-
-        let mut length_buf = [0u8; 4];
-        self.inner.read_exact(&mut length_buf)?;
-        let length = i32::from_be_bytes(length_buf);
-
-        if length < MIN_MESSAGE_LEN {
-            return Err(invalid_data(format!(
-                "message {:?} has length {length}, below the minimum of {MIN_MESSAGE_LEN}",
-                super::frontend_name(tag)
-            )));
+        loop {
+            while self.message_read < self.message_len {
+                before_read(&self.inner)?;
+                match self.inner.read(if self.message_len == 5 {
+                    &mut self.header[self.message_read..5]
+                } else {
+                    &mut self.buf[self.message_read..self.message_len]
+                }) {
+                    Ok(0) if self.message_read == 0 => return Ok(None),
+                    Ok(0) => {
+                        return Err(io::Error::new(
+                            io::ErrorKind::UnexpectedEof,
+                            "truncated message",
+                        ));
+                    }
+                    Ok(n) => self.message_read += n,
+                    Err(e) if e.kind() == io::ErrorKind::Interrupted => continue,
+                    Err(e) => return Err(e),
+                }
+            }
+            if self.message_len == 5 {
+                let length = i32::from_be_bytes(
+                    self.header[1..5]
+                        .try_into()
+                        .map_err(|_| invalid_data("invalid header".into()))?,
+                );
+                if length < MIN_MESSAGE_LEN {
+                    return Err(invalid_data(format!(
+                        "message length {length} is below the minimum of {MIN_MESSAGE_LEN}"
+                    )));
+                }
+                let payload_len = (length - MIN_MESSAGE_LEN) as usize;
+                if payload_len > self.max_message_len {
+                    return Err(invalid_data(format!(
+                        "message body of {payload_len} bytes exceeds the {}-byte limit",
+                        self.max_message_len
+                    )));
+                }
+                self.message_len = 5 + payload_len;
+                self.buf.resize(self.message_len, 0);
+                self.buf[..5].copy_from_slice(&self.header);
+                if payload_len != 0 {
+                    continue;
+                }
+            }
+            self.message_read = 0;
+            return Ok(Some(Frame {
+                tag: self.buf[0],
+                payload: &self.buf[5..],
+                raw: &self.buf,
+            }));
         }
-        let payload_len = (length - MIN_MESSAGE_LEN) as usize;
-        if payload_len > self.max_message_len {
-            return Err(invalid_data(format!(
-                "message {:?} body of {payload_len} bytes exceeds the {}-byte limit",
-                super::frontend_name(tag),
-                self.max_message_len
-            )));
-        }
-
-        self.buf.clear();
-        self.buf.reserve(5 + payload_len);
-        self.buf.push(tag);
-        self.buf.extend_from_slice(&length_buf);
-        self.buf.resize(5 + payload_len, 0);
-        self.inner.read_exact(&mut self.buf[5..])?;
-
-        // Both slices borrow the same buffer immutably, which is fine; `raw` is what the
-        // relay writes straight through, `payload` is what inspection reads.
-        let payload = &self.buf[5..];
-        Ok(Some(Frame {
-            tag,
-            payload,
-            raw: &self.buf,
-        }))
     }
 }
 
@@ -408,5 +439,85 @@ mod tests {
         let err = r.read_startup().unwrap_err();
         assert_eq!(err.kind(), io::ErrorKind::InvalidData);
         assert!(err.to_string().contains("exceeds"), "{err}");
+    }
+}
+
+#[cfg(test)]
+mod nonblocking_tests {
+    use super::*;
+    use std::collections::VecDeque;
+
+    struct Fragmented(VecDeque<io::Result<Vec<u8>>>);
+    impl Read for Fragmented {
+        fn read(&mut self, output: &mut [u8]) -> io::Result<usize> {
+            match self.0.pop_front() {
+                Some(Ok(mut bytes)) => {
+                    let n = output.len().min(bytes.len());
+                    output[..n].copy_from_slice(&bytes[..n]);
+                    if n < bytes.len() {
+                        bytes.drain(..n);
+                        self.0.push_front(Ok(bytes));
+                    }
+                    Ok(n)
+                }
+                Some(Err(e)) => Err(e),
+                None => Ok(0),
+            }
+        }
+    }
+
+    #[test]
+    fn partial_header_and_payload_survive_would_block() {
+        let source = Fragmented(VecDeque::from([
+            Ok(vec![b'Q', 0]),
+            Err(io::ErrorKind::WouldBlock.into()),
+            Ok(vec![0, 0, 8, b'a']),
+            Err(io::ErrorKind::WouldBlock.into()),
+            Ok(vec![b'b', b'c', 0]),
+            Ok(vec![b'S', 0, 0, 0, 4]),
+        ]));
+        let mut reader = FrameReader::new(source);
+        assert_eq!(
+            reader.read_message().unwrap_err().kind(),
+            io::ErrorKind::WouldBlock
+        );
+        assert_eq!(
+            reader.read_message().unwrap_err().kind(),
+            io::ErrorKind::WouldBlock
+        );
+        let frame = reader.read_message().unwrap().unwrap();
+        assert_eq!(frame.tag, b'Q');
+        assert_eq!(frame.payload, b"abc\0");
+        let frame = reader.read_message().unwrap().unwrap();
+        assert_eq!(frame.tag, b'S');
+        assert!(frame.payload.is_empty());
+        assert!(reader.read_message().unwrap().is_none());
+    }
+    #[test]
+    fn checked_reader_checks_deadline_between_partial_bytes() {
+        struct Trickle(std::io::Cursor<Vec<u8>>);
+        impl Read for Trickle {
+            fn read(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+                let limit = buffer.len().min(1);
+                self.0.read(&mut buffer[..limit])
+            }
+        }
+        let mut reader =
+            FrameReader::new(Trickle(std::io::Cursor::new(b"Q\0\0\0\x08abc\0".to_vec())));
+        let mut checks = 0;
+        let error = reader
+            .read_message_checked(|_| {
+                checks += 1;
+                if checks > 3 {
+                    Err(io::Error::from(io::ErrorKind::TimedOut))
+                } else {
+                    Ok(())
+                }
+            })
+            .unwrap_err();
+        assert_eq!(error.kind(), io::ErrorKind::TimedOut);
+        assert_eq!(checks, 4);
+        // Partial bytes remain framed correctly if a caller grants a new deadline.
+        assert_eq!(reader.read_message().unwrap().unwrap().payload, b"abc\0");
     }
 }

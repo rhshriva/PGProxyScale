@@ -1,0 +1,13 @@
+# Performance acceptance
+
+`protocol_latency.py` is a bounded diagnostic benchmark: timing starts after every client connects and warms up. Throughput uses actual elapsed time; latency estimates use a deterministic, weighted per-client reservoir bounded to 250,000 samples globally.
+
+`acceptance.py` runs simple selects, prepared selects and explicit insert/rollback transactions against operator-provided targets. A separate direct observer must confirm the dedicated probe table is empty before and after the run. Results validate actual returned values, require zero errors/dropped observations, and compare measured throughput and p99 against an explicit SLO file. No default marketing performance claim is produced.
+
+Create a dedicated fixture table `CREATE TABLE pgproxy_perf_probe(client_id integer, operation_id bigint);`. Run only with authorization for rolled-back writes to this table. Provide target DSNs through environment variables, not command-line secrets. Invoke `python3 benchmarks/acceptance.py --slo-file SLO.json --target proxy=PROXY_DSN --release-binary RELEASE --output-directory RESULTS --authorize-probe-writes --rollback-observer-dsn-env DIRECT_DSN`.
+
+Each SLO workload (`simple_select`, `prepared_select`, `transaction_rollback`) declares `clients`, `duration_secs`, `min_samples`, `max_p99_ms` and `min_throughput_ops_per_sec`. Production evidence requires at least an hour per workload and an external physical laboratory inventory; `local-smoke-slo.json` intentionally uses a short diagnostic duration and cannot satisfy production certification.
+
+Every successful operation contributes to a complete logarithmic histogram with ratio 1.001 and 40,000 bins. Upper-bound quantiles are conservative with at most approximately 0.1% relative bucket error plus nanosecond rounding. At most 64 clients use roughly 20.5 MB of histogram storage, independent of run duration; no reservoir discards production samples. Raw histogram JSON is sufficient to independently recompute sample count, elapsed duration, throughput and conservative latency percentiles. Errors and overflow fail acceptance.
+
+`run-local.sh` owns a disposable PostgreSQL fixture and the exact release process it measures, records its binary hash, runs both direct and proxy workloads, and removes its own fixture. It is a local smoke gate. A release file hash alone cannot prove a separately operated remote endpoint uses that file: production laboratory and deployment operator attestations must bind deployed identity out of band. Hardware detection describes the load generator only and cannot establish remote database hardware.

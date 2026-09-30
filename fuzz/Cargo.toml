@@ -1,0 +1,24 @@
+[package]
+name = "pgproxy-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+[package.metadata]
+cargo-fuzz = true
+[dependencies]
+libfuzzer-sys = "0.4"
+pgproxy-wire = { path = "../crates/pgproxy-wire" }
+pgproxy-parser = { path = "../crates/pgproxy-parser" }
+[workspace]
+[[bin]]
+name = "codec"
+path = "fuzz_targets/codec.rs"
+test = false
+doc = false
+bench = false
+[[bin]]
+name = "parser"
+path = "fuzz_targets/parser.rs"
+test = false
+doc = false
+bench = false

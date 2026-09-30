@@ -39,6 +39,7 @@ port = 5432
 dbname = "conformance"
 pool_size = 20
 pool_mode = "transaction"
+client_auth = "trust"
 
 # Transaction mode against a backend that challenges. This is the case that *requires* a
 # credential, because a pooled connection is not the one the client logged in on. The
@@ -50,4 +51,5 @@ port = 5432
 dbname = "conformance"
 pool_size = 20
 pool_mode = "transaction"
+client_auth = "trust"
 password = "conformance"

@@ -17,7 +17,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install toolchain
-        uses: dtolnay/rust-toolchain@stable
+        id: toolchain
+        # Must match rust-toolchain.toml. Using `@stable` here would silently diverge
+        # from the compiler local builds (and the conformance harness) use.
+        uses: dtolnay/rust-toolchain@1.91
         with:
           components: rustfmt, clippy
 
@@ -28,7 +31,9 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          # The rustc version belongs in the key: a toolchain bump must not reuse a
+          # target/ directory that a different compiler populated.
+          key: ${{ runner.os }}-cargo-${{ steps.toolchain.outputs.cachekey }}-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Formatting
         run: cargo fmt --all -- --check
@@ -43,10 +48,21 @@ jobs:
   # its own job. It runs against direct PostgreSQL first: if the harness cannot pass
   # against a correct server, its results against the proxy mean nothing.
   conformance:
-    name: protocol conformance (control: direct postgres)
+    # Quoted: an unquoted `(control: direct postgres)` is not valid YAML -- a colon
+    # followed by a space cannot appear in a plain scalar, and GitHub rejects the whole
+    # workflow file when it cannot be parsed.
+    name: "protocol conformance (control: direct postgres)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # scram_interop.sh builds with the host cargo, and run.sh mounts this repository
+      # into a Rust container, so the pinned toolchain has to be present rather than
+      # fetched implicitly on first use.
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@1.91
+        with:
+          components: rustfmt, clippy
 
       - name: Control run against direct PostgreSQL 18
         run: ./tests/conformance/run.sh

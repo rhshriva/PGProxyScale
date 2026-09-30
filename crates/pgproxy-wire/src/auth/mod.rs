@@ -157,3 +157,5 @@ mod tests {
         assert_eq!(AuthError::Failed.to_string(), "authentication failed");
     }
 }
+
+pub mod client;

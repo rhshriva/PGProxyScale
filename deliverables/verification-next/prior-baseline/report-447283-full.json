@@ -1,0 +1,154 @@
+{
+  "binary_sha256": {
+    "target/debug/pgproxy": "ea3f755f7c0acc4624d0dbaa21786ad9411e88845217c55854a280b5f8bc41a5",
+    "target/release/pgproxy": "d7f0d2208d0a19402575780bbf00b11eded6efe96966402ba9e1abd16de703b0"
+  },
+  "source_sha256_start": "447283fc2ce7cffaeb76a73b6fb1698a913e9f6b626da94aca17ad9d1948fe74",
+  "source_sha256_end": "447283fc2ce7cffaeb76a73b6fb1698a913e9f6b626da94aca17ad9d1948fe74",
+  "environment": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "rustc": "rustc 1.91.1 (ed61e7d7e 2025-11-07)\nbinary: rustc\ncommit-hash: ed61e7d7e242494fb7057f2657300d9e77bb4fcb\ncommit-date: 2025-11-07\nhost: aarch64-apple-darwin\nrelease: 1.91.1\nLLVM version: 21.1.2",
+    "cargo": "cargo 1.91.1 (ea2d97820 2025-10-10)"
+  },
+  "created_at": "2026-09-30T05:58:13.979357+00:00",
+  "git_revision": "37a342940a3f9e4a8e8bed4a84f003a3f631dc1c",
+  "working_tree_included": true,
+  "working_tree_status": " M .github/workflows/ci.yml\n M .gitignore\n M Cargo.lock\n M README.md\n M crates/pgproxy-admin/Cargo.toml\n M crates/pgproxy-admin/src/lib.rs\n M crates/pgproxy-cli/Cargo.toml\n M crates/pgproxy-cli/src/main.rs\n M crates/pgproxy-core/Cargo.toml\n M crates/pgproxy-core/src/config.rs\n M crates/pgproxy-core/src/lib.rs\n M crates/pgproxy-core/src/router.rs\n M crates/pgproxy-core/src/runtime.rs\n M crates/pgproxy-core/src/telemetry.rs\n M crates/pgproxy-core/tests/poll_invariants.rs\n M crates/pgproxy-core/tests/runtime_smoke.rs\n M crates/pgproxy-parser/Cargo.toml\n M crates/pgproxy-parser/src/lib.rs\n M crates/pgproxy-policy/Cargo.toml\n M crates/pgproxy-policy/src/lib.rs\n M crates/pgproxy-pool/src/lib.rs\n M crates/pgproxy-session/Cargo.toml\n M crates/pgproxy-session/src/lib.rs\n M crates/pgproxy-wire/Cargo.toml\n M crates/pgproxy-wire/src/auth/mod.rs\n M crates/pgproxy-wire/src/auth/scram.rs\n M crates/pgproxy-wire/src/backend.rs\n M crates/pgproxy-wire/src/lib.rs\n M crates/pgproxy-wire/src/protocol/codec.rs\n M crates/pgproxy-wire/src/protocol/messages.rs\n M crates/pgproxy-wire/src/protocol/startup.rs\n M crates/pgproxy-wire/src/session/mod.rs\n M crates/pgproxy-wire/src/session/transaction.rs\n M docs/plans/phase-0-foundations.md\n M pgproxy.toml\n M rust-toolchain.toml\n M tests/conformance/pgproxy.toml\n M tests/conformance/run.sh\n?? .github/workflows/compatibility.yml\n?? .github/workflows/fuzz.yml\n?? benchmarks/\n?? crates/pgproxy-admin/src/http.rs\n?? crates/pgproxy-admin/src/usage.rs\n?? crates/pgproxy-cli/src/report.rs\n?? crates/pgproxy-core/src/admission.rs\n?? crates/pgproxy-core/src/attribution.rs\n?? crates/pgproxy-core/src/credentials.rs\n?? crates/pgproxy-core/src/mcp_executor.rs\n?? crates/pgproxy-core/src/reload.rs\n?? crates/pgproxy-core/src/usage.rs\n?? crates/pgproxy-parser/build.rs\n?? crates/pgproxy-parser/examples/\n?? crates/pgproxy-parser/vendor/\n?? crates/pgproxy-policy/src/admission.rs\n?? crates/pgproxy-policy/src/agent.rs\n?? crates/pgproxy-policy/src/context.rs\n?? crates/pgproxy-policy/src/mcp.rs\n?? crates/pgproxy-policy/src/relation_cache.rs\n?? crates/pgproxy-policy/src/resilience.rs\n?? crates/pgproxy-policy/src/scheduler.rs\n?? crates/pgproxy-policy/src/shared_scheduler.rs\n?? crates/pgproxy-pool/src/limit.rs\n?? crates/pgproxy-session/src/cursor.rs\n?? crates/pgproxy-session/src/cursor_protocol.rs\n?? crates/pgproxy-wire/src/accounting.rs\n?? crates/pgproxy-wire/src/auth/client.rs\n?? crates/pgproxy-wire/src/backend_tls.rs\n?? crates/pgproxy-wire/src/credentials.rs\n?? crates/pgproxy-wire/src/failover.rs\n?? crates/pgproxy-wire/src/governance.rs\n?? crates/pgproxy-wire/src/session/cancel.rs\n?? crates/pgproxy-wire/src/tls.rs\n?? crates/pgproxy-wire/tests/fixtures/\n?? deliverables/\n?? docs/architecture/design-technical.md\n?? docs/architecture/remaining-state-virtualization.md\n?? docs/plans/implementation-status.md\n?? docs/plans/remaining-features-implementation.md\n?? docs/testing/\n?? fuzz/\n?? tests/certification/\n?? tests/conformance/SECURITY.md\n?? tests/conformance/VERIFICATION.md\n?? tests/conformance/backend-tls/\n?? tests/conformance/credentials/\n?? tests/conformance/drivers/areas_check.py\n?? tests/conformance/drivers/asyncpg_check.py\n?? tests/conformance/drivers/backend_limit_check.py\n?? tests/conformance/drivers/backend_tls_check.py\n?? tests/conformance/drivers/benchmark_check.py\n?? tests/conformance/drivers/credentials_usage_check.py\n?? tests/conformance/drivers/governance_check.py\n?? tests/conformance/drivers/ledger_check.py\n?? tests/conformance/drivers/mcp_check.py\n?? tests/conformance/drivers/mcp_rls_check.py\n?? tests/conformance/drivers/operations_check.py\n?? tests/conformance/drivers/protected_columns_check.py\n?? tests/conformance/drivers/protocol_negotiation_check.py\n?? tests/conformance/drivers/relation_cache_check.py\n?? tests/conformance/drivers/reload_check.py\n?? tests/conformance/drivers/rls_fairness_check.py\n?? tests/conformance/drivers/security_check.py\n?? tests/conformance/drivers/server_cost_check.py\n?? tests/conformance/drivers/virtual_state_check.py\n?? tests/conformance/failover/\n?? tests/conformance/governance/\n?? tests/conformance/native-matrix.sh\n?? tests/conformance/reload_fixtures.py\n?? tests/conformance/security_fixtures.py\n?? tests/conformance/server-cost/\n",
+  "production_certified": false,
+  "gates": [
+    {
+      "name": "certification-evidence-tests",
+      "status": "pass",
+      "seconds": 1.33,
+      "log": "deliverables/verification-next/certification-evidence-tests.log",
+      "tests_passed": 0,
+      "tests_failed": 0
+    },
+    {
+      "name": "workspace-tests",
+      "status": "pass",
+      "seconds": 15.27,
+      "log": "deliverables/verification-next/workspace-tests.log",
+      "tests_passed": 338,
+      "tests_failed": 0
+    },
+    {
+      "name": "strict-lint",
+      "status": "pass",
+      "seconds": 2.74,
+      "log": "deliverables/verification-next/strict-lint.log",
+      "tests_passed": 0,
+      "tests_failed": 0
+    },
+    {
+      "name": "release-build",
+      "status": "pass",
+      "seconds": 0.13,
+      "log": "deliverables/verification-next/release-build.log",
+      "tests_passed": 0,
+      "tests_failed": 0
+    },
+    {
+      "name": "build",
+      "status": "pass",
+      "seconds": 0.46,
+      "log": "deliverables/verification-next/build.log",
+      "tests_passed": 0,
+      "tests_failed": 0
+    },
+    {
+      "name": "replicated-failover",
+      "status": "pass",
+      "seconds": 7.4,
+      "log": "deliverables/verification-next/replicated-failover.log",
+      "tests_passed": 0,
+      "tests_failed": 0
+    },
+    {
+      "name": "fenced-local-fixture",
+      "status": "pass",
+      "seconds": 5.29,
+      "log": "deliverables/verification-next/fenced-local-fixture.log",
+      "tests_passed": 0,
+      "tests_failed": 0
+    },
+    {
+      "name": "linux-tests-lint",
+      "status": "pass",
+      "seconds": 21.24,
+      "log": "deliverables/verification-next/linux-tests-lint.log",
+      "tests_passed": 338,
+      "tests_failed": 0
+    },
+    {
+      "name": "independent-security-review",
+      "status": "external-evidence-required"
+    },
+    {
+      "name": "deployment-fencing-and-split-brain-review",
+      "status": "external-evidence-required"
+    },
+    {
+      "name": "bare-metal-performance-and-soak",
+      "status": "external-evidence-required"
+    },
+    {
+      "name": "real-credential-provider-integration",
+      "status": "external-evidence-required"
+    },
+    {
+      "name": "source-stability",
+      "status": "pass"
+    },
+    {
+      "name": "backend-tls-matrix",
+      "status": "pass",
+      "cases_passed": 48,
+      "scope": "PostgreSQL14\u201318 eight cases each plus PG18RSA-PSS eight",
+      "log": "postgres-14-18-tls-mtls-plus-rsa-pss.log"
+    },
+    {
+      "name": "postgres-driver-compatibility",
+      "status": "pass",
+      "cases_passed": 260,
+      "log": "postgres-14-18-compatibility.log",
+      "initial_attempt": "postgres-14-18-compatibility-initial-failure.log",
+      "note": "Initial concurrent run timed out; clean rerun passed unchanged source and unchanged tests."
+    },
+    {
+      "name": "local-performance-smoke",
+      "status": "pass",
+      "workload_cases": 6,
+      "production_scope": false,
+      "log": "pgproxy-performance-next.log"
+    },
+    {
+      "name": "server-cost-postgres-14-18",
+      "status": "pass",
+      "cases_passed": 35,
+      "log": "server-cost-postgres-14-18.log"
+    },
+    {
+      "name": "server-cost-cpu",
+      "status": "pass",
+      "cases_passed": 7,
+      "log": "server-cost-cpu.log"
+    },
+    {
+      "name": "mcp-live",
+      "status": "pass",
+      "cases_passed": 16,
+      "log": "mcp-live.log"
+    },
+    {
+      "name": "relation-cache-live",
+      "status": "pass",
+      "cases_passed": 10,
+      "log": "relation-cache-live.log"
+    }
+  ],
+  "python_contract_tests_passed": 13,
+  "replicated_fault_scenarios_passed": 5,
+  "power_fence_scenarios_passed": 5,
+  "source_sha256_after_all_gates": "447283fc2ce7cffaeb76a73b6fb1698a913e9f6b626da94aca17ad9d1948fe74"
+}

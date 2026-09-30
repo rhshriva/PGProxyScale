@@ -21,10 +21,11 @@ Three differentiators, in build order:
 
 Explicitly *not* the product: raw pooling speed, and sharding-first. See `docs/vision/roadmap.md` §6.
 
-## Status
+## Project stage
 
-Pre-alpha. Nothing is implemented yet — this repository currently contains the research base, the
-decision records, and the plan.
+Pre-alpha. Session and transaction relays, the PostgreSQL parser, a bounded Session-State Ledger,
+client/backend authentication, cancellation routing, and the connection pool are implemented.
+Backend TLS, authenticated operations, SQL policy, tenant scheduling, trusted role/RLS contexts, bounded MCP tools, verified endpoint failover, expiring credentials, cursor snapshots and validated relation caching are also implemented. Production readiness and the full roadmap remain unfinished.
 
 ## Layout
 
@@ -41,7 +42,7 @@ crates/                        Rust workspace (see ADR 0001)
 tests/conformance/             wire-protocol conformance harness (run against
                                direct PostgreSQL first - it is the control)
 spikes/                        the throwaway experiments behind the ADR revisions
-benches/                       hard-case benchmark suite (not yet built)
+benchmarks/                    reproducible protocol latency smoke harness
 tools/                         PostgreSQL version matrix
 pgproxy.toml                   example configuration
 ```
@@ -76,9 +77,31 @@ PROXY=1 ./tests/conformance/run.sh                      # the same scenarios, th
 ./tests/conformance/scram_interop.sh                    # SCRAM verified against real libpq
 ```
 
-**Not yet implemented**, and refused rather than faked: TLS (the proxy answers `SSLRequest` with
-`N`), cancellation routing (ADR-0007), transaction pooling (W4), the admin console, and the
-Session-State Ledger (Phase 1).
+**Still unfinished:** full state virtualization, comprehensive DDL invalidation
+on retained connections, durable notification failover, replica/cache invalidation integration,
+OAuth/token exchange, exclusive per-tenant server cost allocation for shared roles, and production acceptance. Optional frontend TLS supports SCRAM channel
+binding and CA-verified certificate identity mapping. Without TLS configuration, SSLRequest receives N.
+
+**Transaction pooling** relays both directions using socket readiness, including Flush,
+pipelined Sync batches and COPY. A per-client ledger restores confirmed settings and prepared
+statements. LISTEN, held cursors, temp tables, session locks and opaque effects conservatively
+retain the backend. Connections eligible for reuse undergo `DISCARD ALL`; interrupted exchanges
+are discarded. This preserves compatibility but does not achieve zero pinning.
+
+Transaction routes must explicitly select `client_auth = "trust"`, `"md5"`, `"scram-sha256"`, or `"certificate"`.
+MD5/SCRAM routes use `auth_users` stored verifiers and reject clients before pool acquisition.
+Backend credentials are separate. Session routes support passthrough or terminated authentication;
+terminated session mode retains its backend across DISCARD ALL. Certificate routes require
+`general.tls.client_ca` and map usernames to canonical SHA256 certificate fingerprints in `auth_users`.
+Per-client cancellation keys route to the current backend and revoke before reuse.
+Session timeout/message/memory limits are configurable in `[general.session]`.
+Global client and login-rate limits apply before starting authentication threads. Idle connections
+with EOF or unexpected pending data are discarded. `require_primary = true` checks writable-primary
+status before each handoff; it requires terminated authentication. Shutdown waits for active clients
+within its configured budget. TLS currently uses an internal loopback bridge; performance gates remain open.
+
+See [the implementation status and remaining work](docs/plans/implementation-status.md) for the
+current goal, completed increment, and ordered backlog.
 
 ## Open questions
 
@@ -95,3 +118,41 @@ Requires Rust 1.91+ and a C toolchain (`libpg_query` is built from source).
 cargo build --workspace
 cargo test --workspace
 ```
+
+
+## Operations, policy and agent tools
+
+Optional loopback operations endpoints expose authenticated metrics, bounded client diagnostics,
+pool status, configuration reload, and planned draining. Reload creates a validated generation;
+existing clients retain their original policy and pools. A process-wide physical backend limit
+also bounds overlapping generations. See [reload and capacity](docs/testing/reload-and-capacity.md).
+
+Governed routes require verified client identities. SQL capability grants are deny by default;
+protected columns are refused, and trusted role/tenant contexts apply to every backend handoff.
+Bounded weighted scheduling and principal quotas constrain contention. The immutable principal
+selected for `--mcp-stdio --mcp-database <route> --mcp-user <user>` shares these policy rules;
+query, explain and schema tools enforce time, row, byte and request limits. Literal-only immutable
+results can be cached; eligible ordinary relation projections can use freshly validated repeatable-read snapshots.
+Views, RLS, replicas and complex expressions bypass this cache.
+
+Actual server WAL, buffer and optional CPU measurements can be exported by an operator:
+
+```sh
+./target/debug/pgproxy --config pgproxy.toml --server-cost-database <route> \
+  --server-cost-user <monitor-user> --server-cost-report /private/path/cost.json
+```
+
+This requires `pg_stat_statements` and monitoring privileges; actual CPU additionally
+requires `pg_stat_kcache`. These are cumulative database/role/PostgreSQL-queryid
+measurements, including activity outside the proxy. They are separate from client
+usage and do not invent an exclusive tenant share.
+
+Reproducible fixture and driver instructions live in
+[governance tests](tests/conformance/governance/README.md),
+[verification](tests/conformance/VERIFICATION.md), and the
+[implementation status](docs/plans/implementation-status.md).
+
+The additional work and its precise limits are documented in
+[remaining-feature integration](docs/plans/remaining-features-implementation.md).
+`tests/certification/run.py` collects reproducible evidence, source hashes and unmet external
+security/fencing/provider/performance gates; a passing local run does not certify deployment.

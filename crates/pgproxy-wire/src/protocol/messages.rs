@@ -344,3 +344,46 @@ mod tests {
         );
     }
 }
+
+/// Advertise a supported minor and ignored protocol-extension startup parameters.
+/// PostgreSQL protocol-flow/message-formats define this message before authentication.
+pub fn send_negotiate_protocol_version<W: std::io::Write>(
+    writer: &mut crate::protocol::codec::FrameWriter<W>,
+    minor: i32,
+    unsupported: &[&str],
+) -> std::io::Result<()> {
+    let mut payload = minor.to_be_bytes().to_vec();
+    payload.extend_from_slice(&(unsupported.len() as i32).to_be_bytes());
+    for name in unsupported {
+        if !name.starts_with("_pq_.") || name.contains('\0') {
+            return Err(std::io::Error::other("invalid protocol extension"));
+        }
+        payload.extend_from_slice(name.as_bytes());
+        payload.push(0);
+    }
+    writer.write_message(
+        crate::protocol::backend::NEGOTIATE_PROTOCOL_VERSION,
+        &payload,
+    )
+}
+#[cfg(test)]
+mod negotiation_tests {
+    use super::*;
+    #[test]
+    fn encodes_negotiation_fields_and_rejects_non_extensions() {
+        let mut writer = crate::protocol::codec::FrameWriter::new(Vec::new());
+        send_negotiate_protocol_version(&mut writer, 0, &["_pq_.future"]).unwrap();
+        let raw = writer.into_inner();
+        assert_eq!(raw[0], b'v');
+        assert_eq!(&raw[5..13], &[0, 0, 0, 0, 0, 0, 0, 1]);
+        assert_eq!(&raw[13..], b"_pq_.future\0");
+        assert!(
+            send_negotiate_protocol_version(
+                &mut crate::protocol::codec::FrameWriter::new(Vec::new()),
+                0,
+                &["application_name"]
+            )
+            .is_err()
+        );
+    }
+}

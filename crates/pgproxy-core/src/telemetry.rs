@@ -19,11 +19,13 @@ pub fn init(logging: &Logging) -> Result<()> {
 
     let result = match logging.format {
         LogFormat::Text => tracing_subscriber::fmt()
+            .with_writer(std::io::stderr)
             .with_env_filter(filter)
             .with_target(false)
             .try_init(),
         LogFormat::Json => tracing_subscriber::fmt()
             .json()
+            .with_writer(std::io::stderr)
             .with_env_filter(filter)
             .with_target(false)
             .try_init(),

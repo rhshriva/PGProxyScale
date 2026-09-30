@@ -1,0 +1,34 @@
+[general]
+listen_addr = "0.0.0.0"
+listen_port = 6446
+workers = 2
+[general.session]
+query_timeout_secs = 3
+[[databases]]
+name = "policy_rls"
+host = "127.0.0.1"
+port = 55439
+dbname = "conformance"
+user = "postgres"
+pool_mode = "transaction"
+client_auth = "scram-sha256"
+pool_size = 2
+require_primary = true
+auth_users = { postgres = "SCRAM-SHA-256$4096:cGdwcm94eS10ZXN0LXNhbHQ=$bnjU9GCMHxxI3hDk0aVJDUeTKPSt4QiWNyBMZTvsAyQ=:kCVRr5z13WVeARjoFmm9DsfXmHiNS/d4xgbRjwP+Py8=", other = "SCRAM-SHA-256$4096:cGdwcm94eS10ZXN0LXNhbHQ=$bnjU9GCMHxxI3hDk0aVJDUeTKPSt4QiWNyBMZTvsAyQ=:kCVRr5z13WVeARjoFmm9DsfXmHiNS/d4xgbRjwP+Py8=" }
+[databases.policy]
+queue_timeout_ms = 100
+scheduler = { capacity = 8, per_principal = 1, minimum = 2, maximum = 2, initial = 2, queue_target_ms = 10, adaptive = false }
+[[databases.policy.grants]]
+principal = { user = "postgres", tenant = "noisy", agent = "noisy-agent" }
+capabilities = { read = ["public.pgproxy_rls_tenants"], write = [], functions = ["pg_catalog.pg_sleep"], denied_columns = ["secret"] }
+quota = { concurrency = 1, burst = 100, per_second = 100, lifetime_queries = 10000 }
+context = { role = "pgproxy_rls_reader", tenant = "noisy", statement_timeout_ms = 1500, read_only = true }
+weight = 1
+priority = "batch"
+[[databases.policy.grants]]
+principal = { user = "other", tenant = "victim", agent = "victim-agent" }
+capabilities = { read = ["public.pgproxy_rls_tenants"], write = [], functions = ["pg_catalog.pg_sleep"], denied_columns = ["secret"] }
+quota = { concurrency = 1, burst = 100, per_second = 100, lifetime_queries = 10000 }
+context = { role = "pgproxy_rls_reader", tenant = "victim", statement_timeout_ms = 1500, read_only = true }
+weight = 1
+priority = "interactive"

@@ -1,0 +1,30 @@
+name: PostgreSQL compatibility
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres: [14, 15, 16, 17, 18]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.91.0
+      - uses: Swatinem/rust-cache@v2
+      - name: Parser build tools
+        run: sudo apt-get update -qq && sudo apt-get install -y make gcc
+      - name: Build and unit verification
+        run: cargo test --workspace && cargo build -p pgproxy-cli
+      - name: Direct and pooled driver compatibility
+        env:
+          PGPROXY_MATRIX_VERSIONS: ${{ matrix.postgres }}
+        run: tests/conformance/native-matrix.sh
+      - name: Backend TLS and cancellation
+        env:
+          PGPROXY_TLS_POSTGRES_IMAGE: postgres:${{ matrix.postgres }}-alpine
+        run: tests/conformance/backend-tls/run.sh

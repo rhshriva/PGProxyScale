@@ -8,6 +8,11 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+serde_json = { version = "1", features = ["float_roundtrip"] }
+pgproxy-parser = { path = "../pgproxy-parser" }
+pgproxy-policy = { path = "../pgproxy-policy" }
+pgproxy-admin = { path = "../pgproxy-admin" }
+pgproxy-pool = { path = "../pgproxy-pool" }
 pgproxy-wire = { path = "../pgproxy-wire" }
 
 socket2.workspace = true
@@ -21,3 +26,7 @@ toml.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+nix = { version = "0.30", features = ["signal", "process"] }

@@ -598,3 +598,6 @@ mod tests {
         );
     }
 }
+
+pub mod limit;
+pub use limit::{ConnectionLimit, ConnectionPermit, LimitError, LimitSnapshot};

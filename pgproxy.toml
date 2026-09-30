@@ -8,16 +8,44 @@ listen_addr = "0.0.0.0"
 listen_port = 6432
 # 0 = one worker per available CPU. Each worker binds its own SO_REUSEPORT listener.
 workers = 0
-# Users allowed to use the admin console. Empty disables it.
+max_client_connections = 1024
+# Shared physical backend cap, including idle pools and overlapping reload generations.
+max_backend_connections = 200
+connection_rate_per_second = 1000
+# Reserved SQL-admin identities; HTTP operations use their own bearer token.
 admin_users = ["postgres"]
 # How long to wait for in-flight work when shutting down.
 shutdown_timeout_secs = 30
+
+# Optional frontend TLS. Paths are relative to the process working directory.
+# [general.tls]
+# certificate = "/etc/pgproxy/server.pem"
+# private_key = "/etc/pgproxy/server-key.pem"
+# required = true
+# client_ca = "/etc/pgproxy/client-ca.pem" # needed for certificate authentication
+
+# Optional per-client safety limits (defaults shown).
+# [general.session]
+# startup_timeout_secs = 10
+# query_timeout_secs = 30
+# idle_in_transaction_secs = 30
+# client_write_timeout_secs = 30
+# max_message_bytes = 16777216
+# max_sql_bytes = 65536
+# memory_bytes = 4194304
+# virtualize_hold_cursors = false # opt-in bounded pristine SCROLL WITH HOLD text snapshots
+# cost_attribution = false # measured exchange/row/byte usage, optional parsing overhead
 
 [logging]
 # Any `tracing` filter directive, e.g. "pgproxy_wire=debug,info"
 level = "info"
 # "text" for terminals, "json" for log shippers
 format = "text"
+
+# Optional operations HTTP listener (loopback only). Use a private random token >=32 bytes.
+# [operations]
+# listen = "127.0.0.1:6433"
+# token = "<replace-with-a-private-random-token>"
 
 # Databases clients may reach through the proxy.
 # `name` is what the client asks for; `host`/`port`/`dbname` are the real backend.
@@ -27,3 +55,35 @@ host = "127.0.0.1"
 port = 5432
 dbname = "app"
 pool_size = 20
+# require_primary = true # check writable-primary status before each pooled handoff
+# For transaction mode select client authentication explicitly:
+# pool_mode = "transaction"
+# client_auth = "scram-sha256"
+# auth_users = { app_user = "<stored PostgreSQL SCRAM verifier>" }
+# Configure user/password separately when the backend uses a fixed service identity.
+
+# Optional verified backend TLS; certificate names must match server_name.
+# [databases.backend_tls]
+# root_certificate = "/etc/pgproxy/backend-ca.pem"
+# server_name = "database.example.internal"
+# require_channel_binding = true
+# client_certificate = "/etc/pgproxy/backend-client.pem" # optional paired mTLS identity
+# private_key = "/etc/pgproxy/backend-client-key.pem"
+
+# A complete policy, role/RLS and scheduler example is in
+# tests/conformance/governance/pgproxy.toml (isolated test credentials only).
+
+# Ordered alternate endpoints. Every candidate must authenticate as a writable primary;
+# promotion/fencing remains external, and uncertain user SQL is never replayed.
+# [[databases.failover]]
+# host = "database-secondary.example.internal"
+# port = 5432
+# Omitted backend_tls inherits primary trust and server_name; specify its own TLS identity
+# if the alternate has a different certificate name.
+
+# Optional expiring backend credentials replace the static password:
+# [databases.credential_provider]
+# kind = "file"
+# path = "/run/secrets/pgproxy-backend-lease.json"
+# JSON: {"user":"leased_role","password":"...","expires_at":<Unix seconds>}
+# Other adapter and usage-report options: docs/testing/credentials-and-usage.md.

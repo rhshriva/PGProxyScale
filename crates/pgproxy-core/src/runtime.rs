@@ -12,12 +12,13 @@
 //! Per-connection work runs on its own thread. That is the data-path model S1 measured;
 //! an event loop per core is a later optimisation gated on evidence, not preference.
 
+use crate::admission::Admission;
 use std::net::{SocketAddr, TcpListener};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc::{self, Sender};
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use mio::net::TcpListener as MioListener;
 use mio::{Events, Interest, Poll, Token, Waker};
@@ -51,6 +52,9 @@ pub struct Runtime {
     service: Arc<dyn Service>,
     ready: Option<ReadySignal>,
     shutdown: Option<ShutdownToken>,
+    operations: Arc<pgproxy_admin::Operations>,
+    diagnostics: pgproxy_admin::http::PoolDiagnostics,
+    control: Option<pgproxy_admin::http::Control>,
 }
 
 impl Runtime {
@@ -61,6 +65,9 @@ impl Runtime {
             service,
             ready: None,
             shutdown: None,
+            operations: Arc::default(),
+            diagnostics: Arc::new(|| "[]".into()),
+            control: None,
         }
     }
 
@@ -81,6 +88,20 @@ impl Runtime {
         self
     }
 
+    pub fn with_operations(
+        mut self,
+        operations: Arc<pgproxy_admin::Operations>,
+        diagnostics: pgproxy_admin::http::PoolDiagnostics,
+    ) -> Self {
+        self.operations = operations;
+        self.diagnostics = diagnostics;
+        self
+    }
+
+    pub fn with_control(mut self, control: pgproxy_admin::http::Control) -> Self {
+        self.control = Some(control);
+        self
+    }
     /// Run until a shutdown signal arrives, then drain within the configured budget.
     pub fn run(self) -> Result<()> {
         let workers = self.cfg.effective_workers();
@@ -115,6 +136,25 @@ impl Runtime {
             listeners.push(reuseport_listener(bound)?);
         }
 
+        let _operations_server = self
+            .cfg
+            .operations
+            .as_ref()
+            .map(|cfg| {
+                pgproxy_admin::http::Server::start_with_control(
+                    cfg.listen,
+                    cfg.token.clone(),
+                    Arc::clone(&self.operations),
+                    Arc::clone(&self.diagnostics),
+                    self.control.clone(),
+                )
+            })
+            .transpose()
+            .map_err(Error::Poll)?;
+        let admission = Admission::new(
+            self.cfg.general.max_client_connections,
+            self.cfg.general.connection_rate_per_second,
+        );
         let next_id = Arc::new(AtomicU64::new(1));
         let mut wakers = Vec::with_capacity(workers);
         let mut handles = Vec::with_capacity(workers);
@@ -140,10 +180,16 @@ impl Runtime {
             let service = Arc::clone(&self.service);
             let token = shutdown.clone();
             let ids = Arc::clone(&next_id);
+            let admission = Arc::clone(&admission);
+            let operations = Arc::clone(&self.operations);
 
             let handle = thread::Builder::new()
                 .name(format!("pgproxy-w{worker}"))
-                .spawn(move || worker_loop(worker, listener, poll, service, token, ids))
+                .spawn(move || {
+                    worker_loop(
+                        worker, listener, poll, service, token, ids, admission, operations,
+                    )
+                })
                 .map_err(|source| Error::Spawn { worker, source })?;
             handles.push((worker, handle));
         }
@@ -155,6 +201,7 @@ impl Runtime {
             "pgproxy listening"
         );
 
+        self.operations.set_ready(true);
         if let Some(tx) = &self.ready {
             // A closed receiver is not an error: the caller may not care.
             let _ = tx.send(bound);
@@ -164,6 +211,7 @@ impl Runtime {
             thread::sleep(SHUTDOWN_POLL);
         }
 
+        self.operations.set_ready(false);
         tracing::info!("shutdown requested; draining in-flight work");
         for waker in &wakers {
             if let Err(e) = waker.wake() {
@@ -171,11 +219,16 @@ impl Runtime {
             }
         }
 
-        self.drain(handles)
+        self.drain(handles, &admission)
     }
 
     /// Join workers, bounded by the configured shutdown timeout.
-    fn drain(&self, handles: Vec<(usize, thread::JoinHandle<Result<()>>)>) -> Result<()> {
+    fn drain(
+        &self,
+        handles: Vec<(usize, thread::JoinHandle<Result<()>>)>,
+        admission: &Admission,
+    ) -> Result<()> {
+        let began = Instant::now();
         let budget = Duration::from_secs(self.cfg.general.shutdown_timeout_secs);
         let (tx, rx) = mpsc::channel::<Option<usize>>();
 
@@ -204,6 +257,9 @@ impl Runtime {
         match rx.recv_timeout(budget) {
             Ok(Some(worker)) => Err(Error::WorkerPanic { worker }),
             Ok(None) => {
+                if !admission.wait_empty(budget.saturating_sub(began.elapsed())) {
+                    tracing::warn!("shutdown budget elapsed waiting for client sessions");
+                }
                 tracing::info!("all workers stopped");
                 Ok(())
             }
@@ -219,6 +275,7 @@ impl Runtime {
 }
 
 /// Accept loop for one worker. Runs until shutdown is requested.
+#[allow(clippy::too_many_arguments)]
 fn worker_loop(
     worker: usize,
     listener: MioListener,
@@ -226,6 +283,8 @@ fn worker_loop(
     service: Arc<dyn Service>,
     shutdown: ShutdownToken,
     next_id: Arc<AtomicU64>,
+    admission: Arc<Admission>,
+    operations: Arc<pgproxy_admin::Operations>,
 ) -> Result<()> {
     tracing::debug!(worker, "worker started");
 
@@ -244,6 +303,11 @@ fn worker_loop(
         loop {
             match listener.accept() {
                 Ok((stream, peer)) => {
+                    let Some(permit) = admission.acquire() else {
+                        operations.rejected.fetch_add(1, Ordering::Relaxed);
+                        tracing::debug!(worker, "connection admission limit reached");
+                        continue;
+                    };
                     let stream: std::net::TcpStream = stream.into();
                     // The listener is non-blocking (mio requires it) and an accepted
                     // socket INHERITS that flag. The session layer uses blocking I/O with
@@ -267,6 +331,7 @@ fn worker_loop(
 
                     if let Err(e) = thread::Builder::new().name(format!("pgproxy-c{id}")).spawn(
                         move || {
+                            let _permit = permit;
                             if let Err(err) = service.handle(conn) {
                                 tracing::debug!(id, error = %err, "connection ended with error");
                             }

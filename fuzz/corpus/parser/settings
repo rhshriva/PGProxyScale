@@ -1,0 +1,1 @@
+SET search_path='public'; PREPARE q(int) AS SELECT $1

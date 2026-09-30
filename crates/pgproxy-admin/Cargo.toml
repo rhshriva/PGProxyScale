@@ -11,3 +11,6 @@ publish.workspace = true
 pgproxy-pool = { path = "../pgproxy-pool" }
 pgproxy-session = { path = "../pgproxy-session" }
 
+serde.workspace = true
+serde_json = "1"
+subtle.workspace = true

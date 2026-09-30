@@ -25,6 +25,10 @@ PIP_VOLUME=pgproxy-conformance-pip
 # built by the host toolchain; letting a Linux container write there would collide with
 # the macOS artefacts.
 TARGET_VOLUME=pgproxy-conformance-target
+# rustup's home lives inside the container image and every container here is `--rm`, so
+# without a volume the toolchain pinned in rust-toolchain.toml (active via the mounted
+# repository) would be re-downloaded on every run.
+RUSTUP_VOLUME=pgproxy-conformance-rustup
 
 PG_IMAGE="postgres:${PG_VERSION:-18}-alpine"
 PY_IMAGE="python:3.12-slim"
@@ -67,8 +71,8 @@ docker exec "$PG_NAME" psql -U postgres -d "$DB" -q -c \
 
 if [ -n "$PROXY" ]; then
   echo "== building pgproxy for linux =="
-  docker run --rm -v "$REPO:/app" -v "$TARGET_VOLUME:/target" -w /app \
-    -e CARGO_TARGET_DIR=/target \
+  docker run --rm -v "$REPO:/app" -v "$TARGET_VOLUME:/target" -v "$RUSTUP_VOLUME:/usr/local/rustup" \
+    -w /app -e CARGO_TARGET_DIR=/target \
     "$RUST_IMAGE" bash -c \
     'export PATH=/usr/local/cargo/bin:$PATH; cargo build --release -p pgproxy-cli' \
     || { echo "pgproxy build failed"; exit 4; }

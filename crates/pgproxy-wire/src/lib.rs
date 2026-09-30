@@ -12,11 +12,17 @@
 #![warn(unsafe_code)]
 #![deny(clippy::undocumented_unsafe_blocks)]
 
+pub mod accounting;
 pub mod auth;
 pub mod backend;
+pub mod backend_tls;
+pub mod credentials;
+pub mod failover;
+pub mod governance;
 pub mod protocol;
 pub mod service;
 pub mod session;
+pub mod tls;
 
 pub use auth::{AuthError, AuthMethod};
 pub use backend::{BackendConnection, BackendCredentials};

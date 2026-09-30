@@ -8,6 +8,8 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+pgproxy-policy = { path = "../pgproxy-policy" }
+pgproxy-admin = { path = "../pgproxy-admin" }
 pgproxy-parser = { path = "../pgproxy-parser" }
 pgproxy-pool = { path = "../pgproxy-pool" }
 thiserror.workspace = true
@@ -23,3 +25,13 @@ md-5.workspace = true
 base64.workspace = true
 subtle.workspace = true
 rand.workspace = true
+stringprep = "0.1"
+
+mio = { version = "1", features = ["net", "os-poll"] }
+pgproxy-session = { path = "../pgproxy-session" }
+rustls = { version = "0.23", default-features = false, features = ["std", "ring", "tls12"] }
+rustls-pemfile = "2"
+x509-parser = "0.18"
+
+[dev-dependencies]
+rcgen = "0.13"

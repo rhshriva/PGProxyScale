@@ -147,40 +147,29 @@ The ledger is only safe if we know exactly what can and cannot be virtualised.
 - [ ] Connection-storm protection (serverless/Lambda burst, restart login flood)
 - [ ] Never hand out a connection to a demoted primary
 
-## W4 — Pooling: status and one open architectural problem
+## W4 — Pooling: current status
 
-**Done:** a real connection pool (RAII checkout, LIFO reuse, bounded checkout, dead
-connections discarded) and a backend connector that authenticates to PostgreSQL as a
-client over trust, MD5 and SCRAM — validated against live servers in both auth modes.
+**Implemented:** RAII checkout, LIFO reuse, bounded admission, backend authentication over
+trust/MD5/SCRAM, and transaction relay driven by socket readiness. Both frontend and backend
+messages can advance independently, so Parse/Flush, extended query batches, and COPY no longer
+self-deadlock. The codec retains partial headers and payloads across nonblocking reads.
 
-**Implemented but incomplete: transaction pooling.** The proxy can be the server to the
-client and a client to the backend, checkout a connection per transaction, and reset it
-with `DISCARD ALL` before reuse. It works for self-contained requests (verified with
-`psql -c 'select 1'` through a transaction-pooled routing name).
+The relay counts forwarded Query/Sync messages against ReadyForQuery responses. It releases a
+backend only at idle status with no outstanding completion and no unsynchronised extended batch.
+Explicit and failed transactions stay bound. `DISCARD ALL` resets reusable connections; incomplete
+exchanges and I/O failures discard them. Login, reset, client writes, and relay inactivity are bounded.
+The handshake backend is returned before waiting for the first query, avoiding idle login pinning.
 
-**The open problem, found by running it.** The transaction loop forwards one client
-message and then relays backend responses until `ReadyForQuery`. That is wrong for the
-**extended query protocol**, where `ReadyForQuery` only arrives after `Sync`: the loop
-forwards `Parse`, waits for a `ReadyForQuery` that will not come, and self-deadlocks. It
-also cannot support `COPY`, which needs both directions interleaved. Since psycopg and
-most drivers use the extended protocol by default, this means transaction mode is
-effectively unusable as written.
+Regression tests cover Parse/Flush before Sync, pipelined Syncs, error recovery, failed transaction
+rollback, COPY IN, and fragmented frames. Live driver conformance remains the acceptance gate.
 
-The failure was initially *silent and destructive*: each deadlocked session parked
-forever holding a pooled connection, the pool starved, and the only symptom was
-`total=20 idle=0` and every later client being told "too many clients already". Two
-guards now make it honest rather than silent:
+**Additional implementation:** transaction client MD5/SCRAM authentication, cancellation routing,
+configurable session limits, and ledger replay of settings and prepared statements. Live
+PostgreSQL 18 conformance passes 17/17 scenarios; stateful resources may retain their backend.
 
-* a bounded backend read (`query_timeout`, 30s) discards the connection and returns a
-  clear error instead of pinning it;
-* a client idle-in-transaction bound (30s) and a client write timeout stop a stalled
-  client from holding a backend indefinitely.
-
-**The fix** is a concurrent bidirectional relay while a connection is bound: split the
-backend connection into reader and writer halves, run the backend-to-client direction on
-its own thread, and have the session loop stop when that direction reports the
-transaction boundary. That is the next W4 increment, and the conformance harness already
-names the scenarios that will judge it.
+**Remaining:** native TLS, deeper state virtualization, DDL invalidation on retained connections,
+backend health/role checks, per-core pool ownership, and the full driver/version matrix. Session
+mode continues to relay authentication and session state unchanged.
 
 ## W5 — Test and measurement
 

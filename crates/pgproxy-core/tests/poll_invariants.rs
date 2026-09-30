@@ -50,19 +50,27 @@ fn poll_honours_its_timeout_with_a_listener_registered() {
 }
 
 #[test]
-fn a_waker_unblocks_a_poll_waiting_indefinitely() {
+fn a_live_waker_unblocks_a_poll_before_its_watchdog() {
     let mut poll = Poll::new().expect("poll");
-    let waker = Waker::new(poll.registry(), Token(1)).expect("waker");
+    let waker = std::sync::Arc::new(Waker::new(poll.registry(), Token(1)).expect("waker"));
+    let thread_waker = std::sync::Arc::clone(&waker);
 
     let started = Instant::now();
     let handle = std::thread::spawn(move || {
         std::thread::sleep(Duration::from_millis(50));
-        waker.wake().expect("wake");
+        thread_waker.wake().expect("wake");
     });
 
     let mut events = Events::with_capacity(16);
-    // `None` means "wait forever": only the waker can end this.
-    poll.poll(&mut events, None).expect("poll");
+    // Keep the registered waker alive until polling completes. On Linux, closing
+    // its eventfd before epoll consumes the wake can remove the pending event.
+    // A finite watchdog turns a missing wake into a failing test, never a hung suite.
+    poll.poll(&mut events, Some(Duration::from_secs(2)))
+        .expect("poll");
+    assert!(
+        events.iter().any(|event| event.token() == Token(1)),
+        "waker event missing"
+    );
     let elapsed = started.elapsed();
 
     handle.join().expect("waker thread");

@@ -1,0 +1,11 @@
+{
+  "production_certified": false,
+  "source_sha256": "447283fc2ce7cffaeb76a73b6fb1698a913e9f6b626da94aca17ad9d1948fe74",
+  "required": [
+    "out-of-band verified trust-root public key and signed deployment policy",
+    "independent signed security assessment and remediation evidence",
+    "authoritative deployed fencing and multi-vantage write-probe evidence",
+    "authorized real AWS RDS and Vault lifecycle observations",
+    "physical laboratory inventory and hour-long workload measurements with declared SLOs"
+  ]
+}

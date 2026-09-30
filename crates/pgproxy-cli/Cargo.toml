@@ -12,7 +12,10 @@ name = "pgproxy"
 path = "src/main.rs"
 
 [dependencies]
+pgproxy-policy = { path = "../pgproxy-policy" }
+serde_json = "1"
 pgproxy-core = { path = "../pgproxy-core" }
 pgproxy-wire = { path = "../pgproxy-wire" }
 clap.workspace = true
 tracing.workspace = true
+rand.workspace = true

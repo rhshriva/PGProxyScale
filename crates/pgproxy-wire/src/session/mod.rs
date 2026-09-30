@@ -26,28 +26,27 @@
 //! than a raw byte copy so that it has the frame boundaries and transaction state the
 //! ledger will need.
 
+pub mod cancel;
 pub mod rewrite;
 pub mod transaction;
 
 use std::collections::HashMap;
 use std::io;
 use std::net::{Shutdown, SocketAddr, TcpStream, ToSocketAddrs};
-use std::sync::atomic::{AtomicBool, AtomicI32, AtomicU8, AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU8, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
-use rand::RngCore;
-use rand::rngs::OsRng;
 use tracing::{debug, info, warn};
 
 use pgproxy_pool::{Pool, PoolConfig, Poolable};
 
 use crate::backend::{BackendConnection, BackendCredentials};
+use crate::protocol::backend;
 use crate::protocol::codec::{Frame, FrameReader, FrameWriter};
 use crate::protocol::messages::{self as backend_messages, Severity, sqlstate};
 use crate::protocol::startup::{StartupParams, StartupRequest};
-use crate::protocol::{DEFAULT_MAX_MESSAGE_LEN, backend};
 use crate::service::{Connection, Service, ShutdownToken};
 
 use rewrite::build_startup;
@@ -96,6 +95,7 @@ pub struct PoolSettings {
     /// How long a session waits for a backend before being told there are too many
     /// clients.
     pub checkout_timeout: Duration,
+    pub require_primary: bool,
 }
 
 impl Default for PoolSettings {
@@ -103,6 +103,7 @@ impl Default for PoolSettings {
         Self {
             max_size: 20,
             checkout_timeout: Duration::from_secs(5),
+            require_primary: false,
         }
     }
 }
@@ -110,8 +111,12 @@ impl Default for PoolSettings {
 /// Everything needed to serve a connection, resolved from configuration.
 #[derive(Debug, Clone)]
 pub struct ResolvedBackend {
+    pub failover: Option<Arc<crate::failover::FailoverPlan>>,
+    pub credential_provider: Option<Arc<dyn crate::credentials::CredentialProvider>>,
     /// Where the backend is.
     pub target: BackendTarget,
+    pub tls: Option<crate::backend_tls::BackendTls>,
+    pub governance: Option<Arc<crate::governance::RouteGovernance>>,
     /// How to pool it.
     pub mode: PoolMode,
     /// How to authenticate to it. `None` means the proxy relies on the backend trusting
@@ -121,16 +126,58 @@ pub struct ResolvedBackend {
     pub pool: PoolSettings,
     /// How long to wait for a TCP connection to this backend.
     pub connect_timeout: Duration,
+    /// How to authenticate clients before opening a backend.
+    pub client_auth: crate::auth::client::ClientAuth,
 }
 
 impl ResolvedBackend {
+    /// Resolve expiring credentials for the selected endpoint before any user SQL is sent.
+    pub fn connect_backend(
+        &self,
+        timeout: Duration,
+        max_message_len: usize,
+    ) -> io::Result<BackendConnection> {
+        let deadline = Instant::now() + timeout;
+        let template = self
+            .credentials
+            .as_ref()
+            .ok_or_else(|| io::Error::other("terminated backend credentials required"))?;
+        if let Some(plan) = &self.failover {
+            return plan.connect(
+                template,
+                timeout,
+                max_message_len,
+                self.credential_provider.as_deref(),
+            );
+        }
+        let lease = match &self.credential_provider {
+            Some(provider) => provider.resolve(&self.target, template, deadline)?,
+            None => crate::credentials::CredentialLease {
+                credentials: template.clone(),
+                expires_at: None,
+            },
+        };
+        let remaining = deadline.saturating_duration_since(Instant::now());
+        if remaining.is_zero() {
+            return Err(io::Error::from(io::ErrorKind::TimedOut));
+        }
+        BackendConnection::connect_with_tls(
+            &self.target,
+            &lease.credentials,
+            remaining,
+            max_message_len,
+            self.tls.as_ref(),
+        )
+        .map(|connection| connection.with_credential_expiry(lease.expires_at))
+    }
+
     /// Identity of the pool this connection belongs to.
     ///
     /// Includes the role, so pools are per `(database, user)` as PgBouncer's are: two
     /// clients of different roles must never share a backend connection.
     pub fn pool_key(&self) -> String {
         format!(
-            "{}:{}/{}@{}",
+            "{}:{}/{}@{}?size={}&wait={:?}&connect={:?}&primary={}&tls={:?}&failover={:?}&credentials={:?}",
             self.target.host,
             self.target.port,
             self.target.database.as_deref().unwrap_or(""),
@@ -138,6 +185,15 @@ impl ResolvedBackend {
                 .as_ref()
                 .map(|c| c.user.as_str())
                 .unwrap_or(""),
+            self.pool.max_size,
+            self.pool.checkout_timeout,
+            self.connect_timeout,
+            self.pool.require_primary,
+            self.tls.as_ref().map(|tls| tls.pool_identity()),
+            self.failover.as_ref().map(|plan| plan.pool_identity()),
+            self.credential_provider
+                .as_ref()
+                .map(|provider| provider.pool_identity()),
         )
     }
 }
@@ -169,10 +225,16 @@ pub trait DatabaseRouter: Send + Sync + 'static {
 /// Tunables for one session.
 #[derive(Debug, Clone)]
 pub struct SessionOptions {
+    pub virtualize_hold_cursors: bool,
+    pub cost_attribution: bool,
     /// How long to wait for the backend to accept a TCP connection.
     pub connect_timeout: Duration,
     /// Largest message accepted in either direction.
     pub max_message_len: usize,
+    /// Per-client ledger and parse-cache memory budget.
+    pub session_memory_bytes: usize,
+    /// Largest SQL statement accepted by the grammar parser.
+    pub max_sql_bytes: usize,
     /// How long a client may hold a pooled backend while saying nothing.
     ///
     /// Without a bound like this, one stalled client pins a pooled connection forever and
@@ -190,18 +252,26 @@ pub struct SessionOptions {
     /// A client that stops reading while the proxy writes a large result set would
     /// otherwise block its session thread indefinitely, again holding a backend.
     pub client_write_timeout: Duration,
+    pub operations: Arc<pgproxy_admin::Operations>,
+    pub backend_capacity: Arc<pgproxy_pool::ConnectionLimit>,
 }
 
 impl Default for SessionOptions {
     fn default() -> Self {
         Self {
+            virtualize_hold_cursors: false,
+            cost_attribution: false,
             connect_timeout: Duration::from_secs(10),
-            max_message_len: DEFAULT_MAX_MESSAGE_LEN,
+            max_message_len: 16 * 1024 * 1024,
+            session_memory_bytes: 4 * 1024 * 1024,
+            max_sql_bytes: pgproxy_parser::DEFAULT_MAX_SQL_BYTES,
             // Matches the spirit of PostgreSQL's idle_in_transaction_session_timeout,
             // which also exists to stop a client holding resources it is not using.
             idle_in_transaction: Duration::from_secs(30),
             query_timeout: Duration::from_secs(30),
             client_write_timeout: Duration::from_secs(30),
+            operations: Arc::default(),
+            backend_capacity: pgproxy_pool::ConnectionLimit::new(200),
         }
     }
 }
@@ -219,9 +289,42 @@ pub struct SessionStats {
     messages_from_backend: AtomicU64,
     bytes_from_client: AtomicU64,
     bytes_from_backend: AtomicU64,
+    operations: Option<(Arc<pgproxy_admin::Operations>, u64)>,
+    clock: Mutex<pgproxy_admin::ExchangeClock>,
+    accounting: Mutex<crate::accounting::AccountingTracker>,
+}
+
+impl Drop for SessionStats {
+    fn drop(&mut self) {
+        if let Some((operations, id)) = &self.operations {
+            for sample in self.accounting.lock().unwrap().finish() {
+                operations.record_client_usage(*id, sample);
+            }
+        }
+    }
 }
 
 impl SessionStats {
+    fn with_operations(
+        operations: Arc<pgproxy_admin::Operations>,
+        id: u64,
+        attribution: bool,
+    ) -> Self {
+        Self {
+            operations: Some((operations, id)),
+            accounting: Mutex::new(crate::accounting::AccountingTracker::new(attribution)),
+            clock: Mutex::default(),
+            handshake_complete: AtomicBool::new(false),
+            transaction_status: AtomicU8::new(0),
+            messages_from_client: AtomicU64::new(0),
+            messages_from_backend: AtomicU64::new(0),
+            bytes_from_client: AtomicU64::new(0),
+            bytes_from_backend: AtomicU64::new(0),
+        }
+    }
+    fn accounting_options(&self, options: pgproxy_parser::ParseOptions) {
+        self.accounting.lock().unwrap().options(options);
+    }
     /// Whether the backend has reached its first `ReadyForQuery`.
     pub fn handshake_complete(&self) -> bool {
         self.handshake_complete.load(Ordering::Relaxed)
@@ -263,6 +366,24 @@ impl SessionStats {
     }
 
     fn observe(&self, direction: Direction, frame: &Frame<'_>) {
+        if let Some((operations, id)) = &self.operations {
+            let from_client = direction == Direction::ClientToBackend;
+            operations.observe(*id, from_client, frame.tag, frame.payload, frame.len());
+            let (sample, dropped) = {
+                let mut tracker = self.accounting.lock().unwrap();
+                let sample = tracker.observe(from_client, frame.tag, frame.payload, frame.len());
+                (sample, tracker.take_dropped())
+            };
+            if let Some(sample) = sample {
+                operations.record_client_usage(*id, sample);
+            }
+            if dropped > 0 {
+                operations.add_usage_dropped(dropped);
+            }
+            if let Some(elapsed) = self.clock.lock().unwrap().observe(from_client, frame.tag) {
+                operations.latency(elapsed);
+            }
+        }
         match direction {
             Direction::ClientToBackend => {
                 self.messages_from_client.fetch_add(1, Ordering::Relaxed);
@@ -306,10 +427,9 @@ pub struct SessionService {
     options: SessionOptions,
     /// Pools, created on first use and keyed by [`ResolvedBackend::pool_key`].
     pools: Mutex<HashMap<String, Arc<Pool<BackendConnection>>>>,
-    /// Source of the process ids the proxy reports as `BackendKeyData`.
-    next_process_id: AtomicI32,
-    /// The proxy's own cancel key, issued to clients instead of a backend's.
-    cancel_key: Vec<u8>,
+    cancellation: Arc<cancel::CancelRegistry>,
+    frontend_tls: Option<Arc<crate::tls::FrontendTls>>,
+    login_gate: Option<Arc<AtomicBool>>,
 }
 
 impl SessionService {
@@ -320,18 +440,31 @@ impl SessionService {
 
     /// Create a service with explicit options.
     pub fn with_options(router: Arc<dyn DatabaseRouter>, options: SessionOptions) -> Self {
-        // A per-process key rather than the backend's: the proxy issues its own so that
-        // cancellation can eventually be routed to whichever backend is bound (ADR-0007).
-        let mut cancel_key = vec![0u8; 4];
-        OsRng.fill_bytes(&mut cancel_key);
-
         Self {
             router,
             options,
             pools: Mutex::new(HashMap::new()),
-            next_process_id: AtomicI32::new(1),
-            cancel_key,
+            cancellation: Arc::new(cancel::CancelRegistry::default()),
+            frontend_tls: None,
+            login_gate: None,
         }
+    }
+
+    /// Enable native PostgreSQL TLS negotiation on the frontend.
+    pub fn with_frontend_tls(mut self, tls: crate::tls::FrontendTls) -> Self {
+        self.frontend_tls = Some(Arc::new(tls));
+        self
+    }
+
+    /// Keep cancellation ownership valid for clients of previous service generations.
+    pub fn with_cancellation_from(mut self, previous: &SessionService) -> Self {
+        self.cancellation = Arc::clone(&previous.cancellation);
+        self
+    }
+    /// Gate new logins after startup decoding; cancellation continues during draining.
+    pub fn with_login_gate(mut self, gate: Arc<AtomicBool>) -> Self {
+        self.login_gate = Some(gate);
+        self
     }
 
     /// The pool for a resolved backend, creating it on first use.
@@ -342,15 +475,10 @@ impl SessionService {
             return Arc::clone(pool);
         }
 
-        let target = resolved.target.clone();
-        let credentials = resolved.credentials.clone().unwrap_or(BackendCredentials {
-            user: String::new(),
-            password: None,
-            database: None,
-            application_name: None,
-        });
+        let route = resolved.clone();
         let options = self.options.clone();
         let connect_timeout = resolved.connect_timeout;
+        let require_primary = resolved.pool.require_primary || resolved.failover.is_some();
 
         let pool = Pool::new(
             PoolConfig {
@@ -358,12 +486,24 @@ impl SessionService {
                 checkout_timeout: resolved.pool.checkout_timeout,
             },
             move || {
-                BackendConnection::connect(
-                    &target,
-                    &credentials,
-                    connect_timeout,
-                    options.max_message_len,
-                )
+                let deadline = Instant::now() + connect_timeout;
+                let permit = options
+                    .backend_capacity
+                    .acquire(connect_timeout)
+                    .map_err(io::Error::other)?;
+                let remaining = deadline.saturating_duration_since(Instant::now());
+                if remaining.is_zero() {
+                    return Err(io::Error::from(io::ErrorKind::TimedOut));
+                }
+                let mut connection = route
+                    .connect_backend(remaining, options.max_message_len)?
+                    .with_capacity_permit(permit);
+                // Reset queries use blocking I/O after the readiness relay relinquishes
+                // ownership. Bound them too, so a stalled reset cannot consume the pool.
+                connection.set_read_timeout(Some(options.query_timeout))?;
+                connection.set_write_timeout(Some(options.query_timeout))?;
+                connection.require_primary(require_primary);
+                Ok(connection)
             },
         );
         pools.insert(key, Arc::clone(&pool));
@@ -392,7 +532,18 @@ impl SessionService {
 
 impl Service for SessionService {
     fn handle(&self, conn: Connection) -> io::Result<()> {
-        self.serve(conn)
+        let _client = self
+            .options
+            .operations
+            .register(conn.id, conn.peer.to_string());
+        let result = self.serve(conn);
+        if result.is_err() {
+            self.options
+                .operations
+                .errors
+                .fetch_add(1, Ordering::Relaxed);
+        }
+        result
     }
 }
 
@@ -407,6 +558,8 @@ impl SessionService {
             shutdown,
         } = conn;
 
+        stream.set_read_timeout(Some(self.options.connect_timeout))?;
+        stream.set_write_timeout(Some(self.options.client_write_timeout))?;
         let mut client_reader =
             FrameReader::with_max_message_len(stream.try_clone()?, self.options.max_message_len);
         let mut client_writer = FrameWriter::new(stream);
@@ -423,40 +576,64 @@ impl SessionService {
             }
         };
 
-        let startup = if matches!(startup, StartupRequest::SslRequest) {
-            // TLS is a later W2 item. Decline honestly: a client with sslmode=prefer (the
-            // common default) continues in plaintext, and one with sslmode=require fails
-            // rather than being silently downgraded.
-            debug!(id, "client requested TLS; declining");
+        let startup = if matches!(startup, StartupRequest::GssEncRequest) {
             use std::io::Write as _;
             client_writer.get_ref().write_all(b"N")?;
             client_writer.get_ref().flush()?;
+            client_reader.read_startup()?
+        } else {
+            startup
+        };
+        // Keep the bridge alive until every protocol relay half exits.
+        let mut tls_bridge = None;
+        let startup = if matches!(startup, StartupRequest::SslRequest) {
+            use std::io::Write as _;
+            if let Some(tls) = &self.frontend_tls {
+                client_writer.get_ref().write_all(b"S")?;
+                client_writer.get_ref().flush()?;
+                let bridge = tls.accept(client_writer.get_ref().try_clone()?, shutdown.clone())?;
+                let encrypted_plaintext = bridge.stream.try_clone()?;
+                encrypted_plaintext.set_read_timeout(Some(self.options.connect_timeout))?;
+                encrypted_plaintext.set_write_timeout(Some(self.options.client_write_timeout))?;
+                client_reader = FrameReader::with_max_message_len(
+                    encrypted_plaintext.try_clone()?,
+                    self.options.max_message_len,
+                );
+                client_writer = FrameWriter::new(encrypted_plaintext);
+                tls_bridge = Some(bridge);
+            } else {
+                client_writer.get_ref().write_all(b"N")?;
+                client_writer.get_ref().flush()?;
+            }
             match client_reader.read_startup() {
                 Ok(s) => s,
                 Err(e) => {
-                    debug!(id, error = %e, "malformed startup packet after TLS refusal");
+                    debug!(id, error = %e, "malformed startup packet after TLS negotiation");
                     return Ok(());
                 }
             }
         } else {
             startup
         };
+        if self.frontend_tls.as_ref().is_some_and(|tls| tls.required)
+            && tls_bridge.is_none()
+            && matches!(startup, StartupRequest::Startup(_))
+        {
+            backend_messages::send_error(
+                &mut client_writer,
+                Severity::Fatal,
+                "28000",
+                "encrypted connections are required",
+            )?;
+            return Ok(());
+        }
 
         let params = match startup {
             StartupRequest::Startup(params) => params,
             StartupRequest::CancelRequest(cancel) => {
-                // Routing a cancellation requires the proxy to have issued the cancel key
-                // in the first place, which is ADR-0007. Refusing is correct until then: a
-                // cancellation that silently does nothing is worse than one that is
-                // reported.
-                warn!(
-                    id,
-                    process_id = cancel.process_id,
-                    key_len = cancel.key.len(),
-                    "CancelRequest received but cancellation routing is not implemented \
-                     (see ADR-0007)"
-                );
-                return Ok(());
+                return self
+                    .cancellation
+                    .dispatch(&cancel, self.options.connect_timeout);
             }
             other => {
                 let _ = backend_messages::send_error(
@@ -469,6 +646,25 @@ impl SessionService {
                 return Ok(());
             }
         };
+
+        if self
+            .login_gate
+            .as_ref()
+            .is_some_and(|gate| !gate.load(Ordering::Acquire))
+        {
+            backend_messages::send_error(
+                &mut client_writer,
+                Severity::Fatal,
+                sqlstate::CANNOT_CONNECT_NOW,
+                "planned switchover is draining sessions",
+            )?;
+            return Ok(());
+        }
+        self.options.operations.identity(
+            id,
+            params.get("user").unwrap_or(""),
+            params.get("database").unwrap_or(""),
+        );
 
         // ------------------------------------------------------------ route
 
@@ -488,21 +684,73 @@ impl SessionService {
 
         // ------------------------------------------------------------ dispatch
 
+        let cancellation = self.cancellation.session()?;
         match resolved.mode {
-            PoolMode::Session => serve_session(
-                id,
-                worker,
-                peer,
-                &params,
-                &resolved,
-                client_reader,
-                client_writer,
-                &self.options,
-                shutdown,
-            ),
-            PoolMode::Transaction => {
+            PoolMode::Session
+                if matches!(
+                    resolved.client_auth,
+                    crate::auth::client::ClientAuth::Passthrough
+                ) =>
+            {
+                serve_session(
+                    id,
+                    worker,
+                    peer,
+                    &params,
+                    &resolved,
+                    client_reader,
+                    client_writer,
+                    &self.options,
+                    shutdown,
+                    &cancellation,
+                )
+            }
+            PoolMode::Transaction | PoolMode::Session => {
+                let unsupported = params
+                    .iter()
+                    .filter_map(|(name, _)| name.starts_with("_pq_.").then_some(name))
+                    .collect::<Vec<_>>();
+                if params.protocol_version != crate::protocol::PROTOCOL_3_0
+                    || !unsupported.is_empty()
+                {
+                    backend_messages::send_negotiate_protocol_version(
+                        &mut client_writer,
+                        0,
+                        &unsupported,
+                    )?;
+                    client_writer.flush()?;
+                }
+                client_reader
+                    .get_ref()
+                    .set_read_timeout(Some(self.options.connect_timeout))?;
+                client_writer
+                    .get_ref()
+                    .set_write_timeout(Some(self.options.client_write_timeout))?;
+                if crate::auth::client::authenticate_secure(
+                    &resolved.client_auth,
+                    params.get("user").unwrap_or(""),
+                    &mut client_reader,
+                    &mut client_writer,
+                    tls_bridge
+                        .as_ref()
+                        .and_then(|bridge| bridge.channel_binding.as_deref()),
+                    tls_bridge
+                        .as_ref()
+                        .and_then(|bridge| bridge.peer_certificate.as_deref()),
+                )
+                .is_err()
+                {
+                    backend_messages::send_error(
+                        &mut client_writer,
+                        Severity::Fatal,
+                        sqlstate::INVALID_PASSWORD,
+                        "password authentication failed",
+                    )?;
+                    client_writer.flush()?;
+                    return Ok(());
+                }
+                client_reader.get_ref().set_read_timeout(None)?;
                 let pool = self.pool_for(&resolved);
-                let process_id = self.next_process_id.fetch_add(1, Ordering::Relaxed);
                 transaction::serve(
                     id,
                     peer,
@@ -512,8 +760,9 @@ impl SessionService {
                     pool,
                     &self.options,
                     shutdown,
-                    process_id,
-                    &self.cancel_key,
+                    &cancellation,
+                    resolved.mode == PoolMode::Session,
+                    resolved.governance.clone(),
                 )
             }
         }
@@ -532,8 +781,13 @@ fn serve_session(
     mut client_writer: FrameWriter<TcpStream>,
     options: &SessionOptions,
     shutdown: ShutdownToken,
+    cancellation: &cancel::CancelSession,
 ) -> io::Result<()> {
     let target = &resolved.target;
+    let _capacity = options
+        .backend_capacity
+        .acquire(resolved.connect_timeout)
+        .map_err(io::Error::other)?;
 
     let backend = match connect(target, resolved.connect_timeout) {
         Ok(stream) => stream,
@@ -551,6 +805,8 @@ fn serve_session(
         }
     };
 
+    backend.set_read_timeout(Some(options.connect_timeout))?;
+    backend.set_write_timeout(Some(options.client_write_timeout))?;
     let backend_reader =
         FrameReader::with_max_message_len(backend.try_clone()?, options.max_message_len);
     let mut backend_writer = FrameWriter::new(backend);
@@ -585,7 +841,11 @@ fn serve_session(
         "session established"
     );
 
-    let stats = Arc::new(SessionStats::default());
+    let stats = Arc::new(SessionStats::with_operations(
+        Arc::clone(&options.operations),
+        id,
+        options.cost_attribution,
+    ));
     let result = relay(
         client_reader,
         client_writer,
@@ -593,6 +853,7 @@ fn serve_session(
         backend_writer,
         Arc::clone(&stats),
         shutdown,
+        cancellation,
     );
 
     info!(
@@ -645,6 +906,7 @@ fn relay(
     backend_writer: FrameWriter<TcpStream>,
     stats: Arc<SessionStats>,
     shutdown: ShutdownToken,
+    cancellation: &cancel::CancelSession,
 ) -> io::Result<()> {
     let upstream_stats = Arc::clone(&stats);
     let upstream_shutdown = shutdown.clone();
@@ -660,13 +922,49 @@ fn relay(
             )
         })?;
 
-    let downstream = pump(
-        backend_reader,
-        client_writer,
-        Direction::BackendToClient,
-        stats,
-        shutdown,
-    );
+    let mut reader = backend_reader;
+    let mut writer = client_writer;
+    let address = reader.get_ref().peer_addr()?;
+    let backend_socket = reader.get_ref().try_clone()?;
+    let mut binding = None;
+    let downstream = (|| {
+        loop {
+            let Some(frame) = reader.read_message()? else {
+                return Ok(());
+            };
+            stats.observe(Direction::BackendToClient, &frame);
+            if frame.tag == backend::READY_FOR_QUERY {
+                backend_socket.set_read_timeout(None)?;
+                writer.get_ref().set_read_timeout(None)?;
+            }
+            if frame.tag == backend::BACKEND_KEY_DATA {
+                if frame.payload.len() < 8 || frame.payload.len() > 36 {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidData,
+                        "invalid backend cancel key",
+                    ));
+                }
+                let process_id = i32::from_be_bytes(
+                    frame.payload[..4]
+                        .try_into()
+                        .map_err(|_| io::Error::other("invalid cancel process id"))?,
+                );
+                binding = Some(cancellation.bind(address, process_id, &frame.payload[4..])?);
+                backend_messages::send_backend_key_data(
+                    &mut writer,
+                    cancellation.process_id,
+                    &cancellation.key,
+                )?;
+            } else {
+                writer.write_raw(frame.raw)?;
+            }
+        }
+    })();
+    drop(binding);
+    // Wake both halves when either direction fails; a backend error must not leave
+    // the frontend reader thread parked forever.
+    let _ = reader.get_ref().shutdown(Shutdown::Both);
+    let _ = writer.get_ref().shutdown(Shutdown::Both);
 
     // Whichever direction ends first shuts down its destination's write side, so the peer
     // observes EOF and the other thread stops rather than blocking forever.
@@ -727,10 +1025,84 @@ mod tests {
     use super::*;
 
     #[test]
+    fn authentication_failure_never_opens_or_creates_a_backend_pool() {
+        struct Router;
+        impl DatabaseRouter for Router {
+            fn route(&self, _: &StartupParams) -> Result<ResolvedBackend, RouteError> {
+                Ok(ResolvedBackend {
+                    failover: None,
+                    credential_provider: None,
+                    tls: None,
+                    governance: None,
+                    target: BackendTarget {
+                        host: "127.0.0.1".into(),
+                        port: 9,
+                        database: Some("app".into()),
+                        user: None,
+                    },
+                    mode: PoolMode::Transaction,
+                    credentials: None,
+                    pool: PoolSettings::default(),
+                    connect_timeout: Duration::from_secs(1),
+                    client_auth: crate::auth::client::ClientAuth::Md5(HashMap::from([(
+                        "alice".into(),
+                        crate::auth::md5::hash_password(b"secret", "alice"),
+                    )])),
+                })
+            }
+        }
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let client = TcpStream::connect(listener.local_addr().unwrap()).unwrap();
+        client
+            .set_read_timeout(Some(Duration::from_secs(2)))
+            .unwrap();
+        let (stream, peer) = listener.accept().unwrap();
+        let service = Arc::new(SessionService::new(Arc::new(Router)));
+        let serving = Arc::clone(&service);
+        let handle = thread::spawn(move || {
+            serving.handle(Connection {
+                id: 1,
+                worker: 0,
+                stream,
+                peer,
+                shutdown: ShutdownToken::new(),
+            })
+        });
+        let mut writer = FrameWriter::new(client.try_clone().unwrap());
+        let mut reader = FrameReader::new(client);
+        let mut startup = crate::protocol::PROTOCOL_3_0.to_be_bytes().to_vec();
+        startup.extend_from_slice(b"user\0alice\0database\0app\0\0");
+        writer
+            .write_raw(&((startup.len() + 4) as i32).to_be_bytes())
+            .unwrap();
+        writer.write_raw(&startup).unwrap();
+        let frame = reader.read_message().unwrap().unwrap();
+        let crate::auth::messages::AuthenticationRequest::Md5Password { salt } =
+            crate::auth::messages::AuthenticationRequest::parse(frame.payload).unwrap()
+        else {
+            panic!("expected MD5");
+        };
+        let response =
+            crate::auth::md5::response(&crate::auth::md5::hash_password(b"wrong", "alice"), &salt)
+                .unwrap();
+        writer
+            .write_message(
+                crate::protocol::frontend::PASSWORD,
+                &crate::auth::messages::password_message(&response),
+            )
+            .unwrap();
+        let frame = reader.read_message().unwrap().unwrap();
+        assert_eq!(frame.tag, backend::ERROR_RESPONSE);
+        assert!(frame.payload.windows(5).any(|window| window == b"28P01"));
+        handle.join().unwrap().unwrap();
+        assert!(service.pool_stats().is_empty());
+    }
+
+    #[test]
     fn session_options_defaults_are_sane() {
         let options = SessionOptions::default();
         assert_eq!(options.connect_timeout, Duration::from_secs(10));
-        assert_eq!(options.max_message_len, DEFAULT_MAX_MESSAGE_LEN);
+        assert_eq!(options.max_message_len, 16 * 1024 * 1024);
     }
 
     #[test]
