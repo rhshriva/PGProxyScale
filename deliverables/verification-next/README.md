@@ -1,6 +1,6 @@
 # Current verification evidence
 
-Frozen source SHA256: `2f7780739057cd402de7f4f4a108e05ba9a8bc523ddea6e2da8cfcbd66ebd3bf`.
+Frozen source SHA256: `ef878fc5c242ea24dc4c198def25f0b3d3ca456fb94319573dc41dc602ea9175`.
 
 ## Local gate rerun — 2026-09-30
 
@@ -22,6 +22,10 @@ This run adds two architecture-decision records (ADR-0006 session-state virtuali
 ADR-0007 shared-role tenant cost attribution) and documents the native suspended-`CLOSE` dependency
 risk in `docs/testing/ledger-semantics.md`. Documentation is excluded from source identity, so those
 changes do not alter the frozen hash; only the cursor regression test does.
+
+This hash also includes the CI build-tooling fix in `tests/conformance/run.sh`: the slim
+`rust:*-slim-bookworm` build container now installs `make`/`gcc` before building `pgproxy-cli`,
+because `crates/pgproxy-parser/build.rs` compiles the vendored libpg_query sources with `make`.
 
 `performance/` (collected at the previous source hash) contains six actual direct/proxy smoke workloads, zero errors or dropped measurements, an independent empty-table rollback check, complete bounded latency histograms and the owned release-process provenance. These short local measurements do not satisfy hour-long physical-laboratory certification requirements.
 

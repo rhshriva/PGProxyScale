@@ -40,7 +40,7 @@ if a.live:
 else:
     gates.append({'name': 'replicated-failover', 'status': 'not-run'})
 if a.linux:
-    gate('linux-tests-lint', ['docker', 'run', '--rm', '-v', str(ROOT)+':/app', '-v', 'pgproxy-conformance-target:/target', '-v', 'pgproxy-linux-cargo:/usr/local/cargo', '-v', 'pgproxy-linux-rustup:/usr/local/rustup', '-w', '/app', '-e', 'CARGO_TARGET_DIR=/target', 'rust:1.91-slim-bookworm', 'sh', '-c', 'apt-get update -qq && apt-get install -y -qq --no-install-recommends make >/dev/null && cargo test --workspace && cargo build --workspace --release && cargo clippy --workspace --all-targets -- -D warnings'], 900)
+    gate('linux-tests-lint', ['docker', 'run', '--rm', '-v', str(ROOT)+':/app', '-v', 'pgproxy-conformance-target:/target', '-v', 'pgproxy-linux-cargo:/usr/local/cargo', '-v', 'pgproxy-linux-rustup:/usr/local/rustup', '-w', '/app', '-e', 'CARGO_TARGET_DIR=/target', 'rust:1.91-slim-bookworm', 'sh', '-c', 'apt-get update -qq && apt-get install -y -qq --no-install-recommends make gcc >/dev/null && cargo test --workspace && cargo build --workspace --release && cargo clippy --workspace --all-targets -- -D warnings'], 900)
 else:
     gates.append({'name': 'linux-tests-lint', 'status': 'not-run'})
 for name in ['independent-security-review', 'deployment-fencing-and-split-brain-review', 'bare-metal-performance-and-soak', 'real-credential-provider-integration']:

@@ -71,10 +71,13 @@ docker exec "$PG_NAME" psql -U postgres -d "$DB" -q -c \
 
 if [ -n "$PROXY" ]; then
   echo "== building pgproxy for linux =="
+  # rust:*-slim images ship without `make` or a C compiler, but pgproxy-parser's
+  # build.rs compiles the vendored libpg_query sources with `make`. Install the
+  # build toolchain first, exactly as .github/workflows/compatibility.yml does.
   docker run --rm -v "$REPO:/app" -v "$TARGET_VOLUME:/target" -v "$RUSTUP_VOLUME:/usr/local/rustup" \
     -w /app -e CARGO_TARGET_DIR=/target \
     "$RUST_IMAGE" bash -c \
-    'export PATH=/usr/local/cargo/bin:$PATH; cargo build --release -p pgproxy-cli' \
+    'export PATH=/usr/local/cargo/bin:$PATH; apt-get update -qq && apt-get install -y -qq --no-install-recommends make gcc >/dev/null && cargo build --release -p pgproxy-cli' \
     || { echo "pgproxy build failed"; exit 4; }
 
   echo "== starting pgproxy =="
