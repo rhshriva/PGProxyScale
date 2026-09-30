@@ -107,16 +107,30 @@ if [ -n "$PROXY" ]; then
 
   # When the backend challenges with SCRAM, this run is a test of passthrough: the
   # client must authenticate *to the backend* through the proxy, with the proxy holding
-  # no credential at all. Enforce that rather than assert it - a password in the proxy's
-  # config would make the test pass for the wrong reason.
+  # no credential at all. Enforce that rather than assert it - a password in the session
+  # route would make the test pass for the wrong reason.
   if [ "${PG_AUTH:-trust}" = "scram-sha-256" ] && [ "$POOL_MODE" = "session" ]; then
-    # Session mode must work with no credential at all, or the test proves nothing.
-    # Transaction mode is the opposite case and is expected to hold one.
-    if grep -qi 'password' "$ROOT/pgproxy.toml"; then
-      echo "FAIL: pgproxy.toml mentions a password, so this would not prove passthrough"
+    # Only the session route is exercised here, and it must hold no credential. The
+    # transaction routes in the same file legitimately do hold one (a pooled connection
+    # is not the client's), so scope the check to the session [[databases]] block rather
+    # than the whole file, which that transaction password would otherwise trip.
+    if awk -v route=conformance_session '
+        function flush() {
+          if (block != "" && block ~ ("name[[:space:]]*=[[:space:]]*\"" route "\"")) {
+            found = 1
+            if (block ~ /(^|[^_[:alnum:]])password[[:space:]]*=/) bad = 1
+          }
+          block = ""
+        }
+        /^[[:space:]]*\[\[databases\]\]/ { flush(); next }
+        { block = block "\n" $0 }
+        END { flush(); exit(bad ? 1 : (found ? 0 : 2)) }
+      ' "$ROOT/pgproxy.toml"; then
+      echo "  session route holds no password: passthrough is the only way this can work"
+    else
+      echo "FAIL: the session route in pgproxy.toml must carry no password, so this would not prove passthrough"
       exit 5
     fi
-    echo "  pgproxy config holds no password: passthrough is the only way this can work"
   fi
 
   TARGET="$PROXY_NAME:6432"

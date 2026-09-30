@@ -1,6 +1,6 @@
 # Current verification evidence
 
-Frozen source SHA256: `ef878fc5c242ea24dc4c198def25f0b3d3ca456fb94319573dc41dc602ea9175`.
+Frozen source SHA256: `dec7d96fe787023540efc4f5b4e01d116ee4fdf4a8d47b3bd9a92f2a8dfa0a77`.
 
 ## Local gate rerun — 2026-09-30
 
@@ -23,9 +23,12 @@ ADR-0007 shared-role tenant cost attribution) and documents the native suspended
 risk in `docs/testing/ledger-semantics.md`. Documentation is excluded from source identity, so those
 changes do not alter the frozen hash; only the cursor regression test does.
 
-This hash also includes the CI build-tooling fix in `tests/conformance/run.sh`: the slim
-`rust:*-slim-bookworm` build container now installs `make`/`gcc` before building `pgproxy-cli`,
-because `crates/pgproxy-parser/build.rs` compiles the vendored libpg_query sources with `make`.
+This hash also carries the CI conformance-harness fixes: the slim `rust:*-slim-bookworm`
+build container now installs `make`/`gcc` before building `pgproxy-cli`
+(`crates/pgproxy-parser/build.rs` compiles the vendored libpg_query sources with `make`); the
+passthrough guard checks only the session route for a credential instead of the whole config
+file (the transaction route legitimately holds one); and `scram_interop.sh` applies the same
+`--add-host host.docker.internal` mapping the other Linux runners use.
 
 `performance/` (collected at the previous source hash) contains six actual direct/proxy smoke workloads, zero errors or dropped measurements, an independent empty-table rollback check, complete bounded latency histograms and the owned release-process provenance. These short local measurements do not satisfy hour-long physical-laboratory certification requirements.
 

@@ -16,6 +16,11 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PORT="${PORT:-6544}"
 PASSWORD="probe-secret"
 PY_IMAGE="python:3.12-slim"
+# Linux CI containers cannot resolve host.docker.internal by default; the other
+# conformance runners add the mapping explicitly, so the interop client must too or
+# it cannot reach the probe and every case looks rejected.
+DOCKER_RUN_ARGS=()
+if [[ "$(uname -s)" == Linux ]]; then DOCKER_RUN_ARGS=(--network host --add-host host.docker.internal:127.0.0.1); fi
 
 cd "$ROOT"
 echo "== building scram_probe =="
@@ -32,7 +37,7 @@ run_case() {
   sleep 1
 
   local client_out
-  client_out="$(docker run --rm -v scapip:/root/.cache/pip "$PY_IMAGE" bash -c "
+  client_out="$(docker run --rm "${DOCKER_RUN_ARGS[@]}" -v scapip:/root/.cache/pip "$PY_IMAGE" bash -c "
     pip install -q 'psycopg[binary]' >/dev/null 2>&1
     python3 -c \"
 import psycopg

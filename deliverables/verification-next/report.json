@@ -3,23 +3,23 @@
     "target/debug/pgproxy": "ea3f755f7c0acc4624d0dbaa21786ad9411e88845217c55854a280b5f8bc41a5",
     "target/release/pgproxy": "35739db4b971fe20ca06703719df4f64631b169962e2af69f83cce5ea6da55e5"
   },
-  "source_sha256_start": "ef878fc5c242ea24dc4c198def25f0b3d3ca456fb94319573dc41dc602ea9175",
-  "source_sha256_end": "ef878fc5c242ea24dc4c198def25f0b3d3ca456fb94319573dc41dc602ea9175",
+  "source_sha256_start": "dec7d96fe787023540efc4f5b4e01d116ee4fdf4a8d47b3bd9a92f2a8dfa0a77",
+  "source_sha256_end": "dec7d96fe787023540efc4f5b4e01d116ee4fdf4a8d47b3bd9a92f2a8dfa0a77",
   "environment": {
     "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
     "rustc": "rustc 1.91.1 (ed61e7d7e 2025-11-07)\nbinary: rustc\ncommit-hash: ed61e7d7e242494fb7057f2657300d9e77bb4fcb\ncommit-date: 2025-11-07\nhost: aarch64-apple-darwin\nrelease: 1.91.1\nLLVM version: 21.1.2",
     "cargo": "cargo 1.91.1 (ea2d97820 2025-10-10)"
   },
-  "created_at": "2026-09-30T17:18:52.082804+00:00",
-  "git_revision": "d7befe4714e4c44feef0a21f166d0b9b55944512",
+  "created_at": "2026-09-30T17:27:06.644523+00:00",
+  "git_revision": "7cf9f2222e2336a45009037b77bd9d8e226a216d",
   "working_tree_included": true,
-  "working_tree_status": " M tests/certification/run.py\n M tests/conformance/run.sh\n",
+  "working_tree_status": " M tests/conformance/run.sh\n M tests/conformance/scram_interop.sh\n",
   "production_certified": false,
   "gates": [
     {
       "name": "certification-evidence-tests",
       "status": "pass",
-      "seconds": 1.6,
+      "seconds": 1.43,
       "log": "deliverables/verification-next/certification-evidence-tests.log",
       "tests_passed": 0,
       "tests_failed": 0
@@ -27,7 +27,7 @@
     {
       "name": "workspace-tests",
       "status": "pass",
-      "seconds": 11.01,
+      "seconds": 3.19,
       "log": "deliverables/verification-next/workspace-tests.log",
       "tests_passed": 339,
       "tests_failed": 0
@@ -35,7 +35,7 @@
     {
       "name": "strict-lint",
       "status": "pass",
-      "seconds": 2.25,
+      "seconds": 1.98,
       "log": "deliverables/verification-next/strict-lint.log",
       "tests_passed": 0,
       "tests_failed": 0
@@ -43,7 +43,7 @@
     {
       "name": "release-build",
       "status": "pass",
-      "seconds": 0.18,
+      "seconds": 0.13,
       "log": "deliverables/verification-next/release-build.log",
       "tests_passed": 0,
       "tests_failed": 0
